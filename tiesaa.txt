@@ -1,0 +1,20 @@
+4029 Tie 3 Pirkkala, Huovi Pirkkala
+4020 Tie 12 Tampere, Sarkannniemi
+2017 Tie 12 Sastamala, Karppala
+2020 Tie 2 Pori, Kähkönen Satakunta
+2126 Tie 2 Huittinen, Korvenmaa Satakunta
+1073 Tie 103 Helsinki, Vuosaari pohjoinen Uusimaa
+7018 Tie 6 Joensuu Pohjois-Karjala
+2047 Tie 1 Salo, Halikko Varsinais-Suomi
+14063 Tie 79 Kittilä, Lohiniva Lappi
+10040 Tie 18 Isokyrö, Napue Etelä-Pohjanmaa
+2025 Tie 43 Uusikaupunki, Kalanti Varsinais-Suomi
+4011 Tie 12 Hämeenlinna, Hauho Kanta-Häme
+3012 Tie 13 Lappeenranta, Karhusjärvi Etelä-Karjala
+8001 Tie 5 Kuopio, Kuvelampi,Pohjois-Savo
+14068 Tie 4 Rovaniemi, Santa Claus Lappi
+14027 Tie 970 Utsjoki, Nuorgam Lappi
+14056 Tie 21 Enontekiö, Ropinsalmi Lappi
+13012 Tie 89 Kuhmo, Kuusamonkylä Kainuu
+3004 Tie 5 Mikkeli Etelä-Savo
+12083 Tie 4 Oulu, Haukipudas Pohjois-Pohjanmaa

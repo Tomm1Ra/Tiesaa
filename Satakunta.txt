@@ -1,0 +1,11 @@
+2020 Tie 2 Pori, Kähkönen Satakunta @21.63253,61.532138,5
+2126 Tie 2 Huittinen, Korvenmaa Satakunta @22.849562,61.106727,0
+2013 Tie 11 Ulvila, Sääkskoski Satakunta @22.34721,61.466854,90
+2003 Tie 8 Eurajoki, Pinkjärvi Satakunta @21.694177,61.280479,40
+2014 Tie 23 Kankaanpää, Hapua Satakunta @22.290034,61.800246,85
+2016 Tie 41 Huittinen, Jokisivu Satakunta @22.656507,61.109734,60
+2026 Tie 8 Merikarvia, Kuvaskan Satakunta @21.624488,61.943607,0
+2029 Tie 12, Eura Satakunta @22.177219,61.137375,52
+2006 Tie 2 Kokemäki, Seppälänah Satakunta @22.447849,61.20855,48
+2009 Tie 8 Pori, Ahlainen Satakunta @21.758195,61.651109,29
+2090 Tie 8 Rauma, Luostarinkylä Satakunta @21.569286,61.150155,0

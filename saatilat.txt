@@ -1,0 +1,61 @@
+0	.
+4	Auerta, pölyä tai savua, näkyvyys yli 1 km
+5	Auerta, pölyä tai savua, näkyvyys alle 1 km
+10	Utua
+11 *Kuuroja
+12 *Enemmän tai vähemmän jatkuvaa
+13 *Salamoita näkyy, ukkosta ei kuulu
+14 *Sadetta tulee
+15 *Sadetta näkyvissä ei vielä tule
+16 *Sadetta näkyvissä kohta sataa
+17 *Sataa
+18 *Jyrinää
+19 *Ei sada
+20	Sumua viime tunnin aikana
+21	Sadetta viime tunnin aikana, olomuoto tuntematon
+22	Tihkua tai lumijyväsiä viime tunnin aikana
+23	Vesisadetta viime tunnin aikana
+24	Lumisadetta viime tunnin aikana
+25	Jäätävää tihkua tai jäätävää vesisadetta viime tunnin aikana
+30	Sumua
+31	Sumulauttoja
+32	Sumua, joka on harventunut viime tunnin aikana
+33	Sumua, jonka sakeus ei ole muuttunut viime tunnin aikana
+34	Sumua, joka on sakeutunut viime tunnin aikana
+40	Sadetta, olomuoto tuntematon
+41	Heikkoa tai kohtalaista sadetta, olomuoto tuntematon
+42	Kovaa sadetta, olomuoto tuntematon
+50	Tihkusadetta
+51	Heikkoa tihkusadetta
+52	Kohtalaista tihkusadetta
+53	Kovaa tihkusadetta
+54	Jäätävää heikkoa tihkusadetta
+55	Jäätävää kohtalaista tihkusadetta
+56	Jäätävää kovaa tihkusadetta
+60	Vesisadetta
+61	Heikkoa vesisadetta
+62	Kohtalaista vesisadetta
+63	Kovaa vesisadetta
+64	Jäätävää heikkoa vesisadetta
+65	Jäätävää kohtalaista vesisadetta
+66	Jäätävää kovaa vesisadetta
+67	Heikkoa räntäsadetta
+68	Kohtalaista tai sakeaa räntäsadetta
+70	Lumisadetta
+71	Heikkoa lumisadetta
+72	Kohtalaista lumisadetta
+73	Sakeaa lumisadetta
+74	Heikkoa jääjyvässadetta
+75	Kohtalaista jääjyvässadetta
+76	Sakeaa jääjyvässadetta
+77	Lumijyväsiä
+78	Jääkiteitä
+80	Kuurosadetta
+81	Heikkoja vesikuuroja
+82	Kohtalaisia vesikuuroja
+83	Kovia vesikuuroja
+84	Erittäin rajuja vesikuuroja
+85	Heikkoja lumikuuroja
+86	Kohtalaisia lumikuuroja
+87	Sakeita lumikuuroja
+89	Raekuuroja

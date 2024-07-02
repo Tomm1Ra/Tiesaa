@@ -1,0 +1,101 @@
+12007 Tie 20 Kuusamo, Kuolio Pohjois-Pohjanmaa @28.815878,65.826123,270
+10017 Tie 67 Kauhajoki, Äijönkylä Etelä-Pohjanmaa @22.280653,62.48064,93
+12028 Tie 5 Kuusamo, Petäjälampi Pohjois-Pohjanmaa @29.144609,66.013444,290
+12038 Tie 5 Kuusamo, Jokivaara Pohjois-Pohjanmaa @29.15156,65.721323,0
+10024 Tie 8 Kalajoki, Himanka Pohjois-Pohjanmaa @23.638808,64.042047,6
+10023 Tie 8 Uusikaarlepyy, Ytterjeppo Pohjanmaa @22.564302,63.44277,24
+12029 Tie 20 Oulu, Hönttämäki Pohjois-Pohjanmaa @25.598637,65.052348,27
+10022 Tie 724 Mustasaari, Raippaluoto Pohjanmaa @21.473267,63.20668,28
+12049 Tie 22 Oulu, Talonpojankangas Pohjois-Pohjanmaa @25.546105,64.986377,20
+10029 Tie 673 Närpiö,  Rangsby Pohjanmaa @21.22345,62.610743,3
+12010 Tie 22 Utajärvi, Sotkajärvi Pohjois-Pohjanmaa @26.267585,64.781115,80
+13011 Tie 20 Pudasjärvi, Taipaleenharju Pohjois-Pohjanmaa @26.847312,65.275583,0
+12053 Tie 4 Liminka, Tupos Pohjois-Pohjanmaa @25.518404,64.864442,22
+12056 Tie 847 Oulu, Kiviniemi Pohjois-Pohjanmaa @25.488513,64.974622,5
+10031 Tie 63 Kokkola, Ullava Keski-Pohjanmaa @24.009266,63.655661,128
+12059 Tie 4 Oulu, Intiö Pohjois-Pohjanmaa @25.507369,65.019901,15
+12036 Tie 20 Taivalkoski Pohjois-Pohjanmaa @28.300681,65.593155,200
+12033 Tie 22 Muhos, Kosulankylä Pohjois-Pohjanmaa @25.84053,64.884172,13
+12020 Tie 27 Haapajärvi, Oksava Pohjois-Pohjanmaa @25.237196,63.813317,85
+10028 Tie 8 Pedersöre, Lepplax Pohjanmaa @22.914409,63.670921,5
+12026 Tie 4 Oulu, Kontinkangas Pohjois-Pohjanmaa @25.507528,65.004511,0
+15011 TEST_TSA_1 Pohjois-Pohjanmaa @18.518625,61.726952,0
+10027 Tie 8 Mustasaari, Riimala Pohjanmaa @21.762351,62.951401,20
+12016 Tie 4 Kärsämäki Pohjois-Pohjanmaa @25.755648,64.006442,115
+10014 Tie 67 Seinäjoki Etelä-Pohjanmaa @22.778415,62.795511,41
+10011 Tie 3 Laihia, Ruto Pohjanmaa @21.898838,63.001363,9
+10010 Tie 19 Lapua, Jouttikallio Etelä-Pohjanmaa @23.039176,62.939947,51
+10008 Tie 3 Ilmajoki, Majakangas Etelä-Pohjanmaa @22.280752,62.787786,70
+10062 Tie 3 Vaasa, Vanhasatama Pohjanmaa @21.696598,63.070926,0
+10050 Tie 19 Lapua, Ränkimäki Etelä-Pohjanmaa @23.049413,62.969337,46
+10004 Tie 8 Vöyri, Kaitsor Pohjanmaa @22.282333,63.256314,7
+10035 Tie 18 Alavus, Kuivaskylä Etelä-Pohjanmaa @23.467606,62.592338,115
+10018 Tie 18 Alavus, Töysä Etelä-Pohjanmaa @23.89992,62.611742,151
+10040 Tie 18 Isokyrö, Napue Etelä-Pohjanmaa @22.354745,62.977816,23
+10013 Tie 16 Alajärvi Kurejoki Etelä-Pohjanmaa @23.679356,63.019762,79
+10075 Tie 67 Ilmajoki Etelä-Pohjanmaa @22.626641,62.743521,43
+10041 Tie 66 Kuortane, Mäyry Etelä-Pohjanmaa @23.52789,62.771234,95
+10036 Tie 19 Kurikka, Luopajärvi Etelä-Pohjanmaa @22.753038,62.587643,90
+10012 Tie 8 Maalahti, Pirttikylä Pohjanmaa @21.641076,62.747496,40
+11004 Tie 86 Oulainen, Piipsjärvi Pohjois-Pohjanmaa @24.911744,64.309463,80
+12001 Tie 4 Oulu, Ouluntulli Pohjois-Pohjanmaa @25.532049,64.947352,10
+10043 Tie 68 Vimpeli, Hietoja Etelä-Pohjanmaa @23.785161,63.183048,0
+10042 Tie 19 Kauhava, Ylihärmä Etelä-Pohjanmaa @22.868361,63.138798,30
+10032 Tie 67 Teuva Etelä-Pohjanmaa @21.805461,62.49633,80
+10015 Tie 13 Kaustinen, Viiperi Keski-Pohjanmaa @23.473325,63.596931,56
+10006 Tie 8 Kokkola, Vitikka Keski-Pohjanmaa @23.274188,63.860891,7
+11006 Tie 58 Lestijärvi, Jykyri Keski-Pohjanmaa @24.66923,63.520814,146
+10003 Tie 8 Mustasaari, Stormossen Pohjanmaa @21.71973,63.130107,0
+10072 Tie 18 Seinajoki, Nurmo, Munakka Etelä-Pohjanmaa @22.782237,62.851326,40
+11002 Tie 28 Kannus Keski-Pohjanmaa @23.886345,63.901208,45
+10001 Tie 8 Kristiinankaupunki, Metsälä Pohjanmaa @21.530822,62.067804,33
+10045 Tie 16  Alajärvi, Möksy Etelä-Pohjanmaa @24.247809,63.037321,0
+10007 Tie 3 Kurikka, Jalasjärvi Koskue Etelä-Pohjanmaa @22.797132,62.393663,99
+15004 Tie 78 Puolanka Leipivaara Testi Lumenmittaus Pohjois-Pohjanmaa @27.780306,64.84645,0
+12002 Tie 8 Raahe, Pattijoki Pohjois-Pohjanmaa @24.561583,64.68631,10
+11001 Tie 8 Kalajoki, Vasankari Pohjois-Pohjanmaa @23.96849,64.340502,9
+12005 Tie 20 Oulu, Arkala Pohjois-Pohjanmaa @26.1921,65.189479,100
+12003 Tie 4 Siikalatva, Pulkkila Pohjois-Pohjanmaa @25.875735,64.281578,80
+10049 Tie 63 Toholampi Keski-Pohjanmaa @24.245085,63.767396,100
+11005 Tie 4 Pyhäjärvi, Lamminaho Pohjois-Pohjanmaa @25.819967,63.64238,0
+10005 Tie 68 Pedersöre, Edsevö Pohjanmaa @22.816947,63.640125,6
+10039 Tie 8 Mustasaari, Vassor Pohjanmaa @22.008784,63.159152,2
+10002 Tie 8 Närpiö Pohjanmaa @21.438225,62.477492,16
+12019 Tie 4 Oulu, Intiö Pohjois-Pohjanmaa @25.507899,65.019907,15
+10077 Tie 66 Lapua, Ränkimäki Etelä-Pohjanmaa @23.049858,62.969259,46
+10054 Tie 673 Maalahti, Petolahti Pohjanmaa @21.394566,62.86962,3
+10081 Tie 67 Ilmajoki, Koskenkorva Etelä-Pohjanmaa @22.485128,62.685238,50
+15003 TEST_TSA_3 Pohjois-Pohjanmaa @19.71639,59.650285,0
+11007 Tie 13 Veteli, Sikaharju Keski-Pohjanmaa @23.917109,63.428219,98
+10009 Tie 66 Alavus, Sapsalampi Etelä-Pohjanmaa @23.627004,62.446837,122
+10048 Tie 13 Perho, Möttönen Keski-Pohjanmaa @24.522293,63.167388,156
+10044 Tie 19 Ilmajoki,  Rengonkylä Etelä-Pohjanmaa @22.837452,62.709428,0
+10082 Tie 18 Alavus Sääskiniemi Etelä-Pohjanmaa @23.28491,62.647975,8
+11003 Tie 27 Ylivieska, Raudaskylä Pohjois-Pohjanmaa @24.744181,64.002905,75
+12004 Tie 4 Ii, Myllykangas Pohjois-Pohjanmaa @25.251136,65.533159,13
+10016 Tie 44 Kauhajoki, Vakkurinkylä Etelä-Pohjanmaa @22.245449,62.116228,123
+10025 Tie 16 Seinäjoki, Ylistaro Etelä-Pohjanmaa @22.63982,62.972591,37
+15010 Tie 833 Oulu Vesala, Testi Lumenmittaus Pohjois-Pohjanmaa @26.058409,65.031926,0
+10026 Tie 8 Kristiinankaupunki, Lapväärtti Pohjanmaa @21.479724,62.266466,11
+10019 Tie 68 Evijärvi, Kirsilä Etelä-Pohjanmaa @23.515232,63.334901,79
+10020 Tie 749 Luoto, Eugmo Pohjanmaa @22.782701,63.805549,4
+10021 Tie 19 Kauhava Alahärmä, Voltti Etelä-Pohjanmaa @22.799024,63.28904,28
+12014 Tie 4 Tyrnävä, Temmes Pohjois-Pohjanmaa @25.615972,64.657302,55
+12008 Tie 5 Kuusamo, Kitka Pohjois-Pohjanmaa @28.898913,66.305314,240
+12006 Tie 20 Pudasjärvi, Pintamo Pohjois-Pohjanmaa @27.62322,65.449339,170
+12011 Tie 78 Pudasjärvi, Kokkoky Pohjois-Pohjanmaa @26.676485,65.690372,120
+12015 Tie 4 Ii, Olhava Pohjois-Pohjanmaa @25.384804,65.412578,8
+12050 Tie 8 Pyhäjoki, Viirre Pohjois-Pohjanmaa @24.210749,64.447492,0
+12025 Tie 816 Hailuoto Pohjois-Pohjanmaa @24.776125,65.034327,0
+12055 Tie 866 Kuusamo, raja Pohjois-Pohjanmaa @30.092433,65.800111,0
+12017 Tie 8 Liminka, Lapinkangas Pohjois-Pohjanmaa @25.350062,64.783095,25
+12009 Tie 88 Pyhäntä, Ahokylä Pohjois-Pohjanmaa @26.552265,63.989185,190
+12013 Tie 86 Siikajoki, Paavola Pohjois-Pohjanmaa @25.209788,64.605684,60
+12022 Tie 4 Liminka, Haaransilta Pohjois-Pohjanmaa @25.487155,64.816273,0
+13003 Tie 22 Vaala, Liminpuro Pohjois-Pohjanmaa @27.241136,64.53361,125
+12083 Tie 4 Oulu, Haukipudas Pohjois-Pohjanmaa @25.424913,65.174473,20
+12067 Tie 4 Siikalatva, Hyttikoski Pohjois-Pohjanmaa @25.799529,64.421923,0
+12069 Tie 4 Oulu, Lintula Pohjois-Pohjanmaa @25.50536,64.985992,10
+12057 Tie 8690 Kuusamo, Vuotunki Pohjois-Pohjanmaa @29.584713,66.121115,250
+12076 Tie 8 Siikajoki, Revonlahti Pohjois-Pohjanmaa @24.967942,64.718614,0
+12082 Tie 4 Oulu, Ritaharju Pohjois-Pohjanmaa @25.442388,65.071346,16

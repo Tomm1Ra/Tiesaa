@@ -1,0 +1,26 @@
+7009 Tie 9 Liperi, Ylämylly Pohjois-Karjala @29.603705,62.63248,102
+9017 Tie 9 Jämsä, Partalanmäki Keski-Suomi @25.069243,61.825827,0
+7011 Tie 9 Tohmajärvi, Värtsilä Pohjois-Karjala @30.525612,62.178713,89
+8011 Tie 9 Kuopio, Vartiala Pohjois-Savo @28.042812,62.93157,116
+8014 Tie 9 Kuopio, Vehmasmäki Pohjois-Savo @27.523779,62.715944,132
+4013 Tie 9 Orivesi, Kutema Pirkanmaa @24.219303,61.645095,150
+8006 Tie 9 Tuusniemi, Tuusjärvi Pohjois-Savo @28.324824,62.872373,105
+8009 Tie 9 Suonenjoki, Levä Pohjois-Savo @27.048434,62.58601,106
+8012 Tie 9 Kuopio, Jännevirta Pohjois-Savo @27.858781,62.959315,88
+8079 Tie 9 Kuopio, Jännevirran silta Pohjois-Savo @27.830014,62.971111,113
+9016 Tie 9 Jämsä, Ratalammi Keski-Suomi @25.328408,61.913724,0
+9011 Tie 9 Hankasalmi, Hallanlahti Keski-Suomi @26.590491,62.377498,113
+9002 Tie 9 Jyväskylä, Korpilahti Keski-Suomi @25.500411,61.999365,125
+9007 Tie 9 Laukaa, Lievestuore Keski-Suomi @26.140128,62.246171,125
+9014 Tie 9 Jyväskylä Keski-Suomi @25.769116,62.24607,79
+9021 Tie 9 Muurame Keljonkangas Keski-Suomi @25.681402,62.17971,160
+9020 Tie 9 Hankasalmi asema Keski-Suomi @26.477676,62.30478,104
+7003 Tie 9 Liperi, Ahonkylä Pohjois-Karjala @29.104238,62.684135,0
+7012 Tie 9 Liperi, Käsämä Pohjois-Karjala @29.340875,62.632521,90
+2011 Tie 9 Loimaa, Mellilä Varsinais-Suomi @22.883857,60.784596,91
+4021 Tie 9 Akaa, Kylmäkoski Pirkanmaa @23.647442,61.115356,100
+4030 Tie 9 Kangasala, Suinula Pirkanmaa @24.071716,61.54979,0
+2027 Tie 9 Aura, Järvenoja Varsinais-Suomi @22.510463,60.615549,54
+4032 Tie 9 Orivesi, Talviainen Pirkanmaa @24.708928,61.731515,0
+4031 Tie 9 Orivesi, Leppähammas Pirkanmaa @24.475165,61.708726,0
+2031 Tie 9 Turku, Kärsämäki Varsinais-Suomi @22.284284,60.497849,0

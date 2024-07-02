@@ -1,0 +1,24 @@
+2010 Tie 3 Parkano, Lamminkoski Pirkanmaa @23.01663,62.112084,140
+2017 Tie 12 Sastamala, Kärppälä Pirkanmaa @23.117187,61.367909,87
+2007 Tie 3 Ikaalinen, Teikangas Pirkanmaa @22.99236,61.787861,125
+4005 Tie 11 Nokia, Sorrinlammi Pirkanmaa @23.422976,61.501564,155
+4006 Tie 3 Lempäälä, Kulju Pirkanmaa @23.765038,61.408411,130
+4020 Tie 12 Tampere, Särkänniemi Pirkanmaa @23.699541,61.507698,100
+4007 Tie 130 Valkeakoski, Jutikkala Pirkanmaa @24.058328,61.148562,90
+4016 Tie 23 Virrat, Puttoskylä Pirkanmaa @23.807369,62.24889,130
+4012 Tie 12 Pälkäne, Kollolanharju Pirkanmaa @24.293627,61.308423,105
+4015 Tie 66 Ruovesi, Ruojärvi Pirkanmaa @24.024142,62.017254,120
+4023 Tie 58 Mänttä-Vilppula, Kuoreniemi Pirkanmaa @24.610931,61.977972,105
+4021 Tie 9 Akaa, Kylmäkoski Pirkanmaa @23.647442,61.115356,100
+4017 Tie 12 Tampere, Atala Pirkanmaa @23.917511,61.497141,120
+9005 Tie 24 Kuhmoinen, Iso-Sääksjärvi Pirkanmaa @25.295385,61.631933,125
+4027 Tie 3 Lempäälä, Lippo Pirkanmaa @23.836093,61.255318,0
+4028 Tie 3 Valkeakoski, Jutikka Pirkanmaa @24.057326,61.140958,0
+4030 Tie 9 Kangasala, Suinula Pirkanmaa @24.071716,61.54979,0
+4064 Tie 3495 Tampere, Rautaharkko Pirkanmaa @23.774446,61.477226,0
+4032 Tie 9 Orivesi, Talviainen Pirkanmaa @24.708928,61.731515,0
+4029 Tie 3 Pirkkala, Huovi Pirkanmaa @23.63602,61.452635,0
+4031 Tie 9 Orivesi, Leppähammas Pirkanmaa @24.475165,61.708726,0
+4076 Tie 12 Kangasala Pirkanmaa @24.060703,61.461774,0
+4024 Tie 3 Ylöjärvi, Metsäkylä Pirkanmaa @23.47546,61.577097,155
+4013 Tie 9 Orivesi, Kutema Pirkanmaa @24.219303,61.645095,150

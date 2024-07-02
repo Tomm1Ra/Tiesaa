@@ -1,0 +1,44 @@
+1009 Tie 4 Mäntsälä, Ohkola Uusimaa @25.18712,60.555731,0
+1010 Tie 4 Mäntsälä, Levanto Uusimaa @25.448236,60.735882,0
+1005 Tie 4 Kerava, Kytömaa_JK Uusimaa @25.124371,60.426274,0
+1004 Tie 4 Helsinki, Jakomäki Uusimaa @25.065093,60.251833,0
+4066 Tie 4 Hartola, Kettuvuori Päijät-Häme @26.03436,61.66544,0
+9004 Tie 4 Äänekoski, Kalaniemi Keski-Suomi @25.810019,62.877732,105
+6001 Tie 4 Heinola, Vierumäki Päijät-Häme @25.905355,61.098739,0
+11005 Tie 4 Pyhäjärvi, Lamminaho Pohjois-Pohjanmaa @25.819967,63.64238,0
+12003 Tie 4 Siikalatva, Pulkkila Pohjois-Pohjanmaa @25.875735,64.281578,80
+12001 Tie 4 Oulu, Ouluntulli Pohjois-Pohjanmaa @25.532049,64.947352,10
+12069 Tie 4 Oulu, Lintula Pohjois-Pohjanmaa @25.50536,64.985992,10
+14004 Tie 4 Sodankylä, Vuojärvi Lappi @26.542602,67.070218,220
+14008 Tie 4 Tervola, Paakkola Lappi @24.69451,65.997655,33
+9006 Tie 4 Laukaa, Vehniä Keski-Suomi @25.684373,62.44032,135
+9019 Tie 4 Jyväskylä, Puuppola Keski-Suomi @25.703895,62.340207,100
+12059 Tie 4 Oulu, Intiö Pohjois-Pohjanmaa @25.507369,65.019901,15
+12015 Tie 4 Ii, Olhava Pohjois-Pohjanmaa @25.384804,65.412578,8
+12022 Tie 4 Liminka, Haaransilta Pohjois-Pohjanmaa @25.487155,64.816273,0
+12026 Tie 4 Oulu, Kontinkangas Pohjois-Pohjanmaa @25.507528,65.004511,0
+18006 Tie 4 Sodankylä, Petäjämaa Lappi @26.617184,67.36213,200
+12016 Tie 4 Kärsämäki Pohjois-Pohjanmaa @25.755648,64.006442,115
+6004 Tie 4 Sysmä, Onkiniemi Päijät-Häme @26.040098,61.412619,0
+12019 Tie 4 Oulu, Intiö Pohjois-Pohjanmaa @25.507899,65.019907,15
+12053 Tie 4 Liminka, Tupos Pohjois-Pohjanmaa @25.518404,64.864442,22
+4001 Tie 4 Hollola, Miekkiö Päijät-Häme @25.613012,60.907742,70
+12082 Tie 4 Oulu, Ritaharju Pohjois-Pohjanmaa @25.442388,65.071346,16
+14039 Tie 4 Kemi, Siikalahti Lappi @24.626121,65.711347,4
+14036 Tie 4 Kemi, Ristikangas Lappi @24.573949,65.752307,36
+12083 Tie 4 Oulu, Haukipudas Pohjois-Pohjanmaa @25.424913,65.174473,20
+9037 Tie 4 Äänekoski, Lintulahti Keski-Suomi @25.807422,62.807001,101
+9018 Tie 4 Äänekoski, Petomäki Keski-Suomi @25.767173,62.693869,0
+9001 Tie 4 Toivakka, Vestonmäki Keski-Suomi @26.05186,62.05144,185
+14068 Tie 4 Rovaniemi, Santa Claus Lappi @25.785034,66.538124,122
+9036 Tie 4 Pihtipudas, Rönnynkylä Keski-Suomi @25.641305,63.422953,119
+12067 Tie 4 Siikalatva, Hyttikoski Pohjois-Pohjanmaa @25.799529,64.421923,0
+14002 Tie 4 Rovaniemi, Jaatila Lappi @25.344265,66.248902,50
+9013 Tie 4 Joutsa, Vähä Säynätjärvi Keski-Suomi @26.083664,61.722526,95
+9008 Tie 4 Viitasaari, Löytänä Keski-Suomi @25.663308,63.224397,130
+12004 Tie 4 Ii, Myllykangas Pohjois-Pohjanmaa @25.251136,65.533159,13
+14020 Tie 4 Keminmaa, Isohaara Lappi @24.532171,65.789405,8
+14016 Tie 4 Inari, Petsikko Lappi @27.238159,69.4476,284
+14003 Tie 4 Inari, Saariselkä, Urupää Lappi @27.42308,68.454743,362
+14007 Tie 4 Sodankylä, Porttipahta Lappi @26.880189,67.989226,240
+12014 Tie 4 Tyrnävä, Temmes Pohjois-Pohjanmaa @25.615972,64.657302,55
