@@ -42,6 +42,13 @@ async function getAsemaSaaInfo(id)  {
 }
 
 
+async function getAllSaaInfo() {
+    const saaInfo = await axios
+            .get('https://tie.digitraffic.fi/api/weather/v1/stations/data')
+            .catch((e)=> console.log("invalid request",e))
+            return saaInfo.data
+        }
+
 async function getSaaasemat() {
     const asemat = await axios
             .get('https://tie.digitraffic.fi/api/weather/v1/stations?lastUpdated=false&state=ACTIVE')
@@ -235,6 +242,7 @@ function checkMeasureTime(measureTime)
 async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,showEmpty) {
     const saatilatMap = new Map();
     const tempNamesMap = new Map();
+    const asemaSaatMap = new Map();
     latBase = home.latitude
     longBase = home.longitude
     saatilalines = saatilat.split('\n');
@@ -257,17 +265,25 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
         }
     }));
 
-    await Promise.all(lines.map(async (line) => {
+    try {
+        allSaaInfo = await getAllSaaInfo() 
+    } catch (err) {console.log("error",err)}
+
+    for (asema of allSaaInfo.stations) {
+        asemaSaatMap.set(asema.id,asema.sensorValues)
+    }
+
+    lines.forEach( (line) => {
         id = line.match(/^([\d]+)/);
         if (id) {
-            //console.log("ID:"+id[0]);
+            // console.log("ID:"+id[0]);
             if (!line.includes('@')) { //haetaan nimi mapista
                 line = tempNamesMap.get(id[0])
             }
-            let asemaData = await getAsemaSaaInfo(id[0])
+            let asemaData = asemaSaatMap.get(parseInt(id[0]));
                 if (asemaData) {
                     const sensorsMap = new Map();
-                    for(const item of asemaData.sensorValues)  {
+                    for(const item of asemaData)  {
                         sensorsMap.set(item.shortName,{"t":item.measuredTime,"v":item.value,"u":item.unit,"d":item.sensorValueDescriptionFi})
                     }
                     lineSplit = line.split('@');
@@ -329,7 +345,7 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
             }
             };
         }
-    ));
+    );
     switch (order){
         case "E" :
         case "S" :
@@ -431,7 +447,7 @@ async function start(consoleline) {
             {if (param.match(/^\-?[0-9]+/)) {
                 limit_temp = param.includes('-')?param.substring(1):param
             }
-            if (param.match(/^\-?[a-zA-Z+-]$/)) {
+            if (param.match(/^\-?[a-wA-W+-]$/)) {
                 order = param.includes('-')?param.substring(1):param
             }
             if (param == '-') order = param;
