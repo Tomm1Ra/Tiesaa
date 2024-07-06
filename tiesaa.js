@@ -232,7 +232,7 @@ function checkMeasureTime(measureTime)
     return mins>7?" *"+Math.floor(mins)+"* ":"";
 }
 
-async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator) {
+async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,showEmpty) {
     const saatilatMap = new Map();
     const tempNamesMap = new Map();
     latBase = home.latitude
@@ -273,6 +273,7 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator)
                     lineSplit = line.split('@');
                     line = lineSplit[0];
                     fullName=line;
+                    asm = fullName.split(' ')[0];
                     lati = 0;
                     longi = 0;
                     if (lineSplit[1]){
@@ -303,9 +304,9 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator)
                     koste=sensorsMap.has("Koste")?sensorsMap.get("Koste").v:0;
                     ilmaMin=sensorsMap.has("IlmMIN")?sensorsMap.get("IlmMIN").v:99;
                     ilmaMax=sensorsMap.has("IlmMAX")?sensorsMap.get("IlmMAX").v:-99;
+                    nakyvyys=sensorsMap.has("Näky_m")?sensorsMap.get("Näky_m").v:99999;
                     linelimit=1000;
-
-                    perusLista.push({"data":perusLine, "lon":longi,"lat":lati,"dist":dist,"temp":temp,"rain":rain,"raini":raini,"ilmaMin":ilmaMin,"ilmaMax":ilmaMax,"wind":wind,"koste":koste});
+                    perusLista.push({"data":perusLine, "asema":asm,"lon":longi,"lat":lati,"dist":dist,"temp":temp,"rain":rain,"raini":raini,"ilmaMin":ilmaMin,"ilmaMax":ilmaMax,"wind":wind,"koste":koste,"nakyvyys":nakyvyys});
 
                     
                     if (detail) {
@@ -370,6 +371,12 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator)
         case "-" : 
             perusLista = perusLista.sort((a,b) => a.ilmaMin- b.ilmaMin);
         break;
+        case "a" : 
+            perusLista = perusLista.sort((a,b) => a.asema - b.asema);
+        break;
+        case "n" : 
+            perusLista = perusLista.sort((a,b) => a.nakyvyys - b.nakyvyys);
+        break;
 
         default:
             perusLista = perusLista.sort((a,b) => a.dist - b.dist);
@@ -380,8 +387,10 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator)
     } else{
         console.log(header);
         for (perusLine of perusLista) {
-            console.log(perusLine.data);
-            if (++counter>=lineLimit) break;
+            if (perusLine.temp != -99 || showEmpty) {
+                console.log(perusLine.data);
+                if (++counter>=lineLimit) break;
+            }
         }
     }
 }
@@ -390,6 +399,7 @@ async function start(consoleline) {
 
     filename = "saatilat.txt";
     order ="d"
+    showEmpty=false;
     separator='\n'
     try {
         saatilat = await fileRead(filename)
@@ -424,7 +434,8 @@ async function start(consoleline) {
             if (param.match(/^\-?[a-zA-Z+-]$/)) {
                 order = param.includes('-')?param.substring(1):param
             }
-            if (param=='-') order = param;
+            if (param == '-') order = param;
+            if (param == 'x') showEmpty = true;
         }
         if (limit_temp==-1) limit_temp=1000; else limit=limit_temp;
         limit = ['P','E','I','L','N','W','S','d'].includes(order)?Math.min(1000,limit_temp):limit;
@@ -439,7 +450,7 @@ async function start(consoleline) {
             separator='*'
         }
         if (typeof rawData !== 'undefined' && rawData) {
-            getTiesaa(rawData,config.home,saatilat,0,order,limit,separator);
+            getTiesaa(rawData,config.home,saatilat,0,order,limit,separator,showEmpty);
         } 
     }
 }
