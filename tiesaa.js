@@ -363,35 +363,35 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
             perusLista = perusLista.sort((a,b) => b.lon - a.lon);
         break;
         case "l" : 
-            perusLista = perusLista.sort((a,b) => b.temp - a.temp);
+            perusLista = perusLista.sort((a,b) => b.temp - a.temp || a.dist - b.dist);
         break;
         case "k" : 
-            perusLista = perusLista.sort((a,b) => a.temp - b.temp);
+            perusLista = perusLista.sort((a,b) => a.temp - b.temp || a.dist - b.dist);
         break;
         case "s" : 
         case "r" : 
-            perusLista = perusLista.sort((a,b) => b.rain- a.rain);
+            perusLista = perusLista.sort((a,b) => b.rain- a.rain || b.raini- a.raini);
         break;
         case "w" : 
-            perusLista = perusLista.sort((a,b) => b.wind- a.wind);
+            perusLista = perusLista.sort((a,b) => b.wind- a.wind || a.asema - b.asema);
         break;
         case "h" : 
-            perusLista = perusLista.sort((a,b) => b.koste- a.koste);
+            perusLista = perusLista.sort((a,b) => b.koste- a.koste || a.asema - b.asema);
         break;
         case "i" : 
-            perusLista = perusLista.sort((a,b) => b.raini- a.raini);
+            perusLista = perusLista.sort((a,b) => b.raini- a.raini || b.rain- a.rain );
         break;
         case "+" : 
-            perusLista = perusLista.sort((a,b) => b.ilmaMax- a.ilmaMax);
+            perusLista = perusLista.sort((a,b) => b.ilmaMax- a.ilmaMax || a.asema - b.asema);
         break;
         case "-" : 
-            perusLista = perusLista.sort((a,b) => a.ilmaMin- b.ilmaMin);
+            perusLista = perusLista.sort((a,b) => a.ilmaMin- b.ilmaMin || a.asema - b.asema);
         break;
         case "a" : 
-            perusLista = perusLista.sort((a,b) => a.asema - b.asema);
+            perusLista = perusLista.sort((a,b) => a.asema - b.asema || a.asema - b.asema);
         break;
         case "n" : 
-            perusLista = perusLista.sort((a,b) => a.nakyvyys - b.nakyvyys);
+            perusLista = perusLista.sort((a,b) => a.nakyvyys - b.nakyvyys || a.asema - b.asema);
         break;
 
         default:
