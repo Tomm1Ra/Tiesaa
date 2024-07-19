@@ -9,6 +9,32 @@ const fileRead = async(fileName) => {
     return result;
 }
 
+async function lastHour(id,endTime,sensor) {
+    startTime = moment(endTime).subtract(1, 'hours').toISOString();
+    console.log(startTime,endTime)
+    const getResponse = await axios
+    .get(`https://tie.digitraffic.fi/api/beta/weather-history-data/${id}/${sensor}?from=${startTime}&to=${endTime}` , {timeout: 15000})
+    .then((response) => response)
+    .catch((e)=> console.log("Tuntematon asema ",id))
+    if (getResponse) {
+        return getResponse.data
+    } else return null;
+}
+
+
+async function getHistory(id,sensor) {
+    startTime = moment().subtract(1, 'days').toISOString();
+    endTime = moment().toISOString();
+    // console.log(startTime,endTime)
+    const getResponse = await axios
+    .get(`https://tie.digitraffic.fi/api/beta/weather-history-data/${id}/${sensor}?from=${startTime}&to=${endTime}` , {timeout: 15000})
+    .then((response) => response)
+    .catch((e)=> console.log("Tuntematon asema ",id))
+    if (getResponse) {
+        return getResponse.data
+    } else return null;
+}
+
 async function getAsemaInfo(id) {
     const getResponse = await axios
     .get(`https://tie.digitraffic.fi/api/weather/v1/stations/${id}` , {timeout: 15000})
@@ -136,7 +162,7 @@ function getValueWithUnit(dataMap,label,type) {
 }
 
 function getValueNoUnit(dataMap,label,type) {
-    return dataMap.has(type)?label+dataMap.get(type).v:"0"
+    return dataMap.has(type)?label+dataMap.get(type).v:""
 }
 
 function getDescription(dataMap,label,type) {
@@ -179,16 +205,17 @@ function sadeLine(dataMap) {
 
 function keliLine(dataMap) {
     return (
-        getDescription(dataMap,"Keli:","Keli1") + getDescription(dataMap," ","Keli2")
+        getDescription(dataMap,"Keli:","Keli1") + getDescription(dataMap," ","Keli2") + getDescription(dataMap," ","Keli3")
         +getDescription(dataMap," Varoitus1:","Varo1")
-        +getDescription(dataMap," 2:","Varo2")
-        +getValueWithUnit(dataMap," Lumensyvyys:","LumSyv") )
+        +getDescription(dataMap," 2:","Varo2")+getDescription(dataMap," 3:","Varo3")+getDescription(dataMap," 4:","Varo4")
+        +getValueWithUnit(dataMap," Lumensyvyys:","LumSyv") +getValueWithUnit(dataMap," ","Lumi_A") +getValueWithUnit(dataMap," ","Lumi_B")
+        +getValueWithUnit(dataMap," ","Lumi_C") +getValueWithUnit(dataMap," ","LumiKA"))
 }
 
 function pisteLine(dataMap) {
     return (
       getValueWithUnit(dataMap,"Kastepiste:","KastP")
-    + getValueWithUnit(dataMap," Jäätymispiste:","JääPi1")
+    + getValueWithUnit(dataMap," Jäätymispiste:","JääPi1") + getValueWithUnit(dataMap," ","JääPi2") + getValueWithUnit(dataMap," ","JääPi3") + getValueWithUnit(dataMap," ","JääPi4")
     + getValueWithUnit(dataMap," Kuurapiste:","KuuraP")
     + getValueWithUnit(dataMap," Ilmankosteus:","Koste") )
 };
@@ -196,28 +223,29 @@ function pisteLine(dataMap) {
 function suolaLine(dataMap) {
     return (
       getValueWithUnit(dataMap,"Kosteuden määrä:","KosMä1")
-    + getValueWithUnit(dataMap," Suolan määrä:","SuoMä1")
-    + getValueWithUnit(dataMap," Suolan väkevyys:","SuoVä1") )
+    + getValueWithUnit(dataMap,"  Suolan määrä:","SuoMä1") + getValueWithUnit(dataMap," ","SuoMä2")
+    + getValueWithUnit(dataMap,"  Suolan väkevyys:","SuoVä1") + getValueWithUnit(dataMap," ","SuoVä2") )
 }
 
 function nakyLine(dataMap) {
     return (
-      getValueWithUnit(dataMap,"Näkyvyys:","Näky_m")
+      getValueWithUnit(dataMap,"Näkyvyys:","Näky_m") + getValueWithUnit(dataMap," ","Näk_km")
     + getValueNoUnit(dataMap," Aurinko:","Aurink")
-    + getValueNoUnit(dataMap," Valoa:","Valoa?") )
+    + getValueNoUnit(dataMap," Valoa:","Valoa?")
+    + getValueNoUnit(dataMap," Sataa:","Sataa"))
 }
 
 function kitkaLine(dataMap) {
     return (
-      getValueWithUnit(dataMap,"Kitka:","Kitka1") + getValueWithUnit(dataMap," ","Kitka2")
-    + getValueWithUnit(dataMap," Vettä:","VedMä1")
-    + getValueWithUnit(dataMap," Lunta:","LumMä1")
-    + getValueWithUnit(dataMap," Jäätä:","JääMä1") )
+      "Kitka:"+getValueWithUnit(dataMap," ","Kitka1") + getValueWithUnit(dataMap," ","Kitka2")
+    + "  Vettä:"+getValueWithUnit(dataMap," ","VedMä1") + getValueWithUnit(dataMap," ","VedMä2")
+    + "  Lunta:"+getValueWithUnit(dataMap," ","LumMä1") + getValueWithUnit(dataMap," ","LumMä2")
+    + "  Jäätä:"+getValueWithUnit(dataMap," ","JääMä1") + getValueWithUnit(dataMap," ","JääMä2") )
 }
 
 function miscLine(dataMap) {
     return (
-      getValueNoUnit(dataMap,"\nAseman status:","Stat1") + getValueNoUnit(dataMap," ","Stat2")
+      getValueNoUnit(dataMap,"\nAseman status:","Stat1") + getValueNoUnit(dataMap," ","Stat2") + getValueNoUnit(dataMap," Vika:","AntVik")
     + getValueNoUnit(dataMap,"  PWD status:","PWDsta") + getValueNoUnit(dataMap," tila:","PWDtil") + getValueNoUnit(dataMap," NäkTila:","PWDnäk") + getValueWithUnit(dataMap," ","PWDrbc") + getValueNoUnit(dataMap," ","PWDtbc")
     + getValueWithUnit(dataMap,"\nJohtavuus 1:","Joht1") + getValueWithUnit(dataMap," 2:","Joht2") + getValueWithUnit(dataMap," 3:","Joht3") + getValueWithUnit(dataMap," 4:","Joht4")
     + getValueWithUnit(dataMap," Pintasignaali 1:","PSig1") + getValueWithUnit(dataMap," 2:","PSig2") + getValueWithUnit(dataMap," 3:","PSig3") + getValueWithUnit(dataMap," 4:","PSig4")
@@ -225,6 +253,21 @@ function miscLine(dataMap) {
     + getValueNoUnit(dataMap,"\nTienpinta OPT 1:","TilaO1") + getValueNoUnit(dataMap," 2:","TilaO2")
     + getValueNoUnit(dataMap," Tila 1:","Tila1") + getValueNoUnit(dataMap," 2:","Tila2") + getValueNoUnit(dataMap," 3:","Tila3") + getValueNoUnit(dataMap," 4:","Tila4")
     + getValueNoUnit(dataMap," Optinen Keli 1:","KeliO1") + getDescription(dataMap," varoitus:","VaroO1") 
+)
+
+}
+function ennusteLine(dataMap) {
+    return (
+        getValueNoUnit(dataMap,"Tuuli:","E-TSuu")
+        +getValueNoUnit(dataMap,"Nopeus:","E-Tuul")
+        +getValueNoUnit(dataMap,"Pilvisyys:","E-Pilv")
+        +getValueNoUnit(dataMap,"Sade","E-SOlo")
+        +getValueNoUnit(dataMap,"Inte","E-SInt")
+        +getValueNoUnit(dataMap,"todnäk","E-STod")
+        +getValueNoUnit(dataMap,"Ilma:","E-Ilma")
+        +getValueNoUnit(dataMap,"Tie","E-Tie")
+        +getValueNoUnit(dataMap,"KasteP","E-KasP")
+        +getValueNoUnit(dataMap,"Sademäärä","E-SS1h")
 )
 
 }
@@ -338,8 +381,9 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
                         console.log("\n"+pisteLine(sensorsMap))
                         console.log(suolaLine(sensorsMap))
                         console.log(nakyLine(sensorsMap))
-                        console.log(kitkaLine(sensorsMap)) 
-                        console.log(miscLine(sensorsMap)) 
+                        console.log(kitkaLine(sensorsMap))
+                        //console.log(ennusteLine(sensorsMap))
+                        //console.log(miscLine(sensorsMap))
                     }
 
             }
@@ -399,6 +443,105 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
     }
     counter=0;
     if (detail) {
+        console.log("\n* 24h historia")
+        console.log(" Aika          Ilma      Tie     Kosteus Tuuli     Näky    SadeSum    Sade")
+        IlmaHistory = await getHistory(id[0],1)
+        Tie1History = await getHistory(id[0],3)
+        MaxTuuliHistory = await getHistory(id[0],17)
+        KosteHistory = await getHistory(id[0],21)
+        SIntHistory = await getHistory(id[0],23)
+        SSumHistory = await getHistory(id[0],24)
+        NakyHistory = await getHistory(id[0],58)
+        h=30;
+        i = 0;
+        maxIlma = -99; minIlma = 99;
+        maxTie = -99; minTie = 99; maxTieT = " N/A "; minTieT = " N/A ";
+        eka=true;
+        for (item of IlmaHistory) {
+            sadeHourMax=0;
+            sadeSumma=0;
+            kosteus=0;
+            maxTuuli=0;
+            nakyvyys=99999;
+            tieLampo="   N/A   ";
+            if (item.sensorValue > maxIlma) {
+                maxIlma = item.sensorValue;
+                maxIlmaT =  moment(item.measuredTime).format('HH:mm')
+            }
+            if (item.sensorValue < minIlma) {
+                minIlma = item.sensorValue;
+                minIlmaT =  moment(item.measuredTime).format('HH:mm')
+            }
+            if (moment(item.measuredTime).format('H') != h)
+            {
+                h = moment(item.measuredTime).format('H');
+                ilma = formatValue(item.sensorValue)+"°C  "
+                for (tieItem of Tie1History) {
+                    if (moment(tieItem.measuredTime).isBetween(moment(item.measuredTime).subtract(1,'hours'),moment(item.measuredTime)))
+                    {
+                        tieLampo  = formatValue(tieItem.sensorValue)+"°C  ";
+                        if (tieItem.sensorValue > maxTie) {
+                            maxTie = tieItem.sensorValue;
+                            maxTieT =  moment(tieItem.measuredTime).format('HH:mm')
+                        }
+                        if (tieItem.sensorValue < minTie) {
+                            minTie = tieItem.sensorValue;
+                            minTieT =  moment(tieItem.measuredTime).format('HH:mm')
+                        }
+                    }
+                }
+                for (sadeItem of SIntHistory) {
+                    if (moment(sadeItem.measuredTime).isBetween(moment(item.measuredTime).subtract(1,'hours'),moment(item.measuredTime)))
+                    {
+                        if (sadeItem.sensorValue > sadeHourMax) sadeHourMax = sadeItem.sensorValue;
+                    }
+                }
+                if (sadeHourMax < 10) korjaus = "  "; else korjaus =" ";
+                if (sadeHourMax == 0) {sadeHourMax="      "} else {sadeHourMax=korjaus+sadeHourMax.toFixed(2)+" mm/h"}
+                for (sadeItem of SSumHistory) {
+                    if (moment(sadeItem.measuredTime).isBetween(moment(item.measuredTime).subtract(1,'hours'),moment(item.measuredTime)))
+                    {
+                        sadeSumma  = sadeItem.sensorValue;
+                    }
+                }
+                if (sadeSumma < 10) korjaus = "  "; else korjaus =" ";
+                if (sadeSumma == 0) {sadeSumma="        "} else {sadeSumma=korjaus+sadeSumma.toFixed(1)+"mm "}
+                for (kosteItem of KosteHistory) {
+                    if (moment(kosteItem.measuredTime).isBetween(moment(item.measuredTime).subtract(1,'hours'),moment(item.measuredTime)))
+                    {
+                        if (kosteItem.sensorValue > kosteus) kosteus = kosteItem.sensorValue;
+                    }
+                }
+                if (kosteus < 100) korjaus = " "; else korjaus ="";
+                kosteus = korjaus+kosteus+"% "
+                for (tuuliItem of MaxTuuliHistory) {
+                    if (moment(tuuliItem.measuredTime).isBetween(moment(item.measuredTime).subtract(1,'hours'),moment(item.measuredTime)))
+                    {
+                        if (tuuliItem.sensorValue > maxTuuli) maxTuuli = tuuliItem.sensorValue;
+                    }
+                }
+                if (maxTuuli < 10) korjaus = " "; else korjaus ="";
+                maxTuuli = korjaus+maxTuuli.toFixed(1)+"m/s  "
+
+                for (nakyItem of NakyHistory) {
+                    if (moment(nakyItem.measuredTime).isBetween(moment(item.measuredTime).subtract(1,'hours'),moment(item.measuredTime)))
+                    {
+                        if (nakyItem.sensorValue < nakyvyys) nakyvyys = nakyItem.sensorValue;
+                    }
+                }
+                if (nakyvyys < 10000) korjaus = " "; else korjaus ="";
+                if (nakyvyys < 1000) korjaus+=" ";
+                nakyvyys = korjaus+nakyvyys+"m "
+                if(eka) { //skipataan eka rivi.
+                    eka=false
+                } else {
+                    console.log (moment(item.measuredTime).format('DD.MM. HH:mm')+"  "+ilma,tieLampo,kosteus,maxTuuli,nakyvyys,sadeSumma+sadeHourMax)
+                }
+            }
+            i++
+        }
+        console.log("\nIlma Max:",maxIlmaT,maxIlma.toFixed(1)+"°C   Min: ",minIlmaT,minIlma.toFixed(1)+"°C")
+        console.log("Tie  Max:",maxTieT,maxTie.toFixed(1)+"°C   Min: ",minTieT,minTie.toFixed(1)+"°C")
 
     } else{
         console.log(header);
