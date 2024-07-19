@@ -105,53 +105,6 @@ async function SaaAsematLista(searchString) {
         return returnData
 }
 
-function formatValue(o) {
-    o=o+"";
-    if (!o.includes('.')) o=o+".0"
-    r=o;
-    if (o < 10 && o >= 0) r=" "+r;
-    if (o > -10) r=" "+r;
-    return r;
-}
-
-function formatValuePos(o) {
-    o=o+"";
-    if (!o.includes('.')) o=o+".0"
-    r=o;
-    if (o < 10) r=" "+r;
-    return r;
-}
-
-
-function formatValueInt100(o) {
-    o=o+"";
-    r=o;
-    if (o<10&&o>=0) r=" "+r;
-    if (o<100) r=" "+r;
-    return r;
-}
-
-function formatValueInt10000(o) {
-    o=o+"";
-    r=o;
-    if (o<10&&o>=0) r=" "+r;
-    if (o<100) r=" "+r;
-    if (o<1000) r=" "+r;
-    if (o<10000) r=" "+r;
-    return r;
-}
-function formatValue2desim(o) {
-    o=o+"";
-    if (!o.includes('.')) o=o+".0"
-    r=o;
-    if (o.split(".")[1].length<2) r=r+"0";
-    if (o<10&&o>=0) r=" "+r;
-    if (o<100) r=" "+r;
-    if (r=="  0.00") {
-        return "  0 " 
-    } else return r;
-}
-
 function updateTime(dataMap) {
     upTime = dataMap.has("Ilma ")?dataMap.get("Ilma ").t:""
     return moment(upTime).locale("fi").format('llll')+"  "+moment(upTime).locale("fi").fromNow(); 
@@ -286,6 +239,8 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
     const saatilatMap = new Map();
     const tempNamesMap = new Map();
     const asemaSaatMap = new Map();
+    lastIlmaTemp="N/A"
+    lastTieTemp="N/A"
     latBase = home.latitude
     longBase = home.longitude
     saatilalines = saatilat.split('\n');
@@ -298,7 +253,7 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
     lines = rawData.split(separator);
     //console.log("LINES:"+lines)
     console.log("\n"+moment().format("D.M.YYYY H:mm"))
-    header = ("                                               Ilma    Min     Max    Kosteus  Tuuli    Näky   Sade24h    Sade ")
+    header = " ".padEnd(46," ")+"Ilma".padStart(5," ")+"Min".padStart(7," ")+"Max".padStart(7," ")+"Kosteus".padStart(12," ")+"Tuuli".padStart(8," ")+"Näky".padStart(7," ")+"Sade24h".padStart(11," ")+"Sade" .padStart(8," ")
     //Haetaan aseman nimi ja paikka jos pelkkä numero listassa
     await Promise.all(lines.map(async (line) => {
         id = line.match(/^([\d]+)/);
@@ -342,17 +297,19 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
                     dist = distance(parseFloat(lati),parseFloat(longi),latBase,longBase).toFixed(1);
                     st=sensorsMap.has("Säätila")?sensorsMap.get("Säätila").v+"":"0";
 
-                    line = (line+"                                               ").substring(45,line);
-                    sensorsMap.has("Ilma ") ?line+=formatValue(sensorsMap.get("Ilma ").v)+sensorsMap.get("Ilma ").u:line+="    N/A"
-                    sensorsMap.has("IlmMIN")?line+=" "+formatValue(sensorsMap.get("IlmMIN").v)+sensorsMap.get("IlmMIN").u:line+="    N/A  "
-                    sensorsMap.has("IlmMAX")?line+=" "+formatValue(sensorsMap.get("IlmMAX").v)+sensorsMap.get("IlmMAX").u:line+="  N/A  "
-                    sensorsMap.has("Koste")?line+="   "+formatValueInt100(sensorsMap.get("Koste").v)+sensorsMap.get("Koste").u:line+="    N/A"
-                    sensorsMap.has("MTuuli")?line+="  "+formatValue(sensorsMap.get("MTuuli").v)+sensorsMap.get("MTuuli").u:line+="     N/A  "
-                    sensorsMap.has("Näky_m")?line+="  "+formatValueInt10000(sensorsMap.get("Näky_m").v)+sensorsMap.get("Näky_m").u:line+="   N/A  "
-                    sensorsMap.has("Sad24h")?line+="  "+formatValuePos(sensorsMap.get("Sad24h").v)+sensorsMap.get("Sad24h").u:line+="     N/A"
-                    sensorsMap.has("S-Int")?line+="  "+formatValue2desim(sensorsMap.get("S-Int").v)+sensorsMap.get("S-Int").u:line+="      N/A"
-                    sensorsMap.has("IPaine")?line+=" "+formatValue(sensorsMap.get("IPaine").v)+sensorsMap.get("IPaine").u:line+=""
+                    line = (line.padEnd(50," ")).substring(45,line);
+                    sensorsMap.has("Ilma ") ?line+=((sensorsMap.get("Ilma ").v.toFixed(1))+sensorsMap.get("Ilma ").u).padStart(7," "):line+="N/A ".padStart(7," ")
+                    sensorsMap.has("IlmMIN")?line+=((sensorsMap.get("IlmMIN").v.toFixed(1))+sensorsMap.get("IlmMIN").u).padStart(8," "):line+="N/A ".padStart(8," ")
+                    sensorsMap.has("IlmMAX")?line+=((sensorsMap.get("IlmMAX").v.toFixed(1))+sensorsMap.get("IlmMAX").u).padStart(8," "):line+="N/A ".padStart(8," ")
+                    sensorsMap.has("Koste")?line+=(sensorsMap.get("Koste").v+sensorsMap.get("Koste").u).padStart(7," "):line+=" N/A ".padStart(7," ")
+                    sensorsMap.has("MTuuli")?line+=((sensorsMap.get("MTuuli").v.toFixed(1))+sensorsMap.get("MTuuli").u).padStart(10," "):line+="N/A  ".padStart(10," ")
+                    sensorsMap.has("Näky_m")?line+=((sensorsMap.get("Näky_m").v)+sensorsMap.get("Näky_m").u).padStart(8," "):line+="N/A  ".padStart(8," ")
+                    sensorsMap.has("Sad24h")?line+=((sensorsMap.get("Sad24h").v).toFixed(1)+sensorsMap.get("Sad24h").u).padStart(9," "):line+="N/A ".padStart(9," ")
+                    sensorsMap.has("S-Int")?line+=((sensorsMap.get("S-Int").v.toFixed(2))+sensorsMap.get("S-Int").u).padStart(11," "):line+="N/A ".padStart(10," ")
+                    sensorsMap.has("IPaine")?line+=((sensorsMap.get("IPaine").v.toFixed(2))+sensorsMap.get("IPaine").u).padStart(12," "):line+=" "
                     sensorsMap.has("Ilma ") ?line+=checkMeasureTime(sensorsMap.get("Ilma ").t):line+=" "
+                    sensorsMap.has("Ilma ") ?lastIlmaTemp=(sensorsMap.get("Ilma ").v.toFixed(1))+sensorsMap.get("Ilma ").u:lastIlmaTemp="N/A";
+                    sensorsMap.has("Tie1") ?lastTieTemp=(sensorsMap.get("Tie1").v.toFixed(1))+sensorsMap.get("Tie1").u:lastTieTemp="N/A";
 
                     line+=" "+saatilatMap.get(st);
                     perusLine=line
@@ -444,7 +401,7 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
     counter=0;
     if (detail) {
         console.log("\n* 24h historia")
-        console.log(" Aika          Ilma      Tie     Kosteus Tuuli     Näky    SadeSum    Sade")
+        console.log(" Aika           Ilma     Tie    Kosteus  Tuuli    Näky    SadeSum   Sade")
         IlmaHistory = await getHistory(id[0],1)
         Tie1History = await getHistory(id[0],3)
         MaxTuuliHistory = await getHistory(id[0],17)
@@ -457,8 +414,10 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
         maxIlma = -99; minIlma = 99;
         maxTie = -99; minTie = 99; maxTieT = " N/A "; minTieT = " N/A ";
         eka=true;
+        lastRainI=0;
         for (item of IlmaHistory) {
             sadeHourMax=0;
+            sadeHourMaxLast=0;
             sadeSumma=0;
             kosteus=0;
             maxTuuli=0;
@@ -475,11 +434,11 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
             if (moment(item.measuredTime).format('H') != h)
             {
                 h = moment(item.measuredTime).format('H');
-                ilma = formatValue(item.sensorValue)+"°C  "
+                ilma = item.sensorValue.toFixed(1)+"°C"
                 for (tieItem of Tie1History) {
                     if (moment(tieItem.measuredTime).isBetween(moment(item.measuredTime).subtract(1,'hours'),moment(item.measuredTime)))
                     {
-                        tieLampo  = formatValue(tieItem.sensorValue)+"°C  ";
+                        tieLampo  = tieItem.sensorValue.toFixed(1)+"°C";
                         if (tieItem.sensorValue > maxTie) {
                             maxTie = tieItem.sensorValue;
                             maxTieT =  moment(tieItem.measuredTime).format('HH:mm')
@@ -495,33 +454,36 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
                     {
                         if (sadeItem.sensorValue > sadeHourMax) sadeHourMax = sadeItem.sensorValue;
                     }
+                    if (moment(sadeItem.measuredTime).isBetween(moment(item.measuredTime),moment(item.measuredTime).add(1,'hours')))
+                    {
+                        if (sadeItem.sensorValue > sadeHourMaxLast) {
+                            sadeHourMaxLast = sadeItem.sensorValue;
+                            lastRainI = sadeHourMaxLast;
+                        }
+                    }
                 }
-                if (sadeHourMax < 10) korjaus = "  "; else korjaus =" ";
-                if (sadeHourMax == 0) {sadeHourMax="      "} else {sadeHourMax=korjaus+sadeHourMax.toFixed(2)+" mm/h"}
+                if (sadeHourMax == 0) {sadeHourMax="      "} else {sadeHourMax=(sadeHourMax.toFixed(2)+"mm/h").padStart(12," ")}
                 for (sadeItem of SSumHistory) {
                     if (moment(sadeItem.measuredTime).isBetween(moment(item.measuredTime).subtract(1,'hours'),moment(item.measuredTime)))
                     {
                         sadeSumma  = sadeItem.sensorValue;
                     }
                 }
-                if (sadeSumma < 10) korjaus = "  "; else korjaus =" ";
-                if (sadeSumma == 0) {sadeSumma="        "} else {sadeSumma=korjaus+sadeSumma.toFixed(1)+"mm "}
+                if (sadeSumma == 0) {sadeSumma="      "} else {sadeSumma=(sadeSumma.toFixed(1)+"mm").padStart(6," ");}
                 for (kosteItem of KosteHistory) {
                     if (moment(kosteItem.measuredTime).isBetween(moment(item.measuredTime).subtract(1,'hours'),moment(item.measuredTime)))
                     {
                         if (kosteItem.sensorValue > kosteus) kosteus = kosteItem.sensorValue;
                     }
                 }
-                if (kosteus < 100) korjaus = " "; else korjaus ="";
-                kosteus = korjaus+kosteus+"% "
+                kosteus = (kosteus+"% ").padStart(7," ");
                 for (tuuliItem of MaxTuuliHistory) {
                     if (moment(tuuliItem.measuredTime).isBetween(moment(item.measuredTime).subtract(1,'hours'),moment(item.measuredTime)))
                     {
                         if (tuuliItem.sensorValue > maxTuuli) maxTuuli = tuuliItem.sensorValue;
                     }
                 }
-                if (maxTuuli < 10) korjaus = " "; else korjaus ="";
-                maxTuuli = korjaus+maxTuuli.toFixed(1)+"m/s  "
+                maxTuuli = (maxTuuli.toFixed(1)+"m/s").padStart(7," ")
 
                 for (nakyItem of NakyHistory) {
                     if (moment(nakyItem.measuredTime).isBetween(moment(item.measuredTime).subtract(1,'hours'),moment(item.measuredTime)))
@@ -529,19 +491,23 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
                         if (nakyItem.sensorValue < nakyvyys) nakyvyys = nakyItem.sensorValue;
                     }
                 }
-                if (nakyvyys < 10000) korjaus = " "; else korjaus ="";
-                if (nakyvyys < 1000) korjaus+=" ";
-                nakyvyys = korjaus+nakyvyys+"m "
+                nakyvyys = (nakyvyys+"m ").padStart(9," ")
                 if(eka) { //skipataan eka rivi.
                     eka=false
                 } else {
-                    console.log (moment(item.measuredTime).format('DD.MM. HH:mm')+"  "+ilma,tieLampo,kosteus,maxTuuli,nakyvyys,sadeSumma+sadeHourMax)
+                    console.log (moment(item.measuredTime).format('DD.MM. HH:mm')+"  "+ilma.padStart(8," "),tieLampo.padStart(8," "),kosteus,maxTuuli,nakyvyys,sadeSumma+sadeHourMax)
                 }
             }
             i++
         }
-        console.log("\nIlma Max:",maxIlmaT,maxIlma.toFixed(1)+"°C   Min: ",minIlmaT,minIlma.toFixed(1)+"°C")
-        console.log("Tie  Max:",maxTieT,maxTie.toFixed(1)+"°C   Min: ",minTieT,minTie.toFixed(1)+"°C")
+        console.log("%s %s %s  %s",
+            moment(IlmaHistory[IlmaHistory.length-1].measuredTime).format('DD.MM. HH:mm'),
+            lastIlmaTemp.padStart(9," "),
+            lastTieTemp.padStart(8," "),
+            (SSumHistory[SSumHistory.length-1].sensorValue+"mm").padStart(31," "),
+            (lastRainI+"mm/h").padStart(11," "))
+        console.log("\nIlma Max:",maxIlmaT,(maxIlma.toFixed(1)+"°C").padStart(7," "),"Min: ",minIlmaT,(minIlma.toFixed(1)+"°C").padStart(7," "))
+        console.log("Tie  Max:",maxTieT,(maxTie.toFixed(1)+"°C").padStart(7," "),"Min: ",minTieT,(minTie.toFixed(1)+"°C").padStart(7," "))
 
     } else{
         console.log(header);
