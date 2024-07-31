@@ -9,7 +9,7 @@
 15 *Sadetta näkyvissä ei vielä tule
 16 *Sadetta näkyvissä kohta sataa
 17 *Sataa
-18 *Jyrinää
+18 *Pilvistä
 19 *Ei sada
 20	Sumua viime tunnin aikana
 21	Sadetta viime tunnin aikana, olomuoto tuntematon

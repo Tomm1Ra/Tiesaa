@@ -306,7 +306,7 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
                     line += sensorsMap.has("Näky_m")?((sensorsMap.get("Näky_m").v)+sensorsMap.get("Näky_m").u).padStart(8," "):"N/A  ".padStart(8," ")
                     line += sensorsMap.has("Sad24h")?((sensorsMap.get("Sad24h").v).toFixed(1)+sensorsMap.get("Sad24h").u).padStart(9," "):"N/A ".padStart(9," ")
                     line += sensorsMap.has("S-Int")?((sensorsMap.get("S-Int").v.toFixed(2))+sensorsMap.get("S-Int").u).padStart(11," "):"N/A  ".padStart(11," ")
-                    line += sensorsMap.has("IPaine")?((sensorsMap.get("IPaine").v.toFixed(2))+sensorsMap.get("IPaine").u).padStart(12," "):" "
+                    line += sensorsMap.has("IPaine")?((sensorsMap.get("IPaine").v.toFixed(1))+sensorsMap.get("IPaine").u).padStart(12," "):" "
                     line += sensorsMap.has("Ilma ") ?checkMeasureTime(sensorsMap.get("Ilma ").t):" "
                     lastIlmaTemp = sensorsMap.has("Ilma ") ?(sensorsMap.get("Ilma ").v.toFixed(1))+sensorsMap.get("Ilma ").u:"N/A";
                     lastTieTemp = sensorsMap.has("Tie1") ?(sensorsMap.get("Tie1").v.toFixed(1))+sensorsMap.get("Tie1").u:"N/A";
