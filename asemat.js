@@ -41,7 +41,7 @@ function SaaAsematLista(searchString) {
                 getAsemaInfo(id,function(asemaData){
                     if (asemaData.properties) {
                         const s= asemaData.properties.names.fi+asemaData.properties.municipality+asemaData.properties.province
-                        if (s.includes(searchString))
+                        if (s.toLowerCase().includes(searchString.toLowerCase()))
                         console.log(asemaData.properties.id,asemaData.properties.names.fi,asemaData.properties.province,
                             "@"+asemaData.geometry.coordinates[0]+","+asemaData.geometry.coordinates[1]+","+asemaData.geometry.coordinates[2]);
                     }

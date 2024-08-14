@@ -105,122 +105,122 @@ async function SaaAsematLista(searchString) {
         return returnData
 }
 
-function updateTime(dataMap) {
-    upTime = dataMap.has("Ilma ")?dataMap.get("Ilma ").t:""
+function updateTime(mittaukset) {
+    upTime = mittaukset["Ilma "]?mittaukset["Ilma "].t:""
     return moment(upTime).locale("fi").format('llll')+"  "+moment(upTime).locale("fi").fromNow(); 
 }
 
-function getValueWithUnit(dataMap,label,type) {
-    return dataMap.has(type)?label+dataMap.get(type).v+dataMap.get(type).u:""
+function getValueWithUnit(mittaukset,label,type) {
+    return mittaukset[type]?label+mittaukset[type].v+mittaukset[type].u:""
 }
 
-function getValueNoUnit(dataMap,label,type) {
-    return dataMap.has(type)?label+dataMap.get(type).v:""
+function getValueNoUnit(mittaukset,label,type) {
+    return mittaukset[type]?label+mittaukset[type].v:""
 }
 
-function getDescription(dataMap,label,type) {
-    return dataMap.has(type)?label+dataMap.get(type).d:""
+function getDescription(mittaukset,label,type) {
+    return mittaukset[type]?label+mittaukset[type].d:""
 }
 
-function lampoLine(dataMap) {
-    return ("Lämpötilat "
-    + getValueWithUnit(dataMap," Ilma:","Ilma ")
-    + getValueWithUnit(dataMap," ","DIlm")
-    + getValueWithUnit(dataMap,"  Tie:","Tie1")+ getValueWithUnit(dataMap," ","DTie1")
-    + getValueWithUnit(dataMap," ","Tie2") + getValueWithUnit(dataMap," ","DTie2")
-    + getValueWithUnit(dataMap," ","Tie3") + getValueWithUnit(dataMap," ","DTie3")
-    + getValueWithUnit(dataMap," ","Tie4") + getValueWithUnit(dataMap," ","DTie4")
-    + getValueWithUnit(dataMap,"  Maa:","Maa1")
-    + getValueWithUnit(dataMap," ","Maa2") 
-    + getValueWithUnit(dataMap," ","Maa3") 
-    + getValueWithUnit(dataMap," ","Maa4")
-    + getValueWithUnit(dataMap," ","Run1"))
+function lampoLine(mittaukset) {
+    return ("Lämpötila "
+    + getValueWithUnit(mittaukset," Ilma:","Ilma ")
+    + getValueWithUnit(mittaukset," ","DIlm")
+    + getValueWithUnit(mittaukset,"   Tie:","Tie1")+ getValueWithUnit(mittaukset," ","DTie1")
+    + getValueWithUnit(mittaukset," ","Tie2") + getValueWithUnit(mittaukset," ","DTie2")
+    + getValueWithUnit(mittaukset," ","Tie3") + getValueWithUnit(mittaukset," ","DTie3")
+    + getValueWithUnit(mittaukset," ","Tie4") + getValueWithUnit(mittaukset," ","DTie4")
+    + getValueWithUnit(mittaukset,"   Maa:","Maa1")
+    + getValueWithUnit(mittaukset," ","Maa2") 
+    + getValueWithUnit(mittaukset," ","Maa3") 
+    + getValueWithUnit(mittaukset," ","Maa4")
+    + getValueWithUnit(mittaukset," ","Run1"))
     
 }
 
-function tuuliLine(dataMap) {
-    return ( "Tuuli "
-    + getValueWithUnit(dataMap," Keski:","KTuuli")
-    + getValueWithUnit(dataMap,"  Maksimi:","MTuuli")
-    + getValueWithUnit(dataMap,"  Suunta:","TSuunt")
-    + getValueWithUnit(dataMap,"  Ilmanpaine:", "IPaine" ))
+function tuuliLine(mittaukset) {
+    return ( "Tuuli     "
+    + getValueWithUnit(mittaukset," Keski:","KTuuli")
+    + getValueWithUnit(mittaukset,"  Maksimi:","MTuuli")
+    + getValueWithUnit(mittaukset,"  Suunta:","TSuunt")
+    + getValueWithUnit(mittaukset,"  Ilmanpaine:", "IPaine" ))
     
 }
 
-function sadeLine(dataMap) {
+function sadeLine(mittaukset) {
     return (
-      getDescription(dataMap,"Sade:","Sade")
-    + getValueWithUnit(dataMap," Intensiteetti:","S-Int")
-    + getValueWithUnit(dataMap," Summa:","S-Sum")
-    + getDescription(dataMap," Olomuoto:","S-Olom")
-    + getValueNoUnit(dataMap," Sadetila:","S-Tila") )
+      getDescription(mittaukset,"Sade  ","Sade")
+    + getValueWithUnit(mittaukset,"  Intensiteetti:","S-Int")
+    + getValueWithUnit(mittaukset,"  Summa:","S-Sum")
+    + getDescription(mittaukset,"  Olomuoto:","S-Olom")
+    + getValueNoUnit(mittaukset,"  Sadetila:","S-Tila") )
 }
 
-function keliLine(dataMap) {
+function keliLine(mittaukset) {
     return (
-        getDescription(dataMap,"Keli:","Keli1") + getDescription(dataMap," ","Keli2") + getDescription(dataMap," ","Keli3")
-        +getDescription(dataMap," Varoitus1:","Varo1")
-        +getDescription(dataMap," 2:","Varo2")+getDescription(dataMap," 3:","Varo3")+getDescription(dataMap," 4:","Varo4")
-        +getValueWithUnit(dataMap," Lumensyvyys:","LumSyv") +getValueWithUnit(dataMap," ","Lumi_A") +getValueWithUnit(dataMap," ","Lumi_B")
-        +getValueWithUnit(dataMap," ","Lumi_C") +getValueWithUnit(dataMap," ","LumiKA"))
+        getDescription(mittaukset,"Keli  ","Keli1") + getDescription(mittaukset," ","Keli2") + getDescription(mittaukset," ","Keli3")
+        +getDescription(mittaukset,"   Varoitus: ","Varo1")
+        +getDescription(mittaukset," ","Varo2")+getDescription(mittaukset," ","Varo3")+getDescription(mittaukset," ","Varo4")
+        +getValueWithUnit(mittaukset,"  Lumensyvyys:","LumSyv") +getValueWithUnit(mittaukset," ","Lumi_A") +getValueWithUnit(mittaukset," ","Lumi_B")
+        +getValueWithUnit(mittaukset," ","Lumi_C") +getValueWithUnit(mittaukset," ","LumiKA"))
 }
 
-function pisteLine(dataMap) {
+function pisteLine(mittaukset) {
     return (
-      getValueWithUnit(dataMap,"Kastepiste:","KastP")
-    + getValueWithUnit(dataMap," Jäätymispiste:","JääPi1") + getValueWithUnit(dataMap," ","JääPi2") + getValueWithUnit(dataMap," ","JääPi3") + getValueWithUnit(dataMap," ","JääPi4")
-    + getValueWithUnit(dataMap," Kuurapiste:","KuuraP")
-    + getValueWithUnit(dataMap," Ilmankosteus:","Koste") )
+      getValueWithUnit(mittaukset,"Kastepiste:","KastP")
+    + getValueWithUnit(mittaukset,"  Jäätymispiste:","JääPi1") + getValueWithUnit(mittaukset," ","JääPi2") + getValueWithUnit(mittaukset," ","JääPi3") + getValueWithUnit(mittaukset," ","JääPi4")
+    + getValueWithUnit(mittaukset,"  Kuurapiste:","KuuraP")
+    + getValueWithUnit(mittaukset,"  Ilmankosteus:","Koste") )
 };
 
-function suolaLine(dataMap) {
+function suolaLine(mittaukset) {
     return (
-      getValueWithUnit(dataMap,"Kosteuden määrä:","KosMä1")
-    + getValueWithUnit(dataMap,"  Suolan määrä:","SuoMä1") + getValueWithUnit(dataMap," ","SuoMä2")
-    + getValueWithUnit(dataMap,"  Suolan väkevyys:","SuoVä1") + getValueWithUnit(dataMap," ","SuoVä2") )
+      getValueWithUnit(mittaukset,"Kosteuden määrä:","KosMä1")
+    + getValueWithUnit(mittaukset,"  Suolan määrä:","SuoMä1") + getValueWithUnit(mittaukset," ","SuoMä2")
+    + getValueWithUnit(mittaukset,"  Suolan väkevyys:","SuoVä1") + getValueWithUnit(mittaukset," ","SuoVä2") )
 }
 
-function nakyLine(dataMap) {
+function nakyLine(mittaukset) {
     return (
-      getValueWithUnit(dataMap,"Näkyvyys:","Näky_m") + getValueWithUnit(dataMap," ","Näk_km")
-    + getValueNoUnit(dataMap," Aurinko:","Aurink")
-    + getValueNoUnit(dataMap," Valoa:","Valoa?")
-    + getValueNoUnit(dataMap," Sataa:","Sataa"))
+      getValueWithUnit(mittaukset,"Näkyvyys:","Näky_m") + getValueWithUnit(mittaukset," ","Näk_km")
+    + getValueNoUnit(mittaukset,"  Aurinko:","Aurink")
+    + getValueNoUnit(mittaukset,"  Valoa:","Valoa?")
+    + getValueNoUnit(mittaukset,"  Sataa:","Sataa"))
 }
 
-function kitkaLine(dataMap) {
+function kitkaLine(mittaukset) {
     return (
-      "Kitka:"+getValueWithUnit(dataMap," ","Kitka1") + getValueWithUnit(dataMap," ","Kitka2")
-    + "  Vettä:"+getValueWithUnit(dataMap," ","VedMä1") + getValueWithUnit(dataMap," ","VedMä2")
-    + "  Lunta:"+getValueWithUnit(dataMap," ","LumMä1") + getValueWithUnit(dataMap," ","LumMä2")
-    + "  Jäätä:"+getValueWithUnit(dataMap," ","JääMä1") + getValueWithUnit(dataMap," ","JääMä2") )
+      "Kitka:"+getValueWithUnit(mittaukset," ","Kitka1") + getValueWithUnit(mittaukset," ","Kitka2")
+    + "  Vettä:"+getValueWithUnit(mittaukset," ","VedMä1") + getValueWithUnit(mittaukset," ","VedMä2")
+    + "  Lunta:"+getValueWithUnit(mittaukset," ","LumMä1") + getValueWithUnit(mittaukset," ","LumMä2")
+    + "  Jäätä:"+getValueWithUnit(mittaukset," ","JääMä1") + getValueWithUnit(mittaukset," ","JääMä2") )
 }
 
-function miscLine(dataMap) {
+function miscLine(mittaukset) {
     return (
-      getValueNoUnit(dataMap,"\nAseman status:","Stat1") + getValueNoUnit(dataMap," ","Stat2") + getValueNoUnit(dataMap," Vika:","AntVik")
-    + getValueNoUnit(dataMap,"  PWD status:","PWDsta") + getValueNoUnit(dataMap," tila:","PWDtil") + getValueNoUnit(dataMap," NäkTila:","PWDnäk") + getValueWithUnit(dataMap," ","PWDrbc") + getValueNoUnit(dataMap," ","PWDtbc")
-    + getValueWithUnit(dataMap,"\nJohtavuus 1:","Joht1") + getValueWithUnit(dataMap," 2:","Joht2") + getValueWithUnit(dataMap," 3:","Joht3") + getValueWithUnit(dataMap," 4:","Joht4")
-    + getValueWithUnit(dataMap," Pintasignaali 1:","PSig1") + getValueWithUnit(dataMap," 2:","PSig2") + getValueWithUnit(dataMap," 3:","PSig3") + getValueWithUnit(dataMap," 4:","PSig4")
-    + getValueWithUnit(dataMap," Jäätaajuus 1:","JTaaj1") + getValueWithUnit(dataMap," 2:","JTaaj2") 
-    + getValueNoUnit(dataMap,"\nTienpinta OPT 1:","TilaO1") + getValueNoUnit(dataMap," 2:","TilaO2")
-    + getValueNoUnit(dataMap," Tila 1:","Tila1") + getValueNoUnit(dataMap," 2:","Tila2") + getValueNoUnit(dataMap," 3:","Tila3") + getValueNoUnit(dataMap," 4:","Tila4")
-    + getValueNoUnit(dataMap," Optinen Keli 1:","KeliO1") + getDescription(dataMap," varoitus:","VaroO1") 
+      getValueNoUnit(mittaukset,"\nAseman status:","Stat1") + getValueNoUnit(mittaukset," ","Stat2") + getValueNoUnit(mittaukset," Vika:","AntVik")
+    + getValueNoUnit(mittaukset,"  PWD status:","PWDsta") + getValueNoUnit(mittaukset," tila:","PWDtil") + getValueNoUnit(mittaukset," NäkTila:","PWDnäk") + getValueWithUnit(mittaukset," ","PWDrbc") + getValueNoUnit(mittaukset," ","PWDtbc")
+    + getValueWithUnit(mittaukset,"\nJohtavuus 1:","Joht1") + getValueWithUnit(mittaukset," 2:","Joht2") + getValueWithUnit(mittaukset," 3:","Joht3") + getValueWithUnit(mittaukset," 4:","Joht4")
+    + getValueWithUnit(mittaukset," Pintasignaali 1:","PSig1") + getValueWithUnit(mittaukset," 2:","PSig2") + getValueWithUnit(mittaukset," 3:","PSig3") + getValueWithUnit(mittaukset," 4:","PSig4")
+    + getValueWithUnit(mittaukset," Jäätaajuus 1:","JTaaj1") + getValueWithUnit(mittaukset," 2:","JTaaj2") 
+    + getValueNoUnit(mittaukset,"\nTienpinta OPT 1:","TilaO1") + getValueNoUnit(mittaukset," 2:","TilaO2")
+    + getValueNoUnit(mittaukset," Tila 1:","Tila1") + getValueNoUnit(mittaukset," 2:","Tila2") + getValueNoUnit(mittaukset," 3:","Tila3") + getValueNoUnit(mittaukset," 4:","Tila4")
+    + getValueNoUnit(mittaukset," Optinen Keli 1:","KeliO1") + getDescription(mittaukset," varoitus:","VaroO1") 
 )
 
 }
-function ennusteLine(dataMap) {
+function ennusteLine(mittaukset) {
     return (
-        getValueNoUnit(dataMap,"Tuuli:","E-TSuu")
-        +getValueNoUnit(dataMap,"Nopeus:","E-Tuul")
-        +getValueNoUnit(dataMap,"Pilvisyys:","E-Pilv")
-        +getValueNoUnit(dataMap,"Sade","E-SOlo")
-        +getValueNoUnit(dataMap,"Inte","E-SInt")
-        +getValueNoUnit(dataMap,"todnäk","E-STod")
-        +getValueNoUnit(dataMap,"Ilma:","E-Ilma")
-        +getValueNoUnit(dataMap,"Tie","E-Tie")
-        +getValueNoUnit(dataMap,"KasteP","E-KasP")
-        +getValueNoUnit(dataMap,"Sademäärä","E-SS1h")
+        getValueNoUnit(mittaukset,"Tuuli:","E-TSuu")
+        +getValueNoUnit(mittaukset,"Nopeus:","E-Tuul")
+        +getValueNoUnit(mittaukset,"Pilvisyys:","E-Pilv")
+        +getValueNoUnit(mittaukset,"Sade","E-SOlo")
+        +getValueNoUnit(mittaukset,"Inte","E-SInt")
+        +getValueNoUnit(mittaukset,"todnäk","E-STod")
+        +getValueNoUnit(mittaukset,"Ilma:","E-Ilma")
+        +getValueNoUnit(mittaukset,"Tie","E-Tie")
+        +getValueNoUnit(mittaukset,"KasteP","E-KasP")
+        +getValueNoUnit(mittaukset,"Sademäärä","E-SS1h")
 )
 
 }
@@ -235,12 +235,285 @@ function checkMeasureTime(measureTime)
     return mins>7?" *"+Math.floor(mins)+"* ":"";
 }
 
-async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,showEmpty) {
+function sortSaaData(data, order) {
+    switch (order){
+        case "E" :
+        case "S" :
+            returnData = data.sort((a,b) => a.lat - b.lat);
+        break;
+        case "P" :
+        case "N" :
+            returnData = data.sort((a,b) => b.lat - a.lat);
+        break;
+        case "L" :
+        case "W" :
+            returnData = data.sort((a,b) => a.lon - b.lon);
+        break;
+        case "I" :
+            returnData = data.sort((a,b) => b.lon - a.lon);
+        break;
+        case "l" : 
+            returnData = data.sort((a,b) => b.mittaukset["Ilma "].v - a.mittaukset["Ilma "].v || a.asema - b.asema);
+        break;
+        case "k" : 
+            returnData = data.sort((a,b) => a.mittaukset["Ilma "].v - b.mittaukset["Ilma "].v || a.asema - b.asema);
+        break;
+        case "s" : 
+        case "r" : 
+            returnData = data.sort((a,b) => b.mittaukset["Sad24h"].v - a.mittaukset["Sad24h"].v || b.mittaukset["S-Int"].v - a.mittaukset["S-Int"].v );
+        break;
+        case "w" : 
+            returnData = data.sort((a,b) => b.mittaukset["MTuuli"].v - a.mittaukset["MTuuli"].v || a.asema - b.asema);
+        break;
+        case "h" : 
+            returnData = data.sort((a,b) => b.mittaukset["Koste"].v  - a.mittaukset["Koste"].v  || a.asema - b.asema);
+        break;
+        case "i" : 
+            returnData = data.sort((a,b) => b.mittaukset["S-Int"].v - a.mittaukset["S-Int"].v  || b.mittaukset["Sad24h"].v - a.mittaukset["Sad24h"].v );
+        break;
+        case "+" : 
+            returnData = data.sort((a,b) => b.mittaukset["IlmMAX"].v - a.mittaukset["IlmMAX"].v || a.asema - b.asema);
+        break;
+        case "-" : 
+            returnData = data.sort((a,b) => a.mittaukset["IlmMIN"].v - b.mittaukset["IlmMIN"].v || a.asema - b.asema);
+        break;
+        case "a" : 
+            returnData = data.sort((a,b) => a.asema - b.asema || a.asema - b.asema);
+        break;
+        case "n" : 
+            returnData = data.sort((a,b) => a.mittaukset["Näky_m"].v - b.mittaukset["Näky_m"].v || a.asema - b.asema);
+        break;
+
+        default:
+            returnData = data.sort((a,b) => a.dist - b.dist);
+    }
+
+    return returnData;
+
+}
+
+function printSaatiedot(fullname, mittaukset) {
+
+    line = fullname
+    line = (line.padEnd(50," ")).substring(49,line);
+    !mittaukset["Ilma "].x ?line += (mittaukset["Ilma "].v.toFixed(1)+mittaukset["Ilma "].u).padStart(7," "):line += "N/A ".padStart(7," ")
+    !mittaukset["IlmMIN"].x?line += (mittaukset["IlmMIN"].v.toFixed(1)+mittaukset["IlmMIN"].u).padStart(8," "):line += "N/A ".padStart(8," ")
+    !mittaukset["IlmMAX"].x?line += (mittaukset["IlmMAX"].v.toFixed(1)+mittaukset["IlmMAX"].u).padStart(8," "):line += "N/A ".padStart(8," ")
+    !mittaukset["Koste"].x ?line += (mittaukset["Koste"].v+mittaukset["Koste"].u).padStart(7," "):line += " N/A ".padStart(7," ")
+    !mittaukset["MTuuli"].x?line += (mittaukset["MTuuli"].v.toFixed(1)+mittaukset["MTuuli"].u).padStart(10," "):line += "N/A  ".padStart(10," ")
+    !mittaukset["Näky_m"].x?line += (mittaukset["Näky_m"].v+mittaukset["Näky_m"].u).padStart(8," "):line += "N/A  ".padStart(8," ")
+    !mittaukset["Sad24h"].x?line += (mittaukset["Sad24h"].v.toFixed(1)+mittaukset["Sad24h"].u).padStart(9," "):line += "N/A ".padStart(9," ")
+    !mittaukset["S-Int"].x ?line += (mittaukset["S-Int"].v.toFixed(2)+mittaukset["S-Int"].u).padStart(11," "):line += "N/A  ".padStart(11," ")
+    mittaukset["IPaine"]?line += (mittaukset["IPaine"].v.toFixed(1)+mittaukset["IPaine"].u).padStart(12," "):line += " "
+    line += mittaukset["Ilma "] ?checkMeasureTime(mittaukset["Ilma "].t):" "
+   
+    line += "  "+mittaukset["Säätila"].text;
+    return line
+}
+
+async function log24History(id)  {
+    console.log("\n* 24h historia")
+    console.log(" Aika           Ilma     Tie    Kosteus  Tuuli    Näky    SadeSum   Sade")
+    IlmaHistory = await getHistory(id[0],1)
+    SSumHistory = await getHistory(id[0],24)
+    Tie1History = await getHistory(id[0],3)
+    MaxTuuliHistory = await getHistory(id[0],17)
+    KosteHistory = await getHistory(id[0],21)
+    SIntHistory = await getHistory(id[0],23)
+    NakyHistory = await getHistory(id[0],58)
+    
+    timeIndex = [];
+    IlmaVal = [];
+    SSumVal = [];
+    Tie1Val = [];
+    MaxTuuliVal = [];
+    KosteVal = [];
+    SIntVal = [];
+    NakyVal = [];
+    
+    h=30;
+    startH=0;
+    i = 0;
+    maxIlma = -99; minIlma = 99;
+    maxTie = -99; minTie = 99; maxTieT = " N/A "; minTieT = " N/A ";
+    eka=true;
+    lastRainI=0;
+    sadeHourMax=0;
+    sadeHourMaxLast=0;
+    sadeSumma=0;
+    kosteus=0;
+    maxTuuli=0;
+    nakyvyys=99999;
+    tieLampo="N/A  ";
+    for (item of IlmaHistory) {
+
+        if (item.sensorValue > maxIlma) {
+            maxIlma = item.sensorValue;
+            maxIlmaT =  moment(item.measuredTime).format('HH:mm')
+        }
+        if (item.sensorValue < minIlma) {
+            minIlma = item.sensorValue;
+            minIlmaT =  moment(item.measuredTime).format('HH:mm')
+        }
+        if (moment(item.measuredTime).format('H') != h)
+        {
+            h = moment(item.measuredTime).format('H');
+            IlmaVal[h]  = item.sensorValue.toFixed(1)+"°C"
+            timeIndex[h] = moment(item.measuredTime).format('DD.MM. HH:mm')
+            if (eka) {
+                startH = h;
+                eka = false;
+            }
+        }
+    }
+
+    for (item of Tie1History) {
+
+        if (item.sensorValue > maxTie) {
+            maxTie = item.sensorValue;
+            maxTieT =  moment(item.measuredTime).format('HH:mm')
+        }
+        if (item.sensorValue < minTie) {
+            minTie = item.sensorValue;
+            minTieT =  moment(item.measuredTime).format('HH:mm')
+        }
+        if (moment(item.measuredTime).format('H') != h)
+        {
+            h = moment(item.measuredTime).format('H');
+            Tie1Val[h] = item.sensorValue.toFixed(1)+"°C"
+        }
+    }
+
+    for (item of SSumHistory) {
+
+        if (moment(item.measuredTime).format('H') != h)
+        {
+            h = moment(item.measuredTime).format('H');
+            ssum = item.sensorValue.toFixed(1)
+            SSumVal[h] = (parseFloat(ssum) != 0) ? ssum+"mm" : ""
+        }
+    }
+
+    for (item of KosteHistory) {
+        if (moment(item.measuredTime).format('H') != h)
+        {
+            h = moment(item.measuredTime).format('H');
+            KosteVal[h] = item.sensorValue+"%"
+        }
+    }
+
+    maxtuuli=0;
+    h=30;
+    for (item of MaxTuuliHistory) {
+        if (moment(item.measuredTime).format('H') != h)
+        {
+            h = moment(item.measuredTime).format('H');
+            MaxTuuliVal[h] = maxtuuli.toFixed(1)+"m/s"
+            maxtuuli = item.sensorValue;
+        } else {
+            if (item.sensorValue > maxtuuli) {
+                maxtuuli = item.sensorValue;
+            }
+        }
+    }
+
+    h=30;
+    sint=0;
+    for (item of SIntHistory) {
+        if (moment(item.measuredTime).format('H') != h)
+        {
+            h = moment(item.measuredTime).format('H');
+            SIntVal[h] = (parseFloat(sint) != 0) ? sint.toFixed(2)+"mm/h" : "";
+            sint = 0
+        } else {
+            if (item.sensorValue > sint) {
+                sint = item.sensorValue;
+            }
+        }
+    }
+
+    h=30;
+    naky = 99999;
+    for (item of NakyHistory) {
+        if (moment(item.measuredTime).format('H') != h)
+        {
+            h = moment(item.measuredTime).format('H');
+            if (naky==99999) naky = item.sensorValue;
+            NakyVal[h] = naky+"m";
+            naky = item.sensorValue;
+            
+        } else {
+            if (item.sensorValue < naky) {
+                naky = item.sensorValue;
+            }
+        }
+  
+    }
+
+    for (i=parseInt(startH)+1; i<(parseInt(startH)+25); i++) {
+        id = i;
+        if (id > 23){ id = id-24}
+        console.log(
+            timeIndex[id],
+            ((IlmaVal[id])?IlmaVal[id]:"").padStart(9," "),
+            ((Tie1Val[id])?Tie1Val[id]:"").padStart(8," "),
+            ((KosteVal[id])?KosteVal[id]:"").padStart(5," "),
+            ((MaxTuuliVal[id])?MaxTuuliVal[id]:"").padStart(9," "),
+            ((NakyVal[id])?NakyVal[id]:"").padStart(7," "),
+            ((SSumVal[id])?SSumVal[id]:"").padStart(8," "),
+            ((SIntVal[id])?SIntVal[id]:"").padStart(11," "),
+        )
+    }
+
+    return ({"IlmaHistory":IlmaHistory,"SSumHistory":SSumHistory,"lastRainI":lastRainI})
+    
+}
+
+async function printData(lista, limit, detail) {
+    header = " ".padEnd(50," ")+"Ilma".padStart(5," ")+"Min".padStart(7," ")+"Max".padStart(7," ")+"Kosteus".padStart(12," ")+"Tuuli".padStart(8," ")+"Näky".padStart(7," ")+"Sade24h".padStart(11," ")+"Sade" .padStart(8," ")
+    counter=0;
+    
+    if (detail) {
+        mittaukset =lista[0].mittaukset;
+        console.log(lista[0].fullname)
+        console.log("\n"+header);
+        console.log(printSaatiedot(lista[0].fullname, mittaukset))
+        console.log("\nEtäisyys: "+lista[0].dist+"km    "+" Longitude: "+lista[0].lon+" Latitude: "+lista[0].lat);
+        console.log("Päivitetty "+updateTime(mittaukset))
+        console.log("\n"+lampoLine(mittaukset));
+        console.log(tuuliLine(mittaukset));
+        console.log(sadeLine(mittaukset) + mittaukset["S-Tila"].text)
+        console.log(keliLine(mittaukset))
+        console.log("\n"+pisteLine(mittaukset))
+        console.log(suolaLine(mittaukset))
+        console.log(nakyLine(mittaukset))
+        console.log(kitkaLine(mittaukset))
+        weatherDetails = await log24History(id);
+        //console.log(weatherDetails.IlmaHistory[0])
+        console.log("%s %s %s  %s",
+            moment(weatherDetails.IlmaHistory[weatherDetails.IlmaHistory.length-1].measuredTime).format('DD.MM. HH:mm'),
+            mittaukset["lastIlmaTemp"].v.padStart(9," "),
+            mittaukset["lastTieTemp"].v.padStart(8," "),
+            ((weatherDetails.SSumHistory.length>0)?(weatherDetails.SSumHistory[weatherDetails.SSumHistory.length-1].sensorValue.toFixed(1)+"mm"):"").padStart(31," "),
+            (weatherDetails.lastRainI>0)?((weatherDetails.lastRainI+"mm/h").padStart(11," ")):"")
+        console.log("\nIlma Max:",maxIlmaT,(maxIlma.toFixed(1)+"°C").padStart(7," "),"Min: ",minIlmaT,(minIlma.toFixed(1)+"°C").padStart(7," "))
+        console.log("Tie  Max:",maxTieT,(maxTie.toFixed(1)+"°C").padStart(7," "),"Min: ",minTieT,(minTie.toFixed(1)+"°C").padStart(7," "))
+
+    } else{
+        console.log(header);
+        for (perusLine of lista) {
+            if (perusLine.mittaukset["Ilma "].v != -99 || showEmpty) {
+                console.log(printSaatiedot(perusLine.fullname,perusLine.mittaukset));
+                if (++counter>=limit) break;
+            }
+        }
+    }
+}
+
+async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator) {
     const saatilatMap = new Map();
     const tempNamesMap = new Map();
     const asemaSaatMap = new Map();
-    lastIlmaTemp="N/A"
-    lastTieTemp="N/A"
     latBase = home.latitude
     longBase = home.longitude
     saatilalines = saatilat.split('\n');
@@ -253,7 +526,6 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
     lines = rawData.split(separator);
     //console.log("LINES:"+lines)
     console.log("\n"+moment().format("D.M.YYYY H:mm"))
-    header = " ".padEnd(46," ")+"Ilma".padStart(5," ")+"Min".padStart(7," ")+"Max".padStart(7," ")+"Kosteus".padStart(12," ")+"Tuuli".padStart(8," ")+"Näky".padStart(7," ")+"Sade24h".padStart(11," ")+"Sade" .padStart(8," ")
     //Haetaan aseman nimi ja paikka jos pelkkä numero listassa
     await Promise.all(lines.map(async (line) => {
         id = line.match(/^([\d]+)/);
@@ -280,9 +552,9 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
             }
             let asemaData = asemaSaatMap.get(parseInt(id[0]));
                 if (asemaData) {
-                    const sensorsMap = new Map();
+                    mittaukset = {}
                     for(const item of asemaData)  {
-                        sensorsMap.set(item.shortName,{"t":item.measuredTime,"v":item.value,"u":item.unit,"d":item.sensorValueDescriptionFi})
+                        mittaukset[item.shortName] = {"t":item.measuredTime,"v":item.value,"u":item.unit,"d":item.sensorValueDescriptionFi}
                     }
                     lineSplit = line.split('@');
                     line = lineSplit[0];
@@ -295,229 +567,33 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator,
                         longi = lineSplit[1].split(',')[0];
                     }
                     dist = distance(parseFloat(lati),parseFloat(longi),latBase,longBase).toFixed(1);
-                    st=sensorsMap.has("Säätila")?sensorsMap.get("Säätila").v+"":"0";
 
-                    line = (line.padEnd(50," ")).substring(45,line);
-                    line += sensorsMap.has("Ilma ") ?((sensorsMap.get("Ilma ").v.toFixed(1))+sensorsMap.get("Ilma ").u).padStart(7," "):"N/A ".padStart(7," ")
-                    line += sensorsMap.has("IlmMIN")?((sensorsMap.get("IlmMIN").v.toFixed(1))+sensorsMap.get("IlmMIN").u).padStart(8," "):"N/A ".padStart(8," ")
-                    line += sensorsMap.has("IlmMAX")?((sensorsMap.get("IlmMAX").v.toFixed(1))+sensorsMap.get("IlmMAX").u).padStart(8," "):"N/A ".padStart(8," ")
-                    line += sensorsMap.has("Koste")?(sensorsMap.get("Koste").v+sensorsMap.get("Koste").u).padStart(7," "):" N/A ".padStart(7," ")
-                    line += sensorsMap.has("MTuuli")?((sensorsMap.get("MTuuli").v.toFixed(1))+sensorsMap.get("MTuuli").u).padStart(10," "):"N/A  ".padStart(10," ")
-                    line += sensorsMap.has("Näky_m")?((sensorsMap.get("Näky_m").v)+sensorsMap.get("Näky_m").u).padStart(8," "):"N/A  ".padStart(8," ")
-                    line += sensorsMap.has("Sad24h")?((sensorsMap.get("Sad24h").v).toFixed(1)+sensorsMap.get("Sad24h").u).padStart(9," "):"N/A ".padStart(9," ")
-                    line += sensorsMap.has("S-Int")?((sensorsMap.get("S-Int").v.toFixed(2))+sensorsMap.get("S-Int").u).padStart(11," "):"N/A  ".padStart(11," ")
-                    line += sensorsMap.has("IPaine")?((sensorsMap.get("IPaine").v.toFixed(1))+sensorsMap.get("IPaine").u).padStart(12," "):" "
-                    line += sensorsMap.has("Ilma ") ?checkMeasureTime(sensorsMap.get("Ilma ").t):" "
-                    lastIlmaTemp = sensorsMap.has("Ilma ") ?(sensorsMap.get("Ilma ").v.toFixed(1))+sensorsMap.get("Ilma ").u:"N/A";
-                    lastTieTemp = sensorsMap.has("Tie1") ?(sensorsMap.get("Tie1").v.toFixed(1))+sensorsMap.get("Tie1").u:"N/A";
-
-                    line += " "+saatilatMap.get(st);
-                    perusLine=line
-                    temp=sensorsMap.has("Ilma ") ?sensorsMap.get("Ilma ").v:order=='k'?99:-99;
-                    rain=sensorsMap.has("Sad24h")?sensorsMap.get("Sad24h").v:0;
-                    raini=sensorsMap.has("S-Int")?sensorsMap.get("S-Int").v:0;
-                    wind=sensorsMap.has("MTuuli")?sensorsMap.get("MTuuli").v:0;
-                    koste=sensorsMap.has("Koste")?sensorsMap.get("Koste").v:0;
-                    ilmaMin=sensorsMap.has("IlmMIN")?sensorsMap.get("IlmMIN").v:99;
-                    ilmaMax=sensorsMap.has("IlmMAX")?sensorsMap.get("IlmMAX").v:-99;
-                    nakyvyys=sensorsMap.has("Näky_m")?sensorsMap.get("Näky_m").v:99999;
+                    mittaukset["Ilma "]  ? mittaukset["Ilma "].v = mittaukset["Ilma "].v:order=='k'?mittaukset["Ilma "]={x:1,v:99,u:""}:mittaukset["Ilma "]= {x:1,v:-99,u:""};
+                    mittaukset["Sad24h"] ? mittaukset["Sad24h"].v =  mittaukset["Sad24h"].v:mittaukset["Sad24h"] = {x:1,v:0,u:""};
+                    mittaukset["S-Int"]  ? mittaukset["S-Int"].v =   mittaukset["S-Int"].v:mittaukset["S-Int"] = {x:1,v:0,u:""};
+                    mittaukset["MTuuli"] ? mittaukset["MTuuli"].v =  mittaukset["MTuuli"].v:mittaukset["MTuuli"] = {x:1,v:0,u:"" };
+                    mittaukset["Koste"]  ? mittaukset["Koste"].v =   mittaukset["Koste"].v:mittaukset["Koste"] = {x:1,v:0,u:""};
+                    mittaukset["IlmMIN"] ? mittaukset["IlmMIN"].v =  mittaukset["IlmMIN"].v:mittaukset["IlmMIN"] = {x:1,v:99,u:""};
+                    mittaukset["IlmMAX"] ? mittaukset["IlmMAX"].v =  mittaukset["IlmMAX"].v:mittaukset["IlmMAX"] = {x:1,v:-99,u:""};
+                    mittaukset["Näky_m"] ? mittaukset["Näky_m"].v =  mittaukset["Näky_m"].v:mittaukset["Näky_m"] = {x:1,v:99999,u:""};
+                    mittaukset["Säätila"] ? mittaukset["Säätila"].text =  saatilatMap.get(mittaukset["Säätila"].v+""):mittaukset["Säätila"] = {text:""};
+                    mittaukset["S-Tila"] ? mittaukset["S-Tila"].text =  saatilatMap.get(mittaukset["S-Tila"].v+""):mittaukset["S-Tila"] = {text:""};
                     linelimit=1000;
-                    perusLista.push({"data":perusLine, "asema":asm,"lon":longi,"lat":lati,"dist":dist,"temp":temp,"rain":rain,"raini":raini,"ilmaMin":ilmaMin,"ilmaMax":ilmaMax,"wind":wind,"koste":koste,"nakyvyys":nakyvyys});
+                    perusLista.push({"fullname":fullName, "mittaukset": mittaukset, "asema":asm, "lon":longi, "lat":lati, "dist":dist});
 
                     
                     if (detail) {
-                        console.log(fullName)
-                        console.log("\n"+header);
-                        console.log(perusLista[0].data)
-                        console.log("\nEtäisyys:"+perusLista[0].dist+"km"+" Longitude:"+perusLista[0].lon+" Latitude:"+perusLista[0].lat);
-                        console.log("Päivitetty "+updateTime(sensorsMap))
-                        console.log("\n"+lampoLine(sensorsMap));
-                        console.log(tuuliLine(sensorsMap));
-                        console.log(sadeLine(sensorsMap) + saatilatMap.get(getValueNoUnit(sensorsMap,"","S-Tila")))
-                        console.log(keliLine(sensorsMap))
-                        console.log("\n"+pisteLine(sensorsMap))
-                        console.log(suolaLine(sensorsMap))
-                        console.log(nakyLine(sensorsMap))
-                        console.log(kitkaLine(sensorsMap))
-                        //console.log(ennusteLine(sensorsMap))
-                        //console.log(miscLine(sensorsMap))
+                        mittaukset["Ilma "] ? mittaukset["lastIlmaTemp"] = {v:mittaukset["Ilma "].v.toFixed(1)+mittaukset["Ilma "].u}:mittaukset["lastIlmaTemp"] ={v:"N/A"};
+                        mittaukset["Tie1"]  ? mittaukset["lastTieTemp"] = {v:mittaukset["Tie1"].v.toFixed(1)+mittaukset["Tie1"].u}:mittaukset["lastTieTemp"] ={v:"N/A"};
                     }
 
             }
             };
         }
     );
-    switch (order){
-        case "E" :
-        case "S" :
-            perusLista = perusLista.sort((a,b) => a.lat - b.lat);
-        break;
-        case "P" :
-        case "N" :
-            perusLista = perusLista.sort((a,b) => b.lat - a.lat);
-        break;
-        case "L" :
-        case "W" :
-            perusLista = perusLista.sort((a,b) => a.lon - b.lon);
-        break;
-        case "I" :
-            perusLista = perusLista.sort((a,b) => b.lon - a.lon);
-        break;
-        case "l" : 
-            perusLista = perusLista.sort((a,b) => b.temp - a.temp || a.dist - b.dist);
-        break;
-        case "k" : 
-            perusLista = perusLista.sort((a,b) => a.temp - b.temp || a.dist - b.dist);
-        break;
-        case "s" : 
-        case "r" : 
-            perusLista = perusLista.sort((a,b) => b.rain- a.rain || b.raini- a.raini);
-        break;
-        case "w" : 
-            perusLista = perusLista.sort((a,b) => b.wind- a.wind || a.asema - b.asema);
-        break;
-        case "h" : 
-            perusLista = perusLista.sort((a,b) => b.koste- a.koste || a.asema - b.asema);
-        break;
-        case "i" : 
-            perusLista = perusLista.sort((a,b) => b.raini- a.raini || b.rain- a.rain );
-        break;
-        case "+" : 
-            perusLista = perusLista.sort((a,b) => b.ilmaMax- a.ilmaMax || a.asema - b.asema);
-        break;
-        case "-" : 
-            perusLista = perusLista.sort((a,b) => a.ilmaMin- b.ilmaMin || a.asema - b.asema);
-        break;
-        case "a" : 
-            perusLista = perusLista.sort((a,b) => a.asema - b.asema || a.asema - b.asema);
-        break;
-        case "n" : 
-            perusLista = perusLista.sort((a,b) => a.nakyvyys - b.nakyvyys || a.asema - b.asema);
-        break;
+    perusLista = sortSaaData(perusLista, order)
+    printData(perusLista, lineLimit, detail)
 
-        default:
-            perusLista = perusLista.sort((a,b) => a.dist - b.dist);
-    }
-    counter=0;
-    if (detail) {
-        console.log("\n* 24h historia")
-        console.log(" Aika           Ilma     Tie    Kosteus  Tuuli    Näky    SadeSum   Sade")
-        IlmaHistory = await getHistory(id[0],1)
-        Tie1History = await getHistory(id[0],3)
-        MaxTuuliHistory = await getHistory(id[0],17)
-        KosteHistory = await getHistory(id[0],21)
-        SIntHistory = await getHistory(id[0],23)
-        SSumHistory = await getHistory(id[0],24)
-        NakyHistory = await getHistory(id[0],58)
-        h=30;
-        i = 0;
-        maxIlma = -99; minIlma = 99;
-        maxTie = -99; minTie = 99; maxTieT = " N/A "; minTieT = " N/A ";
-        eka=true;
-        lastRainI=0;
-        for (item of IlmaHistory) {
-            sadeHourMax=0;
-            sadeHourMaxLast=0;
-            sadeSumma=0;
-            kosteus=0;
-            maxTuuli=0;
-            nakyvyys=99999;
-            tieLampo="N/A  ";
-            if (item.sensorValue > maxIlma) {
-                maxIlma = item.sensorValue;
-                maxIlmaT =  moment(item.measuredTime).format('HH:mm')
-            }
-            if (item.sensorValue < minIlma) {
-                minIlma = item.sensorValue;
-                minIlmaT =  moment(item.measuredTime).format('HH:mm')
-            }
-            if (moment(item.measuredTime).format('H') != h)
-            {
-                h = moment(item.measuredTime).format('H');
-                ilma = item.sensorValue.toFixed(1)+"°C"
-                for (tieItem of Tie1History) {
-                    if (moment(tieItem.measuredTime).isBetween(moment(item.measuredTime).subtract(1,'hours'),moment(item.measuredTime)))
-                    {
-                        tieLampo  = tieItem.sensorValue.toFixed(1)+"°C";
-                        if (tieItem.sensorValue > maxTie) {
-                            maxTie = tieItem.sensorValue;
-                            maxTieT =  moment(tieItem.measuredTime).format('HH:mm')
-                        }
-                        if (tieItem.sensorValue < minTie) {
-                            minTie = tieItem.sensorValue;
-                            minTieT =  moment(tieItem.measuredTime).format('HH:mm')
-                        }
-                    }
-                }
-                for (sadeItem of SIntHistory) {
-                    if (moment(sadeItem.measuredTime).isBetween(moment(item.measuredTime).subtract(61,'minutes'),moment(item.measuredTime)))
-                    {
-                        if (sadeItem.sensorValue > sadeHourMax) sadeHourMax = sadeItem.sensorValue;
-                    }
-                    if (moment(sadeItem.measuredTime).isBetween(moment(item.measuredTime).subtract(1,'minutes'),moment(item.measuredTime).add(1,'hours'),"[]"))
-                    {
-                        if (sadeItem.sensorValue > sadeHourMaxLast) {
-                            sadeHourMaxLast = sadeItem.sensorValue;
-                        }
-                        lastRainI = sadeHourMaxLast;
-                    }
-                }
-                if (sadeHourMax == 0) {sadeHourMax="      "} else {sadeHourMax=(sadeHourMax.toFixed(2)+"mm/h").padStart(12," ")}
-                for (sadeItem of SSumHistory) {
-                    if (moment(sadeItem.measuredTime).isBetween(moment(item.measuredTime).subtract(61,'minutes'),moment(item.measuredTime)))
-                    {
-                        sadeSumma  = sadeItem.sensorValue;
-                    }
-                }
-                if (sadeSumma == 0) {sadeSumma="      "} else {sadeSumma=(sadeSumma.toFixed(1)+"mm").padStart(6," ");}
-                for (kosteItem of KosteHistory) {
-                    if (moment(kosteItem.measuredTime).isBetween(moment(item.measuredTime).subtract(61,'minutes'),moment(item.measuredTime)))
-                    {
-                        if (kosteItem.sensorValue > kosteus) kosteus = kosteItem.sensorValue;
-                    }
-                }
-                kosteus = (kosteus+"% ").padStart(7," ");
-                for (tuuliItem of MaxTuuliHistory) {
-                    if (moment(tuuliItem.measuredTime).isBetween(moment(item.measuredTime).subtract(61,'minutes'),moment(item.measuredTime)))
-                    {
-                        if (tuuliItem.sensorValue > maxTuuli) maxTuuli = tuuliItem.sensorValue;
-                    }
-                }
-                maxTuuli = (maxTuuli.toFixed(1)+"m/s").padStart(7," ")
-
-                for (nakyItem of NakyHistory) {
-                    if (moment(nakyItem.measuredTime).isBetween(moment(item.measuredTime).subtract(61,'minutes'),moment(item.measuredTime)))
-                    {
-                        if (nakyItem.sensorValue < nakyvyys) nakyvyys = nakyItem.sensorValue;
-                    }
-                }
-                nakyvyys = (nakyvyys+"m ").padStart(9," ")
-                if(eka) { //skipataan eka rivi.
-                    eka=false
-                } else {
-                    console.log (moment(item.measuredTime).format('DD.MM. HH:mm')+"  "+ilma.padStart(8," "),tieLampo.padStart(8," "),kosteus,maxTuuli,nakyvyys,sadeSumma+sadeHourMax)
-                }
-            }
-            i++
-        }
-        console.log("%s %s %s  %s",
-            moment(IlmaHistory[IlmaHistory.length-1].measuredTime).format('DD.MM. HH:mm'),
-            lastIlmaTemp.padStart(9," "),
-            lastTieTemp.padStart(8," "),
-            (SSumHistory[SSumHistory.length-1].sensorValue.toFixed(1)+"mm").padStart(31," "),
-            (lastRainI>0)?((lastRainI+"mm/h").padStart(11," ")):"")
-        console.log("\nIlma Max:",maxIlmaT,(maxIlma.toFixed(1)+"°C").padStart(7," "),"Min: ",minIlmaT,(minIlma.toFixed(1)+"°C").padStart(7," "))
-        console.log("Tie  Max:",maxTieT,(maxTie.toFixed(1)+"°C").padStart(7," "),"Min: ",minTieT,(minTie.toFixed(1)+"°C").padStart(7," "))
-
-    } else{
-        console.log(header);
-        for (perusLine of perusLista) {
-            if (perusLine.temp != -99 || showEmpty) {
-                console.log(perusLine.data);
-                if (++counter>=lineLimit) break;
-            }
-        }
-    }
 }
 
 async function start(consoleline) {
@@ -556,14 +632,14 @@ async function start(consoleline) {
             {if (param.match(/^\-?[0-9]+/)) {
                 limit_temp = param.includes('-')?param.substring(1):param
             }
-            if (param.match(/^\-?[a-wA-W+-]$/)) {
+            if (param.match(/^\-?[a-zA-Z+-]$/)) {
                 order = param.includes('-')?param.substring(1):param
             }
             if (param == '-') order = param;
             if (param == 'x') showEmpty = true;
         }
         if (limit_temp==-1) limit_temp=1000; else limit=limit_temp;
-        limit = ['P','E','I','L','N','W','S','d'].includes(order)?Math.min(1000,limit_temp):limit;
+        limit = ['P','E','I','L','N','W','S','d','a'].includes(order)?Math.min(1000,limit_temp):limit;
         if (filename.includes(".")) {
             try {
                 rawData = await fileRead(filename)
@@ -575,7 +651,7 @@ async function start(consoleline) {
             separator='*'
         }
         if (typeof rawData !== 'undefined' && rawData) {
-            getTiesaa(rawData,config.home,saatilat,0,order,limit,separator,showEmpty);
+            getTiesaa(rawData,config.home,saatilat,0,order,limit,separator);
         } 
     }
 }
