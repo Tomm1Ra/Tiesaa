@@ -139,7 +139,7 @@ function lampoLine(mittaukset) {
 }
 
 function tuuliLine(mittaukset) {
-    return ( "Tuuli     "
+    return ( "Tuuli  "
     + getValueWithUnit(mittaukset," Keski:","KTuuli")
     + getValueWithUnit(mittaukset,"  Maksimi:","MTuuli")
     + getValueWithUnit(mittaukset,"  Suunta:","TSuunt")
@@ -477,7 +477,7 @@ async function printData(lista, limit, detail) {
 
     if (detail) {
         mittaukset =lista[0].mittaukset;
-        console.log(lista[0].fullname)
+        //console.log(lista[0].fullname)
         console.log("\n"+header);
         console.log(printSaatiedot(lista[0].fullname, mittaukset))
         console.log("\nEtäisyys: "+lista[0].dist+"km    "+" Longitude: "+lista[0].lon+" Latitude: "+lista[0].lat);
@@ -615,6 +615,10 @@ async function start(consoleline) {
         config = await fileRead("tiesaa.ini")
     } catch (err) {console.log("error",err)}
     config = JSON.parse(config);
+    timeNotify=config.timeNotify;
+    timeReject=config.timeReject;
+    if (typeof timeNotify != 'number') timeNotify = 8;
+    if (typeof timeReject != 'number') timeReject = 30;
 
     filename = "tiesaa.txt";
     if (consoleline[2]) {
@@ -627,15 +631,12 @@ async function start(consoleline) {
             if (asemaData) {
                 const s = asemaData.properties.names.fi+","+asemaData.properties.province+"@"+asemaData.geometry.coordinates[0]+","+asemaData.geometry.coordinates[1]+","+asemaData.geometry.coordinates[2];
                 rawData = consoleline[2].substring(1)+" "+s;
+                console.log(asemaData.id,asemaData.properties.names.fi,asemaData.properties.municipality,asemaData.properties.province,"("+asemaData.properties.roadAddress.contractArea+")")
                 getTiesaa(rawData,config.home,saatilat,1);
             }
     } else{
         limit=config.sortLimit;
-        timeNotify=config.timeNotify;
-        timeReject=config.timeReject;
         if (typeof limit != 'number') limit = 30;
-        if (typeof timeNotify != 'number') timeNotify = 8;
-        if (typeof timeReject != 'number') timeReject = 30;
         limit_temp=-1;
         for (param of consoleline)
             {if (param.match(/^\-?[0-9]+/)) {
