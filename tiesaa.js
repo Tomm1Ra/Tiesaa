@@ -134,7 +134,7 @@ function lampoLine(mittaukset) {
     + getValueWithUnit(mittaukset," ","Maa2") 
     + getValueWithUnit(mittaukset," ","Maa3") 
     + getValueWithUnit(mittaukset," ","Maa4")
-    + getValueWithUnit(mittaukset," ","Run1"))
+    + getValueWithUnit(mittaukset," R:","Run1"))
     
 }
 
@@ -143,7 +143,7 @@ function tuuliLine(mittaukset) {
     + getValueWithUnit(mittaukset," Keski:","KTuuli")
     + getValueWithUnit(mittaukset,"  Maksimi:","MTuuli")
     + getValueWithUnit(mittaukset,"  Suunta:","TSuunt")
-    + getValueWithUnit(mittaukset,"  Ilmanpaine:", "IPaine" ))
+    + getValueWithUnit(mittaukset,"  Ilmanpaine:", "IPaine" ) + getValueWithUnit(mittaukset," ", "DIPain") )
     
 }
 
@@ -177,8 +177,8 @@ function pisteLine(mittaukset) {
 function suolaLine(mittaukset) {
     return (
       getValueWithUnit(mittaukset,"Kosteuden määrä:","KosMä1")
-    + getValueWithUnit(mittaukset,"  Suolan määrä:","SuoMä1") + getValueWithUnit(mittaukset," ","SuoMä2")
-    + getValueWithUnit(mittaukset,"  Suolan väkevyys:","SuoVä1") + getValueWithUnit(mittaukset," ","SuoVä2") )
+    + getValueWithUnit(mittaukset,"  Suolan määrä:","SuoMä1") + getValueWithUnit(mittaukset," ","SuoMä2") + getValueWithUnit(mittaukset," ","SuoMä3") + getValueWithUnit(mittaukset," ","SuoMä4")
+    + getValueWithUnit(mittaukset,"  Suolan väkevyys:","SuoVä1") + getValueWithUnit(mittaukset," ","SuoVä2") + getValueWithUnit(mittaukset," ","SuoVä3") + getValueWithUnit(mittaukset," ","SuoVä4") )
 }
 
 function nakyLine(mittaukset) {
@@ -259,6 +259,9 @@ function sortSaaData(data, order) {
         case "k" : 
             returnData = data.sort((a,b) => a.mittaukset["Ilma "].v - b.mittaukset["Ilma "].v || a.asema - b.asema);
         break;
+        case "M" :
+            returnData = data.sort((a,b) => b.mittaukset["DIlm"].v - a.mittaukset["DIlm"].v || a.asema - b.asema);
+        break;
         case "T" :
             returnData = data.sort((a,b) => b.mittaukset["Tie1"].v - a.mittaukset["Tie1"].v || a.asema - b.asema);
         break;
@@ -300,8 +303,10 @@ function printSaatiedot(fullname, mittaukset) {
 
     line = fullname
     line = (line.padEnd(50," ")).substring(49,line);
-    line += !mittaukset["Ilma "].x ? (mittaukset["Ilma "].v.toFixed(1)+mittaukset["Ilma "].u).padStart(7," ") : noData.padStart(7," ")
-    line += (!mittaukset["Tie1"].x && showTie) ? (mittaukset["Tie1"].v.toFixed(1)+mittaukset["Tie1"].u).padStart(8," ") : showTie ? noData.padStart(8," ") : " "
+    line += !mittaukset["Ilma "].x ? (mittaukset["Ilma "].v.toFixed(1)+mittaukset["Ilma "].u).padStart(8," ") : noData.padStart(8," ")
+    line += (!mittaukset["Tie1"].x && showTie) ? (mittaukset["Tie1"].v.toFixed(1)+mittaukset["Tie1"].u).padStart(9," ") : showTie ? noData.padStart(9," ") : ""
+    line += (!mittaukset["DIlm"].x && showMuutos) ? (mittaukset["DIlm"].v.toFixed(1)+mittaukset["DIlm"].u).padStart(9," ") : showMuutos ? noData.padStart(9," ") : ""
+    line += (showTie || showMuutos) ? "" : " "
     line += !mittaukset["IlmMIN"].x ? (mittaukset["IlmMIN"].v.toFixed(1)+mittaukset["IlmMIN"].u).padStart(8," ") : noData.padStart(8," ")
     line += !mittaukset["IlmMAX"].x ? (mittaukset["IlmMAX"].v.toFixed(1)+mittaukset["IlmMAX"].u).padStart(8," ") : noData.padStart(8," ")
     line += !mittaukset["Koste"].x ? (mittaukset["Koste"].v+mittaukset["Koste"].u).padStart(6," ") : noData.padStart(6," ")
@@ -311,7 +316,7 @@ function printSaatiedot(fullname, mittaukset) {
     line += !mittaukset["S-Int"].x ? (mittaukset["S-Int"].v.toFixed(2)+mittaukset["S-Int"].u).padStart(11," ") : noData.padStart(11," ")
     line += mittaukset["IPaine"] ? (mittaukset["IPaine"].v.toFixed(1)+mittaukset["IPaine"].u).padStart(11," "):""
     line += !mittaukset["Ilma "].x ? (mittaukset["Ilma "].mTime>timeNotify ? " *"+mittaukset["Ilma "].mTime+"* " : "") : ""
-    line += mittaukset["Säätila"].text=="." ? "" : "  "+mittaukset["Säätila"].text
+    line += (showSaatila) ? mittaukset["Säätila"].text=="." ? "" : "  "+mittaukset["Säätila"].text : ""
     return line
 }
 
@@ -347,9 +352,6 @@ async function log24History(id)  {
     maxTuuli=0;
     nakyvyys=99999;
     lastValues={}
-
-
-
 
     for (item of IlmaHistory) {
 
@@ -488,8 +490,8 @@ async function log24History(id)  {
 }
 
 async function printData(lista, limit, detail) {
-    tieString = (showTie)?" Tie".padStart(7," "):""
-    header = " ".padEnd(50," ")+"Ilma".padStart(5," ")+tieString+"Min".padStart(8," ")+"Max".padStart(7," ")+"Kost".padStart(9," ")+"Tuuli".padStart(8," ")+"Näky".padStart(8," ")+"Sade24h".padStart(10," ")+"Sade" .padStart(7," ")
+    optionString = (showTie)? "Tie ".padStart(9," "):(showMuutos)?" Muutos".padStart(9," "):" "
+    header = " ".padEnd(50," ")+"Ilma".padStart(6," ")+optionString+"Min".padStart(7," ")+"Max".padStart(8," ")+"Kost".padStart(8," ")+"Tuuli".padStart(8," ")+"Näky".padStart(8," ")+"Sade24h".padStart(10," ")+"Sade" .padStart(7," ")
     counter=0;
 
     if (detail) {
@@ -592,6 +594,7 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator)
 
                     mittaukset["Ilma "]  ? mittaukset["Ilma "].mTime=checkMeasureTime(mittaukset["Ilma "].t):
                     mittaukset["Ilma "]  ? mittaukset["Ilma "].v = mittaukset["Ilma "].v:order=='k'?mittaukset["Ilma "]={x:1,v:99,u:""}:mittaukset["Ilma "]= {x:1,v:-99,u:""};
+                    mittaukset["DIlm"] ? mittaukset["DIlm"].v =  mittaukset["DIlm"].v:mittaukset["DIlm"] = {x:1,v:0,u:""};
                     mittaukset["Tie1"] ? mittaukset["Tie1"].v =  mittaukset["Tie1"].v:mittaukset["Tie1"] = {x:1,v:0,u:""};
                     mittaukset["Sad24h"] ? mittaukset["Sad24h"].v =  mittaukset["Sad24h"].v:mittaukset["Sad24h"] = {x:1,v:0,u:""};
                     mittaukset["S-Int"]  ? mittaukset["S-Int"].v =   mittaukset["S-Int"].v:mittaukset["S-Int"] = {x:1,v:0,u:""};
@@ -618,6 +621,8 @@ async function start(consoleline) {
     order ="d"
     showEmpty=false;
     showTie=false;
+    showMuutos=false;
+    showSaatila=true;
     separator='\n'
     try {
         saatilat = await fileRead(filename)
@@ -661,11 +666,14 @@ async function start(consoleline) {
             }
             if (param == '-') order = param;
             if (param == 'x') showEmpty = true;
-            if (param == 't') showTie = true;
-            if (param == 'T') {showTie = true; order = param}
+            if (param == 't') {showTie = true; showMuutos=false;}
+            if (param == 'T') {showTie = true; showMuutos=false; order = param}
+            if (param == 'm') {showTie = false; showMuutos=true;}
+            if (param == 'M') {showTie = false; showMuutos=true; order = param}
+            if (param == '.') showSaatila = false;
         }
         if (limit_temp==-1) limit_temp=1000; else limit=limit_temp;
-        limit = ['P','E','I','L','N','W','S','d','a'].includes(order)?Math.min(1000,limit_temp):limit;
+        limit = ['P','E','I','L','N','W','S','D','a','.'].includes(order)?Math.min(1000,limit_temp):limit;
         if (filename.includes(".")) {
             try {
                 rawData = await fileRead(filename)
