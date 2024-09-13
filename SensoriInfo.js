@@ -12,8 +12,12 @@ async function start(consoleline) {
 
         let sensoriData = await getSensoriInfo()
             if (sensoriData) {
+                searchString = (consoleline[2]) ? consoleline[2] : ""
                 for (sensori of sensoriData.sensors) {
-                    console.log(sensori.id,sensori.shortName,sensori.name,sensori.unit,sensori.descriptions.fi)
+                    const s= sensori.shortName+sensori.name+sensori.unit+sensori.descriptions.fi+" "+sensori.id+" "
+                    if (s.toLowerCase().includes(searchString.toLowerCase())) {
+                        console.log(sensori.id,sensori.shortName,sensori.name,sensori.unit,sensori.descriptions.fi)
+                    }
                 }
             }
 }

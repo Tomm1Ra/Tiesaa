@@ -43,8 +43,8 @@ async function getHistory(id,sensor) {
 }
 
 async function start(consoleline) {
-    id = consoleline[2];
-    sensorId = consoleline[3];
+    id = consoleline[2].match(/[0-9]+/)
+    sensorId = consoleline[3].match(/[0-9]+/)
     if (consoleline[4]) {d=consoleline[4];} else {d = 1;}
     colWidth=9;
     h='30';
@@ -52,7 +52,7 @@ async function start(consoleline) {
     header = " h/m"
 
     asemaData = await getAsemaInfo(id)
-    console.log(asemaData.properties.names.fi)
+    console.log(id[0],asemaData.properties.names.fi)
 
     sensoriData = await getSensoriInfo(sensorId)
     console.log(sensoriData.name,"("+sensoriData.unit+")")

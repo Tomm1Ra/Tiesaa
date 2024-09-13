@@ -22,20 +22,20 @@ async function getAsemaSaaInfo(id)  {
 }
 
 async function start(consoleline) {
-    let asemaData = await getAsemaInfo(consoleline[2])
+    id = consoleline[2].match(/[0-9]+/)
+    let asemaData = await getAsemaInfo(id)
         if (asemaData) {
             console.log(asemaData.id,asemaData.properties.names.fi,asemaData.properties.municipality,asemaData.properties.province,"("+asemaData.properties.roadAddress.contractArea+")")
         }
-
-        searchString = (consoleline[3]) ? consoleline[3] : ""
-
-        let asemaMeasures = await getAsemaSaaInfo(consoleline[2])
+        let asemaMeasures = await getAsemaSaaInfo(id)
         if (asemaMeasures) {
             //console.log(asemaSensorValues)
+            searchString = (consoleline[3]) ? consoleline[3] : ""
             asemaMeasures.sensorValues.forEach((sensorValue) => {
-                s = sensorValue.shortName + sensorValue.name + sensorValue.unit
+                s = sensorValue.shortName + sensorValue.name + sensorValue.unit + sensorValue.id
+                desc = sensorValue.sensorValueDescriptionFi ? sensorValue.sensorValueDescriptionFi:""
                 if (s.toLowerCase().includes(searchString.toLowerCase()))
-                console.log(sensorValue.id, sensorValue.shortName, sensorValue.name, sensorValue.value, sensorValue.unit)
+                    console.log(sensorValue.id, sensorValue.shortName, sensorValue.name, sensorValue.value, sensorValue.unit, desc)
             })
         }
 }
