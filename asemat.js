@@ -35,6 +35,7 @@ function getSaaasemat(callback) {
 function SaaAsematLista(searchString) {
     getSaaasemat(function(infoData) {
         if (infoData) {
+            if (searchString.toLowerCase() == "-c") {console.log(infoData.features.length + " asemaa") }
             for(n=0;n<infoData.features.length;n++) {
                 id=infoData.features[n].properties.id;
                 //console.log(n,id);
@@ -50,10 +51,9 @@ function SaaAsematLista(searchString) {
         } else {
             console.log(' Mitä vittua ');
         }
-
-
-})
+    })
 }
+
 searchString='';
 if (process.argv[2]) searchString=process.argv[2]
 SaaAsematLista(searchString)

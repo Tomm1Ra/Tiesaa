@@ -18,37 +18,40 @@ node asemat.js Satakunta > satakunta.txt\
 node asemat.js Tie > tieasemat.txt
 
 Hae tiesäätiedot
-node tiesaa.js <file|-id> [P,L,I,E,a,l,k,+,-,h,w,n,s,i,p,T,M] [d,t,x,X,m,.,s24]\
+node tiesaa.js <file|-id> [P,L,I,E,a,l,k,+,-,h,w,n,s,i,p,T,M] [d,t,x,X,m,.,s24,@]\
 Järjestys:\
-P pohjoinen
-I itä
-L länsi
-E etelä
-a aseman numero\
-l lämpimin ilma
-k kylmin ilma
-p ilmanpaine
-T tien lämpötila
-M ilman lämpötilan muutos\
-+/- Max/Min lämpötilat
-h kosteus
-w tuuli
-n huonoin näkyvyys
-s sade
-i sateen intensiteetti\
-oletusjärjestys on (d) etäisyys kotoa
+'P' pohjoinen
+'I' itä
+'L' länsi
+'E' etelä
+'a' aseman numero\
+'l' lämpimin ilma
+'k' kylmin ilma
+'p' ilmanpaine
+'T' tien lämpötila
+'M' ilman lämpötilan muutos\
+'+'/'-' Max/Min lämpötilat
+'h' kosteus
+'w' tuuli
+'n' huonoin näkyvyys
+'s' sade
+'i' sateen intensiteetti\
+oletusjärjestys on etäisyys kotoa
 
-x näyttää myös asemat joista ei päivitettyä mittausdataa (ilman lämpötilaa), X vain ne\
-t näyttää tien lämpötilan
-m mäyttää ilman lämpötilamuutoksen\
-. ei näytä säätilatekstiä
-s24 sademittaus viimeiset 24h, oletus aamu 06-
+'x' näyttää myös asemat joista ei päivitettyä mittausdataa (ilman lämpötilaa), 'X' vain ne\
+'d' näyttää etäisyyden kotipisteeseen
+'t' näyttää tien lämpötilan
+'m' mäyttää ilman lämpötilamuutoksen\
+'.' ei näytä säätilatekstiä
+'s24' sademittaus viimeiset 24h, oletus aamu 06-\
+@ Vaihtaa kotipisteen @Paikkakunta tai @longitude,latitude (desimaalierotin .)
 
 esim:\
 node tiesaa.js nelostie.txt E (=tiedostossa nelostie.txt olevat asemat etelästä lukien)\
 node tiesaa.js -2009 (= aseman 2009 tarkemmat tiedot)\
 node tiesaa.js Tie w 20 (20 tuulisinta tiesääasemaa)\
-node tiesaa.js tieasemat.txt 30 l (30 lämpimintä tiesääasemaa)
+node tiesaa.js tieasemat.txt 30 l (30 lämpimintä tiesääasemaa)\
+node tiesaa.js tieasemat.txt 30 @Hämeenlinna (30 Hämeenlinnaa lähinnä olevaa tiesääasemaa)
 
 node 24historia.js AAAA BB (näyttää aseman AAAA sensorin BB datat 24h ajalta 5min välein)\
 node AsemanSensorit.js (näyttää mitä sensoreita on asemilla)\

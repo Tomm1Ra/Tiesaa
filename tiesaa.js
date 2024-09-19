@@ -105,6 +105,27 @@ async function SaaAsematLista(searchString) {
         return returnData
 }
 
+
+async function getNewHome(searchString) {
+    returnData ={"long":0,"lat":0};
+    i=0;o=0;
+    infoData = await getSaaasemat();
+        if (infoData) {
+            await Promise.all(infoData.features.map(async (asema) => {
+                i++;
+                id=asema.properties.id;
+                let asemaData = await getAsemaInfo(id)
+                if (asemaData) {
+                    const s = ""+asemaData.properties.municipality
+                        if (s.toLowerCase().includes(searchString.toLowerCase())) {
+                            returnData = {"long":asemaData.geometry.coordinates[0], "lat":asemaData.geometry.coordinates[1]}
+                    }
+                }
+            }))
+        }
+        return returnData;
+}
+
 function updateTime(mittaukset) {
     upTime = mittaukset["Ilma "]?mittaukset["Ilma "].t:""
     return moment(upTime).locale("fi").format('llll')+"  "+moment(upTime).locale("fi").fromNow(); 
@@ -139,20 +160,22 @@ function lampoLine(mittaukset) {
 }
 
 function tuuliLine(mittaukset) {
+    ipaine =  (getValueNoUnit(mittaukset,"","IPaine")) !="0" ?  (getValueWithUnit(mittaukset,"  Ilmanpaine:", "IPaine" ) + getValueWithUnit(mittaukset," ", "DIPain" )) : ""
     return ( "Tuuli  "
     + getValueWithUnit(mittaukset," Keski:","KTuuli")
     + getValueWithUnit(mittaukset,"  Maksimi:","MTuuli")
     + getValueWithUnit(mittaukset,"  Suunta:","TSuunt")
-    + getValueWithUnit(mittaukset,"  Ilmanpaine:", "IPaine" ) + getValueWithUnit(mittaukset," ", "DIPain") )
+    + ipaine )
     
 }
 
 function sadeLine(mittaukset) {
+    zeroTime = isDST  ? "07" : "06"
     return (
       getDescription(mittaukset,"Sade  ","Sade")
     + getValueWithUnit(mittaukset,"  Voimakkuus:","S-Int")
     + getDescription(mittaukset,"  Olomuoto:","S-Olom")
-    + getValueWithUnit(mittaukset,"  Sum 06-:","S-Sum")
+    + getValueWithUnit(mittaukset,"  Sum "+zeroTime +"-:","S-Sum")
     + getValueWithUnit(mittaukset,"  24h:","Sad24h")
     + getValueNoUnit(mittaukset,"  Sadetila:","S-Tila") )
 }
@@ -176,7 +199,7 @@ function pisteLine(mittaukset) {
 
 function suolaLine(mittaukset) {
     return (
-      getValueWithUnit(mittaukset,"Kosteuden määrä:","KosMä1")
+      getValueWithUnit(mittaukset,"Kosteuden määrä:","KosMä1") + getValueWithUnit(mittaukset," ","KosMä2")  + getValueWithUnit(mittaukset," ","KosMä3") + getValueWithUnit(mittaukset," ","KosMä4")
     + getValueWithUnit(mittaukset,"  Suolan määrä:","SuoMä1") + getValueWithUnit(mittaukset," ","SuoMä2") + getValueWithUnit(mittaukset," ","SuoMä3") + getValueWithUnit(mittaukset," ","SuoMä4")
     + getValueWithUnit(mittaukset,"  Suolan väkevyys:","SuoVä1") + getValueWithUnit(mittaukset," ","SuoVä2") + getValueWithUnit(mittaukset," ","SuoVä3") + getValueWithUnit(mittaukset," ","SuoVä4") )
 }
@@ -303,12 +326,28 @@ function sortSaaData(data, order) {
         break;
 
         default:
-            returnData = data.sort((a,b) => a.dist - b.dist);
+            returnData = data.sort((a,b) => a.mittaukset["Dist"].v - b.mittaukset["Dist"].v);
     }
 
     return returnData;
 
 }
+
+async function setNewHome(newHomeString, home)
+    {
+        if (newHomeString.match("[0-9]")) {
+            if (newHomeString.match("[0-9]+(\.[0-9]|)[,;][0-9]+(\.[0-9]+|)")) {
+                home.longitude=parseFloat(newHomeString.split(/[,;]/)[0])
+                home.latitude=parseFloat(newHomeString.split(/[,;]/)[1])
+            }
+        } else  {
+            newHome = await getNewHome(newHomeString)
+            if (newHome.long != 0) {
+                home.longitude=newHome.long
+                home.latitude=newHome.lat
+            }
+        }
+    }
 
 function printSaatiedot(fullname, mittaukset) {
 
@@ -316,11 +355,11 @@ function printSaatiedot(fullname, mittaukset) {
     line = offset + fullname
     line = (line.padEnd(50," ")).substring(49,line);
     line += !mittaukset["Ilma "].x ? (mittaukset["Ilma "].v.toFixed(1)+mittaukset["Ilma "].u).padStart(8," ") : noData.padStart(8," ")
-    line += (!mittaukset["Tie1"].x && showTie) ? (mittaukset["Tie1"].v.toFixed(1)+mittaukset["Tie1"].u).padStart(9," ") : showTie ? noData.padStart(9," ") : ""
-    line += (!mittaukset["DIlm"].x && showMuutos) ? (mittaukset["DIlm"].v.toFixed(1)+mittaukset["DIlm"].u).padStart(9," ") : showMuutos ? noData.padStart(9," ") : ""
-    line += (showTie || showMuutos) ? "" : " "
+    line += (showMuutos) ? !mittaukset["DIlm"].x ? (mittaukset["DIlm"].v.toFixed(1)+mittaukset["DIlm"].u).padStart(9," ") : " ".padStart(9," ") :""
+    line += (showTie) ? !mittaukset["Tie1"].x ? (mittaukset["Tie1"].v.toFixed(1)+mittaukset["Tie1"].u).padStart(9," ") : " ".padStart(9," ") : ""
     line += !mittaukset["IlmMIN"].x ? (mittaukset["IlmMIN"].v.toFixed(1)+mittaukset["IlmMIN"].u).padStart(8," ") : noData.padStart(8," ")
     line += !mittaukset["IlmMAX"].x ? (mittaukset["IlmMAX"].v.toFixed(1)+mittaukset["IlmMAX"].u).padStart(8," ") : noData.padStart(8," ")
+    line += (showDistance) ? (mittaukset["Dist"].v.toFixed(1)+mittaukset["Dist"].u).padStart(9," ") : ""
     line += !mittaukset["Koste"].x ? (mittaukset["Koste"].v+mittaukset["Koste"].u).padStart(6," ") : noData.padStart(6," ")
     line += !mittaukset["MTuuli"].x ? (mittaukset["MTuuli"].v.toFixed(1)+mittaukset["MTuuli"].u).padStart(9," ") : noData.padStart(9," ")
     line += !mittaukset["Näky_m"].x ? (mittaukset["Näky_m"].v+mittaukset["Näky_m"].u).padStart(8," ") : noData.padStart(8," ")
@@ -338,7 +377,7 @@ function printSaatiedot(fullname, mittaukset) {
 
 async function log24History(id)  {
     console.log("\n* 24h historia")
-    console.log(" Aika           Ilma     Tie    Kosteus  Tuuli    Näky    SadeSum   Sade")
+    console.log(" Aika           Ilma     Tie    Kosteus  Tuuli    Näky    SadeSum   SadeI")
     IlmaHistory = await getHistory(id[0],1)
     SSumHistory = await getHistory(id[0],24)
     Tie1History = await getHistory(id[0],3)
@@ -411,14 +450,16 @@ async function log24History(id)  {
     }
     lastValues["tieTemp"] = validHistory?Tie1History[Tie1History.length-1].sensorValue:""
     validHistory=false;
+    prev = 0;
     for (item of SSumHistory) {
         validHistory=true;
         if (moment(item.measuredTime).format('H') != h)
         {
             h = moment(item.measuredTime).format('H');
-            ssum = item.sensorValue.toFixed(1)
+            ssum = prev.toFixed(1)
             SSumVal[h] = (parseFloat(ssum) != 0) ? ssum+"mm" : ""
         }
+        prev = item.sensorValue;
     }
     lastValues["ssum"] = validHistory?SSumHistory[SSumHistory.length-1].sensorValue:""
     validHistory=false;
@@ -506,9 +547,11 @@ async function log24History(id)  {
 }
 
 async function printData(lista, limit, detail) {
-    optionString = (showTie)? "Tie ".padStart(9," "):(showMuutos)?" Muutos".padStart(9," "):" "
-    sadeString = (sade24) ? "Sade24" : "Sade06"
-    header = " ".padEnd(50," ")+"Ilma".padStart(6," ")+optionString+"Min".padStart(7," ")+"Max".padStart(8," ")+"Kost".padStart(8," ")+"Tuuli".padStart(8," ")+"Näky".padStart(8," ")+sadeString.padStart(9," ")+"SadeI" .padStart(8," ")
+    tieString = (showTie)? " Tie ".padStart(9," "):""
+    muutosString = (showMuutos)?" Muutos".padStart(9," "):""
+    etaisyysString = (showDistance)?"Matka".padStart(10," "):""
+    sadeString = (sade24) ? "Sade24" : (isDST) ? "Sade07" :"Sade06"
+    header = " ".padEnd(50," ")+"Ilma".padStart(6," ")+muutosString+tieString+"Min".padStart(7," ")+"Max".padStart(8," ")+etaisyysString+"Kost".padStart(7," ")+"Tuuli".padStart(8," ")+"Näky".padStart(8," ")+sadeString.padStart(9," ")+"SadeI" .padStart(8," ")
     counter=0;
 
     if (detail) {
@@ -516,7 +559,7 @@ async function printData(lista, limit, detail) {
         //console.log(lista[0].fullname)
         console.log("\n"+header);
         console.log(printSaatiedot(lista[0].fullname, mittaukset))
-        console.log("\nEtäisyys: "+lista[0].dist+"km    "+" Long/Lat: "+lista[0].lon+"  "+lista[0].lat);
+        console.log("\nEtäisyys: "+mittaukset["Dist"].v+"km    "+" Long/Lat: "+lista[0].lon+"  "+lista[0].lat);
         console.log("Päivitetty "+updateTime(mittaukset))
         console.log("\n"+lampoLine(mittaukset));
         console.log(tuuliLine(mittaukset));
@@ -633,7 +676,8 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator)
                     mittaukset["Säätila"] ? mittaukset["Säätila"].text = saatilatMap.get(mittaukset["Säätila"].v+"") : mittaukset["Säätila"] = {text:""};
                     mittaukset["S-Tila"] ? mittaukset["S-Tila"].text = saatilatMap.get(mittaukset["S-Tila"].v+"") : mittaukset["S-Tila"] = {text:""};
                     mittaukset["IPaine"] ? mittaukset["IPaine"].v =  mittaukset["IPaine"].v:mittaukset["IPaine"] = {x:1,v:0,u:"" };
-                    perusLista.push({"fullname":fullName, "mittaukset": mittaukset, "asema":asm, "lon":longi, "lat":lati, "dist":dist});
+                    mittaukset["Dist"] = {v:parseFloat(dist),u:"km"};
+                    perusLista.push({"fullname":fullName, "mittaukset": mittaukset, "asema":asm, "lon":longi, "lat":lati});
             }
             };
         }
@@ -653,7 +697,10 @@ async function start(consoleline) {
     showTie=false;
     showMuutos=false;
     showSaatila=true;
+    showDistance = false;
+    newHomeString=""
     separator='\n'
+    isDST = moment().isDST();
     try {
         saatilat = await fileRead(filename)
     } catch (err) {console.log("error",err)}
@@ -691,18 +738,20 @@ async function start(consoleline) {
             {if (param.match(/^\-?[0-9]+/)) {
                 limit_temp = param.includes('-')?param.substring(1):param
             }
-            if (param.match(/^\-?[a-sA-Su-wU-W+-]$/)) {
+            if (param.match(/^\-?[abce-sA-Su-wU-W+-]$/)) {
                 order = param.includes('-')?param.substring(1):param
             }
             if (param == '-') order = param;
             if (param == 'x') showEmpty = true;
             if (param == 'X') showInvalid = true;
-            if (param == 't') {showTie = true; showMuutos=false;}
-            if (param == 'T') {showTie = true; showMuutos=false; order = param}
-            if (param == 'm') {showTie = false; showMuutos=true;}
-            if (param == 'M') {showTie = false; showMuutos=true; order = param}
+            if (param == 't') {showTie = true; }
+            if (param == 'T') {showTie = true; order = param}
+            if (param == 'm') {showMuutos=true;}
+            if (param == 'M') {showMuutos=true; order = param}
             if (param == '.') showSaatila = false;
             if (param == 's24' || param == 'S24') sade24 = true;
+            if (param == 'd') {showDistance = true;}
+            if (param.substring(0,1) == "@") {newHomeString=param.substring(1)}
         }
         if (limit_temp==-1) limit_temp=1000; else limit=limit_temp;
         limit = ['P','E','I','L','N','W','S','D','a','.'].includes(order)?Math.min(1000,limit_temp):limit;
@@ -716,7 +765,8 @@ async function start(consoleline) {
             } catch (err) {console.log("error",err)}
             separator='*'
         }
-        //console.log(order, showEmpty, showTie, timeNotify)
+        if (newHomeString!="") await setNewHome(newHomeString, config.home)
+        //console.log(order, showEmpty, showTie, timeNotify, limit, config.home.longitude,config.home.latitude )
         if (typeof rawData !== 'undefined' && rawData) {
             getTiesaa(rawData,config.home,saatilat,0,order,limit,separator);
         } 
