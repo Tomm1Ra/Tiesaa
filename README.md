@@ -27,15 +27,17 @@ Järjestys:\
 'a' aseman numero\
 'l' lämpimin ilma
 'k' kylmin ilma
+'d' etäisyys
 'p' ilmanpaine
-'T' tien lämpötila
-'M' ilman lämpötilan muutos\
+'t' tien lämpötila
+'m' ilman lämpötilan muutos\
 '+'/'-' Max/Min lämpötilat
 'h' kosteus
 'w' tuuli
 'n' huonoin näkyvyys
 's' sade
 'i' sateen intensiteetti\
+Järjestys [lktm+-hwnsid] ja + tai - järjestää nousevaan tai laskevaan järjestykseen\
 oletusjärjestys on etäisyys kotoa
 
 'x' näyttää myös asemat joista ei päivitettyä mittausdataa (ilman lämpötilaa), 'X' vain ne\
