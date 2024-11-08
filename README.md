@@ -18,7 +18,7 @@ node asemat.js Satakunta > satakunta.txt\
 node asemat.js Tie > tieasemat.txt
 
 Hae tiesäätiedot
-node tiesaa.js <file|-id> [P,L,I,E,a,l,k,+,-,h,w,n,s,i,p,T,M] [d,t,x,X,m,.,s24,@]\
+node tiesaa.js <file|-id> [P,L,I,E,a,l,k,+,-,h,w,n,s,i,p] [d,t,f,x,X,m,.,s24,lumi,@]\
 Järjestys:\
 'P' pohjoinen
 'I' itä
@@ -28,23 +28,23 @@ Järjestys:\
 'l' lämpimin ilma
 'k' kylmin ilma
 'd' etäisyys
-'p' ilmanpaine
-'t' tien lämpötila
-'m' ilman lämpötilan muutos\
+'p' ilmanpaine\
 '+'/'-' Max/Min lämpötilat
 'h' kosteus
 'w' tuuli
 'n' huonoin näkyvyys
 's' sade
 'i' sateen intensiteetti\
-Järjestys [lktm+-hwnsid] ja + tai - järjestää nousevaan tai laskevaan järjestykseen\
+Järjestys [lktm+-hwnsidf] ja + tai - järjestää nousevaan tai laskevaan järjestykseen\
 oletusjärjestys on etäisyys kotoa
 
 'x' näyttää myös asemat joista ei päivitettyä mittausdataa (ilman lämpötilaa), 'X' vain ne\
 'd' näyttää etäisyyden kotipisteeseen
 't' näyttää tien lämpötilan
+'f' näyttää tien kitkan
 'm' mäyttää ilman lämpötilamuutoksen\
 '.' ei näytä säätilatekstiä
+'lumi' näyttää lumensyvyyden
 's24' sademittaus viimeiset 24h, oletus aamu 06-\
 @ Vaihtaa kotipisteen @Paikkakunta tai @longitude,latitude (desimaalierotin .)
 
