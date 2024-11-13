@@ -27,11 +27,11 @@ async function getHistory(id,sensor) {
     endTime = moment().toISOString();
     // console.log(startTime,endTime)
     const getResponse = await axios
-    .get(`https://tie.digitraffic.fi/api/beta/weather-history-data/${id}/${sensor}?from=${startTime}&to=${endTime}` , {timeout: 15000})
+    .get(`https://tie.digitraffic.fi/api/weather/v1/stations/${id}/data/history?sensorId=${sensor}&from=${startTime}&to=${endTime}` , {timeout: 15000})
     .then((response) => response)
     .catch((e)=> console.log("Tuntematon asema ",id))
     if (getResponse) {
-        return getResponse.data
+        return getResponse.data.values
     } else return null;
 }
 

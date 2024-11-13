@@ -32,9 +32,8 @@ async function getSensoriInfo(id) {
 async function getHistory(id,sensor) {
     startTime = moment().subtract(1, 'days').toISOString();
     endTime = moment().toISOString();
-    // console.log(startTime,endTime)
     const getResponse = await axios
-    .get(`https://tie.digitraffic.fi/api/beta/weather-history-data/${id}/${sensor}?from=${startTime}&to=${endTime}` , {timeout: 15000})
+    .get(`https://tie.digitraffic.fi/api/weather/v1/stations/${id}/data/history?sensorId=${sensor}&from=${startTime}&to=${endTime}` , {timeout: 15000})
     .then((response) => response)
     .catch((e)=> console.log("Tuntematon asema ",id,e))
     if (getResponse) {
@@ -62,7 +61,7 @@ async function start(consoleline) {
         header +=  ((a+"").padStart(2)+"-"+((a+4)+"").padStart(2)).padStart(colWidth)
     }
     console.log("\n"+header)
-    for (item of history) {
+    for (item of history.values) {
         if (moment(item.measuredTime).format('H') != h)
             {
                 if (h!='30') console.log((h+":").padStart(3,' '),line.padStart(12*colWidth,' '))
