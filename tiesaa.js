@@ -9,11 +9,9 @@ const fileRead = async(fileName) => {
     return result;
 }
 
-async function lastHour(id,endTime,sensor) {
-    startTime = moment(endTime).subtract(1, 'hours').toISOString();
-    console.log(startTime,endTime)
+async function getHistory1h(id,sensor) {
     const getResponse = await axios
-    .get(`https://tie.digitraffic.fi/api/beta/weather-history-data/${id}/${sensor}?from=${startTime}&to=${endTime}` , {timeout: 15000})
+    .get(`https://tie.digitraffic.fi/api/weather/v1/stations/${id}/data/history?sensorId=${sensor}` , {timeout: 15000})
     .then((response) => response)
     .catch((e)=> console.log("Tuntematon asema ",id))
     if (getResponse) {
@@ -447,13 +445,13 @@ function printSaatiedot(fullname, mittaukset) {
 
 async function log24History(id)  {
     console.log("\n* 24h historia  Ilma     Tie    Kosteus  Tuuli    Näky    SadeSum   SadeI")
-    IlmaHistory = await getHistory(id[0],1)
-    SSumHistory = await getHistory(id[0],24)
-    Tie1History = await getHistory(id[0],3)
-    MaxTuuliHistory = await getHistory(id[0],17)
-    KosteHistory = await getHistory(id[0],21)
-    SIntHistory = await getHistory(id[0],23)
-    NakyHistory = await getHistory(id[0],58)
+    IlmaHistory = await getHistory(id,1)
+    SSumHistory = await getHistory(id,24)
+    Tie1History = await getHistory(id,3)
+    MaxTuuliHistory = await getHistory(id,17)
+    KosteHistory = await getHistory(id,21)
+    SIntHistory = await getHistory(id,23)
+    NakyHistory = await getHistory(id,58)
     
     timeIndex = [];
     IlmaVal = [];
@@ -615,7 +613,27 @@ async function log24History(id)  {
     return (lastValues)
 }
 
-async function printData(lista, limit, detail) {
+async function lastHourHistory(id) {
+    IlmaHistory = await getHistory1h(id,1)
+    SSumHistory = await getHistory1h(id,24)
+    SIntHistory = await getHistory1h(id,23)
+    WindHistory = await getHistory1h(id,17)
+    h = {}
+    h["IlmaH"]=""
+    h["SSumH"]=""
+    h["SIntH"]=""
+    h["MaxTuuli"]=""
+    h["starttime"]=""
+    h["endtime"]=""
+
+    for (item of IlmaHistory.values) {h["IlmaH"] += (""+item.sensorValue.toFixed(1)+" ").padStart(7," ");h["endtime"] = item.measuredTime;if (h["starttime"]=="") h["starttime"]= item.measuredTime}
+    for (item of SSumHistory.values) {h["SSumH"] += item.sensorValue!=0 ? (""+item.sensorValue.toFixed(1)+" ").padStart(7," "):" ".padStart(7," ")}
+    for (item of SIntHistory.values) {h["SIntH"] += item.sensorValue!=0 ? (""+item.sensorValue.toFixed(2)+"").padStart(7," "):" ".padStart(7," ")}
+    for (item of WindHistory.values) {h["MaxTuuli"] += (""+item.sensorValue.toFixed(1)+" ").padStart(7," ")}
+    return h;
+}
+
+async function printData(id, lista, limit, detail) {
     tieString = (showTie)? "Tie ".padStart(9," "):""
     kitkaString = (showKitka)? "Kitka".padStart(8," "):""
     muutosString = (showMuutos)?" Muutos".padStart(9," "):""
@@ -636,7 +654,12 @@ async function printData(lista, limit, detail) {
         console.log("\n"+pisteLine(mittaukset))
         console.log(suolaLine(mittaukset))
         console.log(nakyLine(mittaukset))
-
+        lastHour = await lastHourHistory(id)
+        console.log("\nViimeisin tunti",moment(h["starttime"]).format('DD.MM. HH:mm'),"-",moment(h["endtime"]).format('HH:mm'))
+        console.log("Ilma    °C", lastHour["IlmaH"])
+        console.log("SadeI mm/h", lastHour["SIntH"])
+        console.log("SadeSum mm", lastHour["SSumH"])
+        console.log("Tuuli  m/s", lastHour["MaxTuuli"])
         lastValues = await log24History(id);
         //console.log(lastValues)
         console.log("%s %s %s %s %s %s %s",
@@ -703,10 +726,11 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator)
     for (asema of allSaaInfo.stations) {
         asemaSaatMap.set(asema.id,asema.sensorValues)
     }
-
+    id2=0;
     lines.forEach( (line) => {
         id = line.match(/^([\d]+)/);
         if (id) {
+            id2=id[0]
             // console.log("ID:"+id[0]);
             if (!line.includes('@')) { //haetaan nimi mapista
                 line = tempNamesMap.get(id[0])
@@ -784,7 +808,7 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator)
         }
     );
     perusLista = sortSaaData(perusLista, order)
-    printData(perusLista, lineLimit, detail)
+    printData(id2,perusLista, lineLimit, detail)
 
 }
 
@@ -841,7 +865,7 @@ async function start(consoleline) {
             {if (param.match(/^\-?[0-9]+/)) {
                 limit_temp = param.includes('-')?param.substring(1):param
             }
-            if (param.match(/(?=[a-zA-Z+-])[^dfmtxX.]{1,2}$/)) {
+            if (param.match(/^(?=[a-zA-Z+-])[^dfmtxX.]{1,2}$/)) {
                 order = param.substring(0,1) =='-' ? param.substring(1):param
             }
             if (param == '-' || param == '-+') order = param;
