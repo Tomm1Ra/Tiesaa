@@ -44,7 +44,6 @@
 1084 Tie 50 Vantaa, Suutarila Uusimaa @24.998631,60.287591,16
 1085 Tie 50 Vantaa, Suutarila Uusimaa @25.015549,60.284854,16
 1087 Tie 1282 Lohja, Ikkala Uusimaa @24.087345,60.49857,0
-1088 Tie 1282 Lohja, Ikkala Uusimaa @24.087345,60.49857,0
 1092 Tie 101 Espoo, Mestarintunneli Uusimaa @24.817893,60.222462,0
 1096 Tie 101 Espoo, Vallikallio Uusimaa @24.825079,60.22655,0
 1108 Tie 7 Loviisa, Markkinamäki Kymenlaakso @26.453553,60.491598,7
@@ -52,18 +51,18 @@
 1115 Tie 7 Helsinki, Itäsalmi Uusimaa @25.166158,60.261944,0
 1116 Tie 7 Sipoo, Box Uusimaa @25.409835,60.314793,0
 1117 Tie 148, Sipoo Brobölentie Uusimaa @25.261519,60.364585,0
-1155 Tie 1 Espoo, Nupuri Uusimaa @24.596412,60.228047,0
-1158 Tie 1 Espoo, Kolmiranta Uusimaa @24.499871,60.257497,0
-1161 Tie 1 Vihti, Palojärvi Uusimaa @24.319161,60.293283,0
-1163 Tie 1 Lohja, Lehmijärvi Uusimaa @24.158688,60.288114,0
+1155 Tie 1 Espoo, Nupuri Uusimaa @24.578376,60.227719,0
+1158 Tie 1 Espoo, Kolmiranta Uusimaa @24.517923,60.257836,0
+1161 Tie 1 Vihti, Palojärvi Uusimaa @24.306513,60.293027,0
+1163 Tie 1 Lohja, Lehmijärvi Uusimaa @24.174946,60.28846,0
 1165 Tie 2 Lohja, Salkol Uusimaa @23.914357,60.632845,0
 1166 Tie 25 Vihti, Haimoo Uusimaa @24.527783,60.458818,0
 1167 Tie 25 Vihti, Nummela Uusimaa @24.286795,60.333063,0
 1169 Tie 120 Vihti, Ollila Uusimaa @24.537858,60.354812,0
 1171 Tie 1 Helsinki, Tarvo Uusimaa @24.848197,60.205298,5
-1174 Tie 1 Helsinki, Tarvo Uusimaa @24.848197,60.205298,5
+1174 Tie 1 Helsinki, Tarvo Uusimaa @24.848267,60.204231,5
 1177 Tie 1 Espoo, Sepänkylä Uusimaa @24.734924,60.201777,5
-1180 Tie 1 Espoo, Sepänkylä Uusimaa @24.734924,60.201777,5
+1180 Tie 1 Espoo, Sepänkylä Uusimaa @24.752948,60.202083,5
 1183 Tie 3 Nurmijärvi Klaukkala, Nummimäki Uusimaa @24.824601,60.416649,56
 1189 Tie 25 Vihti, Myllylampi Uusimaa @24.24131,60.311607,0
 1193 Tie 50 Vantaa, Vantaankoski Uusimaa @24.86676,60.296227,0
@@ -119,7 +118,6 @@
 2126 Tie 2 Huittinen, Korvenmaa Satakunta @22.849562,61.106727,0
 2131 Tie 183 Kemiönsaari, Engelsby Varsinais-Suomi @22.740708,60.163807,0
 2142 Tie 40 Raisio Varsinais-Suomi @22.174671,60.488183,0
-2143 Tie 40 Raisio Varsinais-Suomi @22.174671,60.488183,0
 3001 Tie 7 Kotka, Karhunkangas Kymenlaakso @26.995752,60.550431,0
 3002 Tie 7 Hamina, Summa Kymenlaakso @27.088203,60.569293,0
 3003 Tie 62 Puumala, Huuhkaala Etelä-Savo @28.262171,61.482832,0
@@ -144,6 +142,7 @@
 3074 Tie 7 Virolahti, Ravijoki Kymenlaakso @27.475349,60.596463,24
 3075 Tie 7 Virolahti, Mattila Kymenlaakso @27.756659,60.605852,30
 3089 Tie 6 Rautjärvi, Simpele Etelä-Karjala @29.340937,61.419383,0
+3091 Tie 6 Luumäki Pajari Etelä-Karjala @27.226161,60.906625,0
 4001 Tie 4 Hollola, Miekkiö Päijät-Häme @25.613012,60.907742,70
 4002 Tie 24 Asikkala, Iso-Äiniö Päijät-Häme @25.349865,61.226205,125
 4003 Tie 2 Humppila, Koenjoki Kanta-Häme @23.334059,60.956006,100
@@ -181,6 +180,7 @@
 4080 Tie 12 Hollola, Okeroinen Päijät-Häme @25.534522,60.960679,110
 4083 Lahti Elementintie Päijät-Häme @25.952334,60.936121,0
 4084 Tie 167 Orimattila Päijät-Häme @25.728599,60.802649,2
+4085 Tie 65 Ylöjärvi, Kuru Pirkanmaa @23.725555,61.877441,0
 5001 Tie 6 Kouvola, Elimäki Kymenlaakso @26.484738,60.776254,0
 5004 Tie 6 Imatra, Rönkkä Etelä-Karjala @28.856199,61.229996,0
 5005 Tie 6 Parikkala, Rautalahti Etelä-Karjala @29.580662,61.645189,0
@@ -252,12 +252,12 @@
 8019 Tie 551 Vesanto, Löttökorpi Pohjois-Savo @26.389087,62.927206,112
 8020 Tie 5 Kuopio, Siikalahti Pohjois-Savo @27.636252,62.885114,115
 8023 Tie 5 Leppävirta, Oravikos Pohjois-Savo @27.604964,62.589621,92
-8038 Tie 5 Kuopio, Rahusenlampi Pohjois-Savo @27.677779,62.918867,101
-8042 Tie 5 Kuopio, Sorsasalo Pohjois-Savo @27.696966,62.964039,85
+8038 Tie 5 Kuopio, Rahusenlampi Pohjois-Savo @27.677779,62.918858,101
+8042 Tie 5 Kuopio, Sorsasalo Pohjois-Savo @27.696847,62.964039,85
 8064 Tie 23 Leppävirta, Soisalo Pohjois-Savo @28.165408,62.407354,103
 8066 Tie 5 Kuopio, Tikkalansaari Pohjois-Savo @27.671233,62.946849,98
-8071 Tie 5 Kuopio, Rahusenlampi Pohjois-Savo @27.677779,62.918867,101
-8073 Tie 5 Kuopio, Sorsasalo Pohjois-Savo @27.696966,62.964039,85
+8071 Tie 5 Kuopio, Rahusenlampi Pohjois-Savo @27.677783,62.919038,101
+8073 Tie 5 Kuopio, Sorsasalo Pohjois-Savo @27.697045,62.964038,85
 8079 Tie 9 Kuopio, Jännevirran silta Pohjois-Savo @27.830014,62.971111,113
 8084 Tie 5 Kuopio, Vehmasmäki Pohjois-Savo @27.577415,62.71901,120
 9001 Tie 4 Toivakka, Vestonmäki Keski-Suomi @26.05186,62.05144,185
@@ -382,6 +382,7 @@
 12076 Tie 8 Siikajoki, Revonlahti Pohjois-Pohjanmaa @24.967942,64.718614,0
 12082 Tie 4 Oulu, Ritaharju Pohjois-Pohjanmaa @25.442388,65.071346,16
 12083 Tie 4 Oulu, Haukipudas Pohjois-Pohjanmaa @25.424913,65.174473,20
+12089 Tie 800 Siikalatva Kestilä Pohjois-Pohjanmaa @26.290622,64.353206,0
 13001 Tie 6 Sotkamo, Korholanmäk Kainuu @27.997025,64.142281,220
 13002 Tie 5 Ristijärvi, Roukajoki Kainuu @28.403639,64.576405,152
 13003 Tie 22 Vaala, Liminpuro Pohjois-Pohjanmaa @27.241136,64.53361,125
@@ -441,6 +442,7 @@
 14066 Tie 79 Rovaniemi, Patokoski Lappi @25.457463,66.857203,0
 14068 Tie 4 Rovaniemi, Santa Claus Lappi @25.785034,66.538124,122
 14069 Tie 924 Simo, Sankala Lappi @25.515637,65.863113,8
+14070 Tie 80 Kittilä, Tepsa Lappi @25.676753,67.560977,0
 15004 Tie 78 Puolanka Leipivaara Testi Lumenmittaus Pohjois-Pohjanmaa @27.780306,64.84645,0
 15005 Tie 78 Ranua, Portimo, Testi_Lumenmittaus Lappi @26.321557,66.108385,0
 15006 Tie 970 Utsjoki, Nuvvus, Testi Lumenmittaus Lappi @26.230451,69.785258,0
@@ -448,6 +450,7 @@
 15008 Tie 9671 Savukoski, Tulppio, Testi_Lumenmittaus Lappi @29.209595,67.769078,0
 15009 Tie 9111 Kuhmo, Saunajärvi, Testi Lumenmittaus Kainuu @29.976146,63.930677,0
 15010 Tie 833 Oulu Vesala, Testi Lumenmittaus Pohjois-Pohjanmaa @26.058409,65.031926,0
+15038 Tie 140 Mäntsälä IoT Uusimaa @25.319144,60.637428,0
 16001 Tie 1 Salo, Lakiamäki Varsinais-Suomi @23.356861,60.37346,0
 16002 Tie 1 Salo, Lakiamäki Varsinais-Suomi @23.356821,60.373818,0
 16003 Tie 1 Salo, Kruusila Varsinais-Suomi @23.477896,60.380487,0
@@ -462,3 +465,6 @@
 16012 Tie 1 Lohja, Karnainen Uusimaa @24.001952,60.312709,0
 16013 Tie 1 Karnainen Uusimaa @24.001952,60.312709,0
 18006 Tie 4 Sodankylä, Petäjämaa Lappi @26.617184,67.36213,200
+7008 kt74_Joensuu_Onkimäki Pohjois-Karjala @30.691845,62.585064,190
+2054 Ahvenanmaa, Åva Ahvenanmaa @21.081853,60.46362,0
+2052 Ahvenanmaa, Eckerö Ahvenanmaa @19.618722,60.211657,0
