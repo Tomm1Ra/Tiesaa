@@ -492,18 +492,18 @@ async function log24History(id)  {
 
     for (item of IlmaHistory) {
 
-        if (item.sensorValue > maxIlma) {
-            maxIlma = item.sensorValue;
+        if (item.value > maxIlma) {
+            maxIlma = item.value;
             maxIlmaT =  moment(item.measuredTime).format('HH:mm')
         }
-        if (item.sensorValue < minIlma) {
-            minIlma = item.sensorValue;
+        if (item.value < minIlma) {
+            minIlma = item.value;
             minIlmaT =  moment(item.measuredTime).format('HH:mm')
         }
         if (moment(item.measuredTime).format('H') != h)
         {
             h = moment(item.measuredTime).format('H');
-            IlmaVal[h]  = item.sensorValue.toFixed(1)+"°C"
+            IlmaVal[h]  = item.value.toFixed(1)+"°C"
             timeIndex[h] = moment(item.measuredTime).format('DD.MM. HH:mm')
             if (eka) {
                 startH = h;
@@ -511,26 +511,26 @@ async function log24History(id)  {
             }
         }
     }
-    lastValues["ilmaTemp"] = IlmaHistory[IlmaHistory.length-1].sensorValue
+    lastValues["ilmaTemp"] = IlmaHistory[IlmaHistory.length-1].value
     lastValues["ilmaTime"] = IlmaHistory[IlmaHistory.length-1].measuredTime
     validHistory=false;
     for (item of Tie1History) {
         validHistory=true;
-        if (item.sensorValue > maxTie) {
-            maxTie = item.sensorValue;
+        if (item.value > maxTie) {
+            maxTie = item.value;
             maxTieT =  moment(item.measuredTime).format('HH:mm')
         }
-        if (item.sensorValue < minTie) {
-            minTie = item.sensorValue;
+        if (item.value < minTie) {
+            minTie = item.value;
             minTieT =  moment(item.measuredTime).format('HH:mm')
         }
         if (moment(item.measuredTime).format('H') != h)
         {
             h = moment(item.measuredTime).format('H');
-            Tie1Val[h] = item.sensorValue.toFixed(1)+"°C"
+            Tie1Val[h] = item.value.toFixed(1)+"°C"
         }
     }
-    lastValues["tieTemp"] = validHistory?Tie1History[Tie1History.length-1].sensorValue:""
+    lastValues["tieTemp"] = validHistory?Tie1History[Tie1History.length-1].value:""
     validHistory=false;
     prev = 0;
     for (item of SSumHistory) {
@@ -541,20 +541,20 @@ async function log24History(id)  {
             ssum = prev.toFixed(1)
             SSumVal[h] = (parseFloat(ssum) != 0) ? ssum+"mm" : ""
         }
-        prev = item.sensorValue;
+        prev = item.value;
     }
-    lastValues["ssum"] = validHistory?SSumHistory[SSumHistory.length-1].sensorValue:""
+    lastValues["ssum"] = validHistory?SSumHistory[SSumHistory.length-1].value:""
     validHistory=false;
     for (item of KosteHistory) {
         validHistory=true;
         if (moment(item.measuredTime).format('H') != h)
         {
             h = moment(item.measuredTime).format('H');
-            KosteVal[h] = item.sensorValue+"%"
+            KosteVal[h] = item.value+"%"
         }
-        lastKosteus = item.sensorValue;
+        lastKosteus = item.value;
     }
-    lastValues["kosteus"]  = validHistory?KosteHistory[KosteHistory.length-1].sensorValue:""
+    lastValues["kosteus"]  = validHistory?KosteHistory[KosteHistory.length-1].value:""
 
     maxtuuli=0;
     h=30;
@@ -565,10 +565,10 @@ async function log24History(id)  {
         {
             h = moment(item.measuredTime).format('H');
             MaxTuuliVal[h] = maxtuuli.toFixed(1)+"m/s"
-            maxtuuli = item.sensorValue;
+            maxtuuli = item.value;
         } else {
-            if (item.sensorValue > maxtuuli) {
-                maxtuuli = item.sensorValue;
+            if (item.value > maxtuuli) {
+                maxtuuli = item.value;
             }
         }
     }
@@ -584,8 +584,8 @@ async function log24History(id)  {
             SIntVal[h] = (parseFloat(lastRainI) != 0) ? lastRainI.toFixed(2)+"mm/h" : "";
             lastRainI = 0
         } else {
-            if (item.sensorValue > lastRainI) {
-                lastRainI = item.sensorValue;
+            if (item.value > lastRainI) {
+                lastRainI = item.value;
             }
         }
     }
@@ -599,12 +599,12 @@ async function log24History(id)  {
         if (moment(item.measuredTime).format('H') != h)
         {
             h = moment(item.measuredTime).format('H');
-            if (naky==99999) naky = item.sensorValue;
+            if (naky==99999) naky = item.value;
             NakyVal[h] = naky+"m";
-            naky = item.sensorValue;
+            naky = item.value;
         } else {
-            if (item.sensorValue < naky) {
-                naky = item.sensorValue;
+            if (item.value < naky) {
+                naky = item.value;
             }
         }
     }
@@ -641,10 +641,10 @@ async function lastHourHistory(id) {
     h["starttime"]=""
     h["endtime"]=""
 
-    for (item of IlmaHistory.values) {h["IlmaH"] += (""+item.sensorValue.toFixed(1)+" ").padStart(7," ");h["endtime"] = item.measuredTime;if (h["starttime"]=="") h["starttime"]= item.measuredTime}
-    for (item of SSumHistory.values) {h["SSumH"] += item.sensorValue!=0 ? (""+item.sensorValue.toFixed(1)+" ").padStart(7," "):" ".padStart(7," ")}
-    for (item of SIntHistory.values) {h["SIntH"] += item.sensorValue!=0 ? (""+item.sensorValue.toFixed(2)+"").padStart(7," "):" ".padStart(7," ")}
-    for (item of WindHistory.values) {h["MaxTuuli"] += (""+item.sensorValue.toFixed(1)+" ").padStart(7," ")}
+    for (item of IlmaHistory.values) {h["IlmaH"] += (""+item.value.toFixed(1)+" ").padStart(7," ");h["endtime"] = item.measuredTime;if (h["starttime"]=="") h["starttime"]= item.measuredTime}
+    for (item of SSumHistory.values) {h["SSumH"] += item.value!=0 ? (""+item.value.toFixed(1)+" ").padStart(7," "):" ".padStart(7," ")}
+    for (item of SIntHistory.values) {h["SIntH"] += item.value!=0 ? (""+item.value.toFixed(2)+"").padStart(7," "):" ".padStart(7," ")}
+    for (item of WindHistory.values) {h["MaxTuuli"] += (""+item.value.toFixed(1)+" ").padStart(7," ")}
     return h;
 }
 
@@ -917,6 +917,8 @@ async function start(consoleline) {
             if (param == 'f+' || param == 'f-') {showKitka = true; order = param}
             if (param == '.') showSaatila = false;
             if (param == '!') showPlace = true;
+            if (param.substring(0,1) == "*") {showTie = true; showMuutos=true; showDistance=true; sade24=true; limit=50}
+            if (param == '**') {showKitka=true; showLumi = true; }
             if (param == 's24' || param == 'S24') sade24 = true;
             if (param.toLowerCase() == 'lumi') showLumi = true;
             if (param.toLowerCase() == 'lumi+' || param.toLowerCase() == 'lumi-') {showLumi = true; order = param.toLowerCase()}

@@ -68,7 +68,7 @@ async function start(consoleline) {
                 h = moment(item.measuredTime).format('H')
                 line =""
             }
-            line += (item.sensorValue.toFixed(d)+"").padStart(colWidth,' ')
+            line += (item.value.toFixed(d)+"").padStart(colWidth,' ')
     }
     console.log((h+":").padStart(3,' '),line)
 
