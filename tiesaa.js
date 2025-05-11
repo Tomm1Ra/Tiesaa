@@ -705,7 +705,7 @@ async function printData(id, lista, limit, detail) {
             for (perusLine of lista) {
                 if ((perusLine.mittaukset["Ilma "].v != -99  && perusLine.mittaukset["Ilma "].mTime <timeReject) || showEmpty) {
                     fullCount++;
-                    if (perusLine.fullname.toLowerCase().includes(searchPlace.toLowerCase())) {
+                    if ((searchStrings.length == 0 || searchStrings.filter(word => perusLine.fullname.toLowerCase().includes(word.toLowerCase())).length > 0)) {
                         console.log(printSaatiedot(perusLine.fullname,perusLine.mittaukset,fullCount));
                         if (++counter>=limit) break;
                         if (splitPrint && (counter%splitLine == 0)) {
@@ -855,7 +855,8 @@ async function start(consoleline) {
     newHomeString=""
     separator='\n'
     isDST = moment().isDST();
-    searchPlace = ""
+    tempString=""
+    searchStrings = []
     try {
         saatilat = await fileRead(filename)
     } catch (err) {console.log("error",err)}
@@ -897,10 +898,12 @@ async function start(consoleline) {
             }
             if (param.match(/^(?=[#a-zA-Z+-])[^dfmtxX.]{1,2}$/)) {
                 order = param.substring(0,1) =='-' ? param.substring(1):param
-                searchPlace = param.substring(0,1) =='#' ? param.substring(1):searchPlace
+                tempString = param.substring(0,1) =='#' ? param.substring(1):""
+                if (tempString.length > 0) searchStrings.push(tempString);
             }
             if (param.match(/^#.*$/)) {
-                searchPlace = param.substring(0,1) =='#' ? param.substring(1):searchPlace
+                tempString = param.substring(0,1) =='#' ? param.substring(1):""
+                if (tempString.length > 0) searchStrings.push(tempString);
             }
             if (param.match(/^\\.*$/)) {
                 splitPrint = true
@@ -939,7 +942,7 @@ async function start(consoleline) {
             separator='*'
         }
         if (newHomeString!="") await setNewHome(newHomeString, config.home)
-         // console.log(order, showEmpty, showTie, timeNotify, limit, config.home.longitude,config.home.latitude,searchPlace, splitPrint, splitLine, showPlace )
+        //  console.log(order, showEmpty, showTie, timeNotify, limit, config.home.longitude,config.home.latitude,searchStrings, splitPrint, splitLine, showPlace )
         if (typeof rawData !== 'undefined' && rawData) {
             getTiesaa(rawData,config.home,saatilat,0,order,limit,separator);
         } 
