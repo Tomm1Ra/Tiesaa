@@ -150,7 +150,7 @@
 4005 Tie 11 Nokia, Sorrinlammi Pirkanmaa @23.422976,61.501564,155
 4006 Tie 3 Lempäälä, Kulju Pirkanmaa @23.765038,61.408411,130
 4007 Tie 130 Valkeakoski, Jutikkala Pirkanmaa @24.058328,61.148562,90
-4008 Tie 10 Tammela, Heinivaho Kanta-Häme @24.013066,60.827995,140
+4008 Tie 10 Tammela, Heinivaho Kanta-Häme @24.001411,60.827277,140
 4009 Tie 3 Riihimäki, Parmala Kanta-Häme @24.737346,60.706054,100
 4010 Tie 12 Hollola, Toivola Päijät-Häme @25.281987,61.004725,130
 4011 Tie 12 Hämeenlinna, Hauho Kanta-Häme @24.681809,61.159489,100
@@ -430,7 +430,7 @@
 14046 Tie 78 Ranua, Portimo Lappi @26.321557,66.108385,0
 14047 Tie 21 Muonio Pahtonen Lappi @23.632721,67.911098,240
 14049 Tie 21 Muonio Lappi @23.68432,67.955802,240
-14051 Tie 21 Muonio, testiasema auringon säteilymittauksiin Lappi @23.68432,67.955802,0
+14051 Tie 21 Muonio, testiasema auringon säteilymittauksiin Lappi @23.686704,67.95585,0
 14054 Tie 21 Enontekiö, Kilpisjärvi Lappi @20.874249,69.016677,475
 14055 Tie 81 Posio, Mourusalmi Lappi @28.4162,66.092967,0
 14056 Tie 21 Enontekiö, Ropinsalmi Lappi @21.592843,68.675367,0
@@ -468,3 +468,6 @@
 7008 kt74_Joensuu_Onkimäki Pohjois-Karjala @30.691845,62.585064,190
 2054 Ahvenanmaa, Åva Ahvenanmaa @21.081853,60.46362,0
 2052 Ahvenanmaa, Eckerö Ahvenanmaa @19.618722,60.211657,0
+18003 Espoon kaupunki, Karakallio Uusimaa @24.751216,60.233178,35
+18004 Espoon kaupunki, Puolarmetsä Uusimaa @24.686063,60.176832,19
+18005 Lahti, Kivistönmäki Päijät-Häme @25.675391,61.000533,116

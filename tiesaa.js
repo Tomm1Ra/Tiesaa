@@ -878,6 +878,7 @@ async function start(consoleline) {
     isDST = moment().isDST();
     tempString=""
     searchStrings = []
+    oneStation = false;
     try {
         saatilat = await fileRead(filename)
     } catch (err) {console.log("error",err)}
@@ -899,13 +900,16 @@ async function start(consoleline) {
         filename = consoleline[2];
     }
 
-    if (filename.charAt(0) =='-'){
-        rawData = consoleline[2].substring(1)+" :";
+    if (filename.match(/^[0-9]+$/)) oneStation=true;
+    if (filename.substring(1).match(/^[0-9]+$/) && !oneStation) {oneStation=true; filename=filename.substring(1)}
+
+    if (oneStation){
+        rawData = filename+" :";
         if (consoleline[3]) showMisc = true;
-        let asemaData = await getAsemaInfo(consoleline[2].substring(1))
+        let asemaData = await getAsemaInfo(filename)
             if (asemaData) {
                 const s = asemaData.properties.names.fi+","+asemaData.properties.province+"@"+asemaData.geometry.coordinates[0]+","+asemaData.geometry.coordinates[1]+","+asemaData.geometry.coordinates[2];
-                rawData = consoleline[2].substring(1)+" "+s;
+                rawData = filename+" "+s;
                 console.log(asemaData.id,asemaData.properties.names.fi,asemaData.properties.municipality,asemaData.properties.province,"("+asemaData.properties.roadAddress.contractArea+")")
                 getTiesaa(rawData,config.home,saatilat,1);
             }
@@ -959,10 +963,17 @@ async function start(consoleline) {
                 rawData = await fileRead(filename)
             } catch (err) {console.log("error",err)}
         } else {
-            try {
+            /* try {
                 rawData = await SaaAsematLista(filename);
             } catch (err) {console.log("error",err)}
-            separator='*'
+            separator='*' */
+            filename="tieasemat.txt";
+            try {
+               rawData = await fileRead(filename)
+            } catch (err) {console.log("error",err)}
+            for (a of consoleline.slice(2)) {
+                if (a.length > 2) searchStrings.push(a);
+            }
         }
         if (newHomeString!="") await setNewHome(newHomeString, config.home)
         //  console.log(order, showEmpty, showTie, timeNotify, limit, config.home.longitude,config.home.latitude,searchStrings, splitPrint, splitLine, showPlace )
