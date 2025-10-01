@@ -47,7 +47,8 @@ oletusjärjestys on etäisyys kotipisteestä
 'lumi' näyttää lumensyvyyden
 's24' sademittaus viimeiset 24h, 's0' aamulla nollattu sademäärä (oletus)\
 '!' näyttää järjestysnumeron\
-'@' Vaihtaa kotipisteen @Paikkakunta tai @longitude,latitude (desimaalierotin .) 
+'@' Vaihtaa kotipisteen. @longitude,latitude (desimaalierotin .) tai @paikka\
+'@0' Etäisyydet näytetään listan ekasta, '@@' Etäisyys edellisestä\
 '#teksti' filtteröi tekstin sisältävät mukaan
 
 esim:\

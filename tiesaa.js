@@ -418,10 +418,19 @@ async function setNewHome(newHomeString, home)
                 home.latitude=parseFloat(newHomeString.split(/[,;]/)[1])
             }
         } else  {
-            newHome = await getNewHome(newHomeString)
-            if (newHome.long != 0) {
-                home.longitude=newHome.long
-                home.latitude=newHome.lat
+            try {
+                rawData = await fileRead("tieasemat.txt")
+            } catch (err) {console.log("error",err)}
+            lines = rawData.split('\n');
+            for (line of lines) {
+                if (line.match(newHomeString)) {
+                    osat1 = line.split('@');
+                    osat2 = osat1[1].split(',');
+                    home.longitude=parseFloat(osat2[0]);
+                    home.latitude=parseFloat(osat2[1]);
+                    console.log("Kotipiste "+line);
+                    break;
+                }
             }
         }
     }
@@ -663,6 +672,9 @@ async function printData(id, lista, limit, detail) {
     header = " ".padEnd(50," ")+"Ilma".padStart(6," ")+muutosString+tieString+kitkaString+lumiString+"Min".padStart(7," ")+"Max".padStart(8," ")+etaisyysString+"Kost".padStart(8," ")+"Tuuli".padStart(8," ")+"Näky".padStart(8," ")+sadeString.padStart(9," ")+"SadeI" .padStart(8," ")
     counter = 0;
     fullCount = 0;
+    subCount = 0;
+    hLat = tiesaaConfig.home.latitude;
+    hLat = tiesaaConfig.home.longitude;
 
     if (detail) {
         mittaukset =lista[0].mittaukset;
@@ -711,6 +723,17 @@ async function printData(id, lista, limit, detail) {
                 if ((perusLine.mittaukset["Ilma "].v != -99  && perusLine.mittaukset["Ilma "].mTime <timeReject) || showEmpty) {
                     fullCount++;
                     if ((searchStrings.length == 0 || searchStrings.filter(word => perusLine.fullname.toLowerCase().includes(word.toLowerCase())).length > 0)) {
+                        if(fromZero)  {
+                            if(subCount == 0) {hLat = perusLine.lat; hLong = perusLine.lon};
+                            subCount++;
+                            perusLine.mittaukset["Dist"].v =  distance(hLat,hLong,perusLine.lat,perusLine.lon);
+                        }
+                        if(fromNext)  {
+                            if(subCount == 0) {hLat = perusLine.lat; hLong = perusLine.lon};
+                            subCount++;
+                            perusLine.mittaukset["Dist"].v =  distance(hLat,hLong,perusLine.lat,perusLine.lon);
+                            hLat = perusLine.lat; hLong = perusLine.lon;
+                        }
                         console.log(printSaatiedot(perusLine.fullname,perusLine.mittaukset,fullCount));
                         if (++counter>=limit) break;
                         if (splitPrint && (counter%splitLine == 0)) {
@@ -846,7 +869,7 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator)
                     mittaukset["Keli2"] ? mittaukset["Keli2"].text = mittaukset["Keli2"].d : mittaukset["Keli2"] = {text:" - "};
                     if (tuntematon) {mittaukset["Säätila"]={text:"Tuntematon asema"}};
                     if (puuttuu) {mittaukset["Säätila"]={text:"Data puuttuu"}};
-                    perusLista.push({"fullname":fullName, "mittaukset": mittaukset, "asema":asm, "lon":longi, "lat":lati});
+                    perusLista.push({"fullname":fullName, "mittaukset": mittaukset, "asema":asm, "lon":parseFloat(longi), "lat":parseFloat(lati)});
             }
             };
         }
@@ -873,6 +896,8 @@ async function start(consoleline) {
     showPlace = false;
     showKeli = false;
     splitPrint = false;
+    fromZero = false;
+    fromNext = false;
     newHomeString=""
     separator='\n'
     isDST = moment().isDST();
@@ -884,13 +909,13 @@ async function start(consoleline) {
     } catch (err) {console.log("error",err)}
 
     try {
-        config = await fileRead("tiesaa.ini")
+        tiesaaConfig = await fileRead("tiesaa.ini")
     } catch (err) {console.log("error",err)}
-    config = JSON.parse(config);
-    timeNotify=config.timeNotify;
-    timeReject=config.timeReject;
-    noData=config.noData;
-    splitLine=config.splitLine;
+    tiesaaConfig = JSON.parse(tiesaaConfig);
+    timeNotify=tiesaaConfig.timeNotify;
+    timeReject=tiesaaConfig.timeReject;
+    noData=tiesaaConfig.noData;
+    splitLine=tiesaaConfig.splitLine;
     if (typeof timeNotify != 'number') timeNotify = 8;
     if (typeof timeReject != 'number') timeReject = 30;
     if (typeof noData != 'string') noData = "";
@@ -911,10 +936,10 @@ async function start(consoleline) {
                 const s = asemaData.properties.names.fi+","+asemaData.properties.province+"@"+asemaData.geometry.coordinates[0]+","+asemaData.geometry.coordinates[1]+","+asemaData.geometry.coordinates[2];
                 rawData = filename+" "+s;
                 console.log(asemaData.id,asemaData.properties.names.fi,asemaData.properties.municipality,asemaData.properties.province,"("+asemaData.properties.roadAddress.contractArea+")")
-                getTiesaa(rawData,config.home,saatilat,1);
+                getTiesaa(rawData,tiesaaConfig.home,saatilat,1);
             }
     } else{
-        limit=config.sortLimit;
+        limit=tiesaaConfig.sortLimit;
         if (typeof limit != 'number') limit = 30;
         limit_temp=-1;
         for (param of consoleline)
@@ -922,7 +947,7 @@ async function start(consoleline) {
                 limit_temp = param.includes('-')?param.substring(1):param
             }
             if (param.match(/^(?=[#a-zA-Z+-])[^dfmtkxX.]{1,2}$/)) {
-                order = param.substring(0,1) =='-' ? param.substring(1):param
+                order = param.substring(0,1) =='-' ? param.substring(1):param=='s0'?order:param;
                 tempString = param.substring(0,1) =='#' ? param.substring(1):""
                 if (tempString.length > 0) searchStrings.push(tempString);
             }
@@ -948,13 +973,15 @@ async function start(consoleline) {
             if (param.substring(0,1) == "*") {showTie = true; showMuutos=true; showDistance=true; sade24=true; limit=50}
             if (param == '**') {showKitka=true; showLumi = true; }
             if (param == 's24' || param == 'S24') sade24 = true;
-            if (param == 's0' || param == 'S0') sade24 = false;
+            if (param.match('[sS][0]')) sade24 = false;
             if (param.toLowerCase() == 'lumi') showLumi = true;
             if (param.toLowerCase() == 'lumi+' || param.toLowerCase() == 'lumi-') {showLumi = true; order = param.toLowerCase()}
             if (param == 'd') {showDistance = true;}
             if (param == 'd+' || param =='d-') {showDistance=true; order = param}
             if (param.substring(0,1) == "@") {newHomeString=param.substring(1)}
             if (param == 'k') {showKeli = true;}
+            if (param == '@0') {fromZero = true;showDistance=true;newHomeString=''}
+            if (param == '@@') {fromNext = true;showDistance=true;newHomeString=''}
         }
         if (limit_temp==-1) limit_temp=1000; else limit=limit_temp;
         limit = ['P','E','I','L','N','W','S','D','a','.'].includes(order)?Math.min(1000,limit_temp):limit;
@@ -963,22 +990,18 @@ async function start(consoleline) {
                 rawData = await fileRead(filename)
             } catch (err) {console.log("error",err)}
         } else {
-            /* try {
-                rawData = await SaaAsematLista(filename);
-            } catch (err) {console.log("error",err)}
-            separator='*' */
             filename="tieasemat.txt";
             try {
                rawData = await fileRead(filename)
             } catch (err) {console.log("error",err)}
             for (a of consoleline.slice(2)) {
-                if (a.length > 2) searchStrings.push(a);
+                if ((a.length > 2) && (!a.match('([sS][0-9]|@[a-zA-ZåäöÅÄÖ])'))) searchStrings.push(a);
             }
         }
-        if (newHomeString!="") await setNewHome(newHomeString, config.home)
-        //  console.log(order, showEmpty, showTie, timeNotify, limit, config.home.longitude,config.home.latitude,searchStrings, splitPrint, splitLine, showPlace )
+        if (newHomeString!="") await setNewHome(newHomeString, tiesaaConfig.home)
+        //  console.log(order, showEmpty, showTie, timeNotify, limit, tiesaaConfig.home.longitude,tiesaaConfig.home.latitude,searchStrings, splitPrint, splitLine, showPlace )
         if (typeof rawData !== 'undefined' && rawData) {
-            getTiesaa(rawData,config.home,saatilat,0,order,limit,separator);
+            getTiesaa(rawData,tiesaaConfig.home,saatilat,0,order,limit,separator);
         } 
     }
 }
