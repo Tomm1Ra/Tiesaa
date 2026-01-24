@@ -440,6 +440,20 @@ function getKeli(k1, k2) {
     return k1 == "Anturissa on vikaa" ? k2 : k1;
 }
 
+function windDir(wd) {
+    
+    if (wd >  22 && wd <=  68) return "NE";
+    if (wd >  68 && wd <= 113) return " E";
+    if (wd > 113 && wd <= 158) return "SE";
+    if (wd > 158 && wd <= 203) return " S";
+    if (wd > 203 && wd <= 248) return "SW";
+    if (wd > 248 && wd <= 293) return " W";
+    if (wd > 293 && wd <= 338) return "NW";
+    if (wd > 338 || wd <=  22) return " N";
+    return "XX";
+
+}
+
 function printSaatiedot(fullname, mittaukset, n) {
 
     offset = fullname.split(" ")[0].length==4 ? "  " : " "
@@ -458,6 +472,7 @@ function printSaatiedot(fullname, mittaukset, n) {
     line += (showDistance) ? (mittaukset["Dist"].v.toFixed(1)+mittaukset["Dist"].u).padStart(9," ") : ""
     line += !mittaukset["Koste"].x ? (mittaukset["Koste"].v+mittaukset["Koste"].u).padStart(6," ") : noData.padStart(6," ")
     line += !mittaukset["MTuuli"].x ? (mittaukset["MTuuli"].v.toFixed(1)+mittaukset["MTuuli"].u).padStart(9," ") : noData.padStart(9," ")
+    line += !mittaukset["TSuunt"].x ? windDir(mittaukset["TSuunt"].v).padStart(3,' ') : "   "
     line += !mittaukset["Näky_m"].x ? (mittaukset["Näky_m"].v+mittaukset["Näky_m"].u).padStart(8," ") : noData.padStart(8," ")
     if(sade24) {
         line += !mittaukset["Sad24h"].x ? (mittaukset["Sad24h"].v > 0) ? (mittaukset["Sad24h"].v.toFixed(1)+mittaukset["Sad24h"].u).padStart(8," ") : ".   ".padStart(8," ") : noData.padStart(8," ")
@@ -647,11 +662,13 @@ async function lastHourHistory(id) {
     SSumHistory = await getHistory1h(id,24)
     SIntHistory = await getHistory1h(id,23)
     WindHistory = await getHistory1h(id,17)
+    WindDirHistory = await getHistory1h(id,18)
     h = {}
     h["IlmaH"]=""
     h["SSumH"]=""
     h["SIntH"]=""
     h["MaxTuuli"]=""
+    h["TSuunt"]=""
     h["starttime"]=""
     h["endtime"]=""
 
@@ -659,6 +676,7 @@ async function lastHourHistory(id) {
     for (item of SSumHistory.values) {h["SSumH"] += item.value!=0 ? (""+item.value.toFixed(1)+" ").padStart(7," "):" ".padStart(7," ")}
     for (item of SIntHistory.values) {h["SIntH"] += item.value!=0 ? (""+item.value.toFixed(2)+"").padStart(7," "):" ".padStart(7," ")}
     for (item of WindHistory.values) {h["MaxTuuli"] += (""+item.value.toFixed(1)+" ").padStart(7," ")}
+    for (item of WindDirHistory.values) {h["TSuunt"] += (""+windDir(item.value)+" ").padStart(7," ")}
     return h;
 }
 
@@ -669,10 +687,16 @@ async function printData(id, lista, limit, detail) {
     etaisyysString = (showDistance)?"Matka".padStart(9," "):""
     lumiString = (showLumi) ? "Lumi".padStart(8," "):""
     sadeString = (sade24) ? "Sade24" : (isDST) ? "Sade07" :"Sade06"
-    header = " ".padEnd(50," ")+"Ilma".padStart(6," ")+muutosString+tieString+kitkaString+lumiString+"Min".padStart(7," ")+"Max".padStart(8," ")+etaisyysString+"Kost".padStart(8," ")+"Tuuli".padStart(8," ")+"Näky".padStart(8," ")+sadeString.padStart(9," ")+"SadeI" .padStart(8," ")
+    header = " ".padEnd(50," ")+"Ilma".padStart(6," ")+muutosString+tieString+kitkaString+lumiString+"Min".padStart(7," ")+"Max".padStart(8," ")+etaisyysString+"Kost".padStart(8," ")+"Tuuli".padStart(8," ")+"Näky".padStart(10," ")+sadeString.padStart(9," ")+"SadeI" .padStart(8," ")
     counter = 0;
     fullCount = 0;
     subCount = 0;
+    ka_ilma = 0; ka_ilman = 0;
+    ka_tie = 0; ka_tien=0;
+    ka_min = 0; ka_minn=0;
+    ka_max = 0; ka_maxn=0;
+    ka_sade = 0; ka_saden=0;
+    ka_tuuli = 0; ka_tuulin=0;
     hLat = tiesaaConfig.home.latitude;
     hLat = tiesaaConfig.home.longitude;
 
@@ -694,6 +718,7 @@ async function printData(id, lista, limit, detail) {
         console.log("SadeI mm/h", lastHour["SIntH"])
         console.log("SadeSum mm", lastHour["SSumH"])
         console.log("Tuuli  m/s", lastHour["MaxTuuli"])
+        console.log("Tuuli    °", lastHour["TSuunt"])
         lastValues = await log24History(id);
         //console.log(lastValues)
         console.log("%s %s %s %s %s %s %s",
@@ -734,13 +759,30 @@ async function printData(id, lista, limit, detail) {
                             perusLine.mittaukset["Dist"].v =  distance(hLat,hLong,perusLine.lat,perusLine.lon);
                             hLat = perusLine.lat; hLong = perusLine.lon;
                         }
-                        console.log(printSaatiedot(perusLine.fullname,perusLine.mittaukset,fullCount));
-                        if (++counter>=limit) break;
-                        if (splitPrint && (counter%splitLine == 0)) {
+                        if (++counter<=limit) console.log(printSaatiedot(perusLine.fullname,perusLine.mittaukset,fullCount));
+                        if (counter>=limit && shortKeskari)  break;
+                        ka_ilma += perusLine.mittaukset["Ilma "].v; ka_ilman++;
+                        if (perusLine.mittaukset["Tie"].v>-99 && perusLine.mittaukset["Tie"].v<99) {ka_tie += perusLine.mittaukset["Tie"].v; ka_tien++;}
+                        if (perusLine.mittaukset["IlmMIN"].v>-99 && perusLine.mittaukset["IlmMIN"].v<99) {ka_min += perusLine.mittaukset["IlmMIN"].v; ka_minn++;}
+                        if (perusLine.mittaukset["IlmMAX"].v>-99 && perusLine.mittaukset["IlmMAX"].v<99) {ka_max += perusLine.mittaukset["IlmMAX"].v; ka_maxn++;}
+                        if (perusLine.mittaukset["Sad24h"].v>-0.1 && perusLine.mittaukset["Sad24h"].v<999) {ka_sade += perusLine.mittaukset["Sad24h"].v; ka_saden++;}
+                        if (perusLine.mittaukset["MTuuli"].v>0 && perusLine.mittaukset["MTuuli"].v<99) {ka_tuuli += perusLine.mittaukset["MTuuli"].v; ka_tuulin++;}
+
+                        if (splitPrint && (counter%splitLine == 0) &&(counter<limit)) {
                             console.log("  ")
                         }
                     }
                 }
+            }
+            if (showKeskari) {
+                console.log(" Keskiarvo",
+                    ((ka_ilma/ka_ilman).toFixed(1)+"°C").padStart(46," "),
+                    ((ka_tie/ka_tien).toFixed(1)+"°C").padStart(16," "),
+                    ((ka_min/ka_minn).toFixed(1)+"°C").padStart(7," "),
+                    ((ka_max/ka_maxn).toFixed(1)+"°C").padStart(7," "),
+                    ((ka_tuuli/ka_tuulin).toFixed(1)+"m/s").padStart(23," "),
+                    ((ka_sade/ka_saden).toFixed(1)+"mm").padStart(18," ")
+                );
             }
         }
     }
@@ -856,6 +898,7 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator)
                     mittaukset["S-Sum"]  ? mittaukset["S-Sum"].v =   mittaukset["S-Sum"].v:  (order=='s-' ||  order=='r-') ? mittaukset["S-Sum"] = {x:1,v:999,u:""}:mittaukset["S-Sum"] = {x:1,v:-1,u:""};
                     mittaukset["S-Int"]  ? mittaukset["S-Int"].v =   mittaukset["S-Int"].v:  (order=='i-') ? mittaukset["S-Int"] = {x:1,v:999,u:""}:mittaukset["S-Int"] = {x:1,v:0,u:""};
                     mittaukset["MTuuli"] ? mittaukset["MTuuli"].v =  mittaukset["MTuuli"].v: (order=='w-') ? mittaukset["MTuuli"] = {x:1,v:99,u:"" }:mittaukset["MTuuli"] = {x:1,v:0,u:"" };
+                    (mittaukset["MTuuli"] && mittaukset["TSuunt"]) ? mittaukset["TSuunt"].v  =  mittaukset["TSuunt"].v: mittaukset["TSuunt"] = {x:1,v:0,u:"" };
                     mittaukset["Koste"]  ? mittaukset["Koste"].v =   mittaukset["Koste"].v:  (order=='h-') ? mittaukset["Koste"] = {x:1,v:999,u:""}:mittaukset["Koste"] = {x:1,v:0,u:""};
                     mittaukset["IlmMIN"] ? mittaukset["IlmMIN"].v =  mittaukset["IlmMIN"].v : (order=='-+') ? mittaukset["IlmMIN"] = {x:1,v:-99,u:""}:mittaukset["IlmMIN"] = {x:1,v:99,u:""};
                     mittaukset["IlmMAX"] ? mittaukset["IlmMAX"].v =  mittaukset["IlmMAX"].v : (order=='+-') ? mittaukset["IlmMAX"] = {x:1,v:99,u:""}:mittaukset["IlmMAX"] = {x:1,v:-99,u:""};
@@ -895,6 +938,8 @@ async function start(consoleline) {
     showMisc = false;
     showPlace = false;
     showKeli = false;
+    showKeskari = false;
+    shortKeskari = false;
     splitPrint = false;
     fromZero = false;
     fromNext = false;
@@ -982,6 +1027,8 @@ async function start(consoleline) {
             if (param == 'k') {showKeli = true;}
             if (param == '@0') {fromZero = true;showDistance=true;newHomeString=''}
             if (param == '@@') {fromNext = true;showDistance=true;newHomeString=''}
+            if (param == 'ka') {showKeskari = true;}
+            if (param == 'KA') {showKeskari = true; shortKeskari = true;}
         }
         if (limit_temp==-1) limit_temp=1000; else limit=limit_temp;
         limit = ['P','E','I','L','N','W','S','D','a','.'].includes(order)?Math.min(1000,limit_temp):limit;

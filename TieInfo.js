@@ -16,7 +16,11 @@ async function start(consoleline) {
                 for (tapaus of liikenneData.features) {
                     ajankohta = moment(tapaus.properties.releaseTime).format("D.M.YYYY H:mm")
                     for (tieto of tapaus.properties.announcements) {
-                        console.log("\n"+tieto.locationDetails.roadAddressLocation.primaryPoint.province,tieto.locationDetails.roadAddressLocation.primaryPoint.municipality,ajankohta)
+                        if (tieto.locationDetails.roadAddressLocation) {
+                            console.log("\n"+tieto.locationDetails.roadAddressLocation.primaryPoint.province,tieto.locationDetails.roadAddressLocation.primaryPoint.municipality,ajankohta)
+                        } else {
+                            console.log("\n");
+                        }
                         console.log(tieto.title)
                         console.log(tieto.location.description)
                         for (feature of tieto.features) {
