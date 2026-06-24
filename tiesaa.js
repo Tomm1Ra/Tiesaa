@@ -680,6 +680,91 @@ async function lastHourHistory(id) {
     return h;
 }
 
+function showTopList(head,lista,param,n,d) {
+    const p = param;
+    i = 0;
+    c = 0;
+    if (d ==null) d = 1;
+    console.log(head);
+    while( i<n && c<lista.length) {
+        if ((searchStrings.length == 0 || searchStrings.filter(word => lista[c].fullname.toLowerCase().includes(word.toLowerCase())).length > 0)) {
+            console.log(lista[c].mittaukset[p].v.toFixed(d).padStart(10," "), lista[c].mittaukset[p].u.padStart(2," "), lista[c].fullname);
+            i++;
+        }
+        c++;
+    }
+}
+
+
+function showTopValues(arvot,n) {
+    perusLista = sortSaaData(perusLista, 'l');
+    showTopList(" Lämpötila:",perusLista,"Ilma ",n);
+    for (a of perusLista) {
+    if (a.mittaukset["Ilma "].v == -99) {
+        a.mittaukset["Ilma "].v = 99;
+        }
+    }
+    perusLista = sortSaaData(perusLista, 'l-');
+    showTopList("\n Lämpötila alin:",perusLista,"Ilma ",n);
+
+    perusLista = sortSaaData(perusLista, '+');
+    showTopList("\n Lämpötila 24h:",perusLista,"IlmMAX",n);
+
+    perusLista = sortSaaData(perusLista, '-');
+    showTopList("\n Lämpötila alin 24h:",perusLista,"IlmMIN",n);
+
+    sade24 = true;
+    perusLista = sortSaaData(perusLista, 's');
+    showTopList("\n Sade 24h:",perusLista,"Sad24h",n);
+
+    perusLista = sortSaaData(perusLista, 'i');
+    showTopList("\n Sade nyt:",perusLista,"S-Int",n);
+
+    perusLista = sortSaaData(perusLista, 'w');
+    showTopList("\n Puuska tuuli:",perusLista,"MTuuli",n);
+
+    if (topAll || showTie) {
+        perusLista = sortSaaData(perusLista, 't+');
+        showTopList("\n Tie lämpötila:",perusLista,"Tie",n);
+
+        for (a of perusLista) {
+        if (a.mittaukset["Tie"].v == -99) {
+            a.mittaukset["Tie"].v = 99;
+            }
+        }
+        perusLista = sortSaaData(perusLista, 't-');
+        showTopList("\n Tie lämpötila -:",perusLista,"Tie",n);
+
+        for (a of perusLista) {
+        if (a.mittaukset["DIlm"].v == 99) {
+            a.mittaukset["DIlm"].v = -99;
+            }
+        }
+    }
+    if (topAll || showMuutos) {
+        perusLista = sortSaaData(perusLista, 'm+');
+        showTopList("\n Lämpötilan muutos +:",perusLista,"DIlm",n);
+
+        for (a of perusLista) {
+        if (a.mittaukset["DIlm"].v == -99) {
+            a.mittaukset["DIlm"].v = 99;
+            }
+        }
+        perusLista = sortSaaData(perusLista, 'm-');
+        showTopList("\n Lämpötilan muutos -:",perusLista,"DIlm",n);
+    }
+    if (topAll || showKitka) {
+        for (a of perusLista) {
+        if (a.mittaukset["Kitka"].v == -99) {
+            a.mittaukset["Kitka"].v = 1;
+            }
+        }
+    
+        perusLista = sortSaaData(perusLista, 'f-');
+        showTopList("\n Kitka pienin:",perusLista,"Kitka",n, 2);
+    }
+}
+
 async function printData(id, lista, limit, detail) {
     tieString = (showTie)? "Tie ".padStart(9," "):""
     kitkaString = (showKitka)? "Kitka".padStart(8," "):""
@@ -860,7 +945,7 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator)
 
                     mittaukset["Ilma "]  ? mittaukset["Ilma "].mTime=checkMeasureTime(mittaukset["Ilma "].t):
                     mittaukset["Ilma "]  ? mittaukset["Ilma "].v = mittaukset["Ilma "].v : (order=='l-')?mittaukset["Ilma "]={x:1,v:99,u:""}:mittaukset["Ilma "]= {x:1,v:-99,u:""};
-                    mittaukset["DIlm"] ? mittaukset["DIlm"].v =  mittaukset["DIlm"].v : (order=='m+')?mittaukset["DIlm"] = {x:1,v:0,u:""}:mittaukset["DIlm"] = {x:1,v:99,u:""};
+                    mittaukset["DIlm"] ? mittaukset["DIlm"].v =  mittaukset["DIlm"].v : (order=='m+')?mittaukset["DIlm"] = {x:1,v:-99,u:""}:mittaukset["DIlm"] = {x:1,v:99,u:""};
                     if (mittaukset["Tie1"]) {
                         mittaukset["Tie"] =  {v: mittaukset["Tie1"].v,
                                               u: mittaukset["Tie1"].u}
@@ -917,8 +1002,12 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator)
             };
         }
     );
-    perusLista = sortSaaData(perusLista, order)
-    printData(id2,perusLista, lineLimit, detail)
+    if (topList) {
+        showTopValues(perusLista, limit_top);
+    } else {
+        perusLista = sortSaaData(perusLista, order)
+        printData(id2,perusLista, lineLimit, detail)
+    }
 
 }
 
@@ -943,6 +1032,9 @@ async function start(consoleline) {
     splitPrint = false;
     fromZero = false;
     fromNext = false;
+    topList=false;
+    topAll=false;
+    limit_top = 3;
     newHomeString=""
     separator='\n'
     isDST = moment().isDST();
@@ -1015,7 +1107,7 @@ async function start(consoleline) {
             if (param == 'f+' || param == 'f-') {showKitka = true; order = param}
             if (param == '.') showSaatila = false;
             if (param == '!') showPlace = true;
-            if (param.substring(0,1) == "*") {showTie = true; showMuutos=true; showDistance=true; sade24=true; limit=50}
+            if (param.substring(0,1) == "*") {showTie = true; showMuutos=true; showDistance=true; sade24=true;topAll=true; limit=50}
             if (param == '**') {showKitka=true; showLumi = true; }
             if (param == 's24' || param == 'S24') sade24 = true;
             if (param.match('[sS][0]')) sade24 = false;
@@ -1029,8 +1121,10 @@ async function start(consoleline) {
             if (param == '@@') {fromNext = true;showDistance=true;newHomeString=''}
             if (param == 'ka') {showKeskari = true;}
             if (param == 'KA') {showKeskari = true; shortKeskari = true;}
+            if (param == 'top') {topList=true;}
         }
-        if (limit_temp==-1) limit_temp=1000; else limit=limit_temp;
+        if (limit_temp==-1) limit_temp=1000; else {limit=limit_temp;limit_top = limit;}
+
         limit = ['P','E','I','L','N','W','S','D','a','.'].includes(order)?Math.min(1000,limit_temp):limit;
         if (filename.includes(".")) {
             try {
@@ -1042,7 +1136,7 @@ async function start(consoleline) {
                rawData = await fileRead(filename)
             } catch (err) {console.log("error",err)}
             for (a of consoleline.slice(2)) {
-                if ((a.length > 2) && (!a.match('([sS][0-9]|@[a-zA-ZåäöÅÄÖ])'))) searchStrings.push(a);
+                if ((a.length > 2) && (!a.match('([sS][0-9]|@[a-zA-ZåäöÅÄÖ]|^@[0-9]*|^top$)'))) searchStrings.push(a);
             }
         }
         if (newHomeString!="") await setNewHome(newHomeString, tiesaaConfig.home)

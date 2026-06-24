@@ -471,3 +471,9 @@
 18003 Espoon kaupunki, Karakallio Uusimaa @24.751216,60.233178,35
 18004 Espoon kaupunki, Puolarmetsä Uusimaa @24.686063,60.176832,19
 18005 Lahti, Kivistönmäki Päijät-Häme @25.675391,61.000533,116
+12091 Tie 92 Inari, Näätämö Lappi @29.100175,69.66367,0
+12092 Tie 4 Inari, Uruvaara Lappi @27.077311,68.900245,0
+12093 Tie 941 Ranua Saariharju Pohjois-Pohjanmaa @27.137755,65.919193,0
+14072 Tie 81 Rovaniemi, Juotasniemi Lappi @26.94151,66.323516,0
+15003 TEST_TSA_3 Pohjois-Pohjanmaa @19.71639,59.650285,0
+15011 TEST_TSA_1 Pohjois-Pohjanmaa @18.518625,61.726952,0

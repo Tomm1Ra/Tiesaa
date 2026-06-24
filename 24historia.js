@@ -48,6 +48,8 @@ async function start(consoleline) {
     colWidth=9;
     h='30';
     line = ""
+    note = "";
+    lineCount = 0;
     header = " h/m"
 
     asemaData = await getAsemaInfo(id)
@@ -57,11 +59,20 @@ async function start(consoleline) {
     console.log(sensoriData.name,"("+sensoriData.unit+")")
 
     history = await getHistory(id,sensorId)
+
+    //console.log(JSON.stringify(history))
+    const startHour = moment(history.values[0].measuredTime).format('H');
+    const startDay = moment(history.values[0].measuredTime).format('DD');
+    hourOn = parseInt(startHour);
+    dayOn = parseInt(startDay);
+    
+    console.log("Alkaa: "+moment(history.values[0].measuredTime).format('DD.MM.YYYY HH:mm'));
+    
     for (let a=0;a<=59;a+=5) {
         header +=  ((a+"").padStart(2)+"-"+((a+4)+"").padStart(2)).padStart(colWidth)
     }
     console.log("\n"+header)
-    for (item of history.values) {
+/*     for (item of history.values) {
         if (moment(item.measuredTime).format('H') != h)
             {
                 if (h!='30') console.log((h+":").padStart(3,' '),line.padStart(12*colWidth,' '))
@@ -70,8 +81,30 @@ async function start(consoleline) {
             }
             line += (item.value.toFixed(d)+"").padStart(colWidth,' ')
     }
-    console.log((h+":").padStart(3,' '),line)
+    console.log((h+":").padStart(3,' '),line) */
+    for( h=hourOn ; h < hourOn+25 ; h++ ) { 
+        hx = h > 23 ? h-24 : h ;
+        dx = h > 23 ?  moment(history.values[0].measuredTime).add(1, 'days').format('DD') : startDay ;
+        //console.log(dx,hx);
+        for (item of history.values) {
+            if (moment(item.measuredTime).format('H') == hx && moment(item.measuredTime).format('DD') == dx) {
+                if (lineCount <= 11) {
+                    line += (item.value.toFixed(d)+"").padStart(colWidth,' ')
+                }
+                lineCount++;
+            }
+        }
+        if (lineCount > 12) note = " *";
+        if (dx == startDay && h < hourOn +24) {
+            console.log((hx+":").padStart(3,' '),line.padStart(12*colWidth,' ') + note)
+        } else {
+            console.log((hx+":").padStart(3,' '),line.padEnd(12*colWidth,' ') + note)
+        }
 
+        line = "";
+        note = "";
+        lineCount=0;
+    }
 }
 
 if (process.argv.length > 3 ) {

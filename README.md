@@ -44,7 +44,8 @@ oletusjärjestys on etäisyys kotipisteestä
 'f' näyttää tien kitkan
 'm' näyttää ilman lämpötilamuutoksen\
 '.' ei näytä säätilatekstiä
-'lumi' näyttää lumensyvyyden
+'lumi' näyttää lumensyvyyden\
+'top'  näyttää huippulukemat\
 's24' sademittaus viimeiset 24h, 's0' aamulla nollattu sademäärä (oletus)\
 '!' näyttää järjestysnumeron\
 '@' Vaihtaa kotipisteen. @longitude,latitude (desimaalierotin .) tai @paikka\

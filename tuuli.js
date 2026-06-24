@@ -72,6 +72,7 @@ function getDirectionRange(values) {
     avg360 = [];
     startDirection=0, endDirection=0;
     wbMin=0, wbMax=0, ebMin=0, ebMax=0, avg=0;
+    rangeww=0, rangewe=0, rangeew=0, rangeee=0;
     for (item of values) {
         if (item.value <= 180) {
             eastBlock.push(item.value)
@@ -97,21 +98,38 @@ function getDirectionRange(values) {
         wbMax = Math.max(...westBlock);
         ebMin = Math.min(...eastBlock);
         ebMax = Math.max(...eastBlock);
-        //console.log(wbMin,wbMax,ebMin,ebMax)
-        if ((360-wbMin + ebMax) < (wbMax-ebMin)) {
-            startDirection = Math.min(...westBlock);
-            endDirection = Math.max(...eastBlock);
-        } else {
-            startDirection = Math.min(...eastBlock);
-            endDirection = Math.max(...westBlock);
 
-        } 
+        // console.log("ääri ",wbMin,wbMax,ebMin,ebMax)
+        rangewe = 360 - wbMin + ebMax;
+        rangeww = 360 - (wbMax - wbMin); 
+        for (item of values) {
+            if (item.value < wbMax && item.value > wbMin) {
+                rangeww=360;
+            }
+        }
+        
+        rangeew = wbMax - ebMin;
+        rangeee = 360 - (ebMax - ebMin);
+        for (item of values) {
+            if (item.value < ebMax && item.value > ebMin) {
+                rangeee=360;
+            }
+        }
+        
+        //console.log(rangewe, rangeew, rangeww, rangeee);
+        
+        if (rangewe == Math.min(rangeww, rangewe, rangeew, rangeee)) { startDirection = wbMin ; endDirection = ebMax};
+        if (rangeew == Math.min(rangeww, rangewe, rangeew, rangeee)) { startDirection = ebMin ; endDirection = wbMax};
+        if (rangeww == Math.min(rangeww, rangewe, rangeew, rangeee)) { startDirection = wbMax ; endDirection = wbMin};
+        if (rangeee == Math.min(rangeww, rangewe, rangeew, rangeee)) { startDirection = ebMax ; endDirection = ebMin};
+
         for (item of values) {
          avg360.push(item.value > 0 && item.value<startDirection ? item.value+360 : item.value);
          };
          avg = avg360.length > 0 ? avg360.reduce((a, b) => a + b) / avg360.length : 0;
          if (avg > 360) avg-=360;
     }
+
     return {start:startDirection,end:endDirection,avg:avg.toFixed(0)};
 
 }
@@ -201,23 +219,23 @@ async function start(consoleline) {
     console.log(id[0],asemaData.properties.names.fi)
 
     sensoriMTuuli = await getSensoriInfo(voimakkuusAnturi)
-    console.log("\n"+sensoriMTuuli.name,"("+sensoriMTuuli.unit+")")
+    if (consoleline.length >3) console.log("\n"+sensoriMTuuli.name,"("+sensoriMTuuli.unit+")")
 
     historySpeed = await getHistory(id,voimakkuusAnturi)
-    printHistory(historySpeed)
+    if (consoleline.length >3) printHistory(historySpeed)
 
 
     sensoriMTuuli = await getSensoriInfo(puuskaAnturi)
-    console.log("\n"+sensoriMTuuli.name,"("+sensoriMTuuli.unit+")")
+    if (consoleline.length >3) console.log("\n"+sensoriMTuuli.name,"("+sensoriMTuuli.unit+")")
 
     historyMaxSpeed = await getHistory(id,puuskaAnturi)
-    printHistory(historyMaxSpeed)
+    if (consoleline.length >3) printHistory(historyMaxSpeed)
 
     sensoriTSuunt = await getSensoriInfo(suuntaAnturi)
-    console.log("\n"+sensoriTSuunt.name,"("+sensoriTSuunt.unit+")")
+    if (consoleline.length >3) console.log("\n"+sensoriTSuunt.name,"("+sensoriTSuunt.unit+")")
 
     historyDirection = await getHistory(id,suuntaAnturi)
-    printHistory(historyDirection)
+    if (consoleline.length >3) printHistory(historyDirection)
 
     console.log("\n\n Tuntikohtaiset rajat")
     printDaily(historySpeed, historyMaxSpeed, historyDirection)
