@@ -45,9 +45,13 @@ function getMaxPeriod(beforeZero, last, data, step) {
     maxPeriod = 0;
     maxIndex = 0;
     fullData =[];
+    prev = 0;
+    rainBeforeZero = 0;
     if (last!=9999) fullData.push(last);
     for (item of data) {
-        fullData.push(beforeZero + item.value)
+        if (item.value < prev) rainBeforeZero = prev;
+        fullData.push(beforeZero + item.value + rainBeforeZero);
+        prev = item.value;
     }
     if (fullData.length > step) {
         for (var i = 0; i < fullData.length - step; i++) {

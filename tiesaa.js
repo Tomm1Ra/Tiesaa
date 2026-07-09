@@ -488,11 +488,12 @@ function printSaatiedot(fullname, mittaukset, n) {
 }
 
 async function log24History(id)  {
-    console.log("\n* 24h historia  Ilma     Tie    Kosteus  Tuuli    Näky    SadeSum   SadeI")
+    console.log("\n* 24h historia  Ilma     Tie    Kosteus     Tuuli     Näky    SadeSum   SadeI")
     IlmaHistory = await getHistory(id,1)
     SSumHistory = await getHistory(id,24)
     Tie1History = await getHistory(id,3)
     MaxTuuliHistory = await getHistory(id,17)
+    TuuliSuuntaHistory = await getHistory(id,18)
     KosteHistory = await getHistory(id,21)
     SIntHistory = await getHistory(id,23)
     NakyHistory = await getHistory(id,58)
@@ -502,6 +503,7 @@ async function log24History(id)  {
     SSumVal = [];
     Tie1Val = [];
     MaxTuuliVal = [];
+    TuuliSuuntaVal = [];
     KosteVal = [];
     SIntVal = [];
     NakyVal = [];
@@ -559,7 +561,7 @@ async function log24History(id)  {
             Tie1Val[h] = item.value.toFixed(1)+"°C"
         }
     }
-    lastValues["tieTemp"] = validHistory?Tie1History[Tie1History.length-1].value:""
+    lastValues["tieTemp"] = validHistory ? Tie1History[Tie1History.length-1].value : ""
     validHistory=false;
     prev = 0;
     for (item of SSumHistory) {
@@ -572,7 +574,7 @@ async function log24History(id)  {
         }
         prev = item.value;
     }
-    lastValues["ssum"] = validHistory?SSumHistory[SSumHistory.length-1].value:""
+    lastValues["ssum"] = validHistory ? SSumHistory[SSumHistory.length-1].value : ""
     validHistory=false;
     for (item of KosteHistory) {
         validHistory=true;
@@ -583,7 +585,7 @@ async function log24History(id)  {
         }
         lastKosteus = item.value;
     }
-    lastValues["kosteus"]  = validHistory?KosteHistory[KosteHistory.length-1].value:""
+    lastValues["kosteus"] = validHistory ? KosteHistory[KosteHistory.length-1].value : ""
 
     maxtuuli=0;
     h=30;
@@ -601,7 +603,21 @@ async function log24History(id)  {
             }
         }
     }
-    lastValues["maxTuuli"] = validHistory?maxtuuli:""
+    lastValues["maxTuuli"] = validHistory ? maxtuuli : ""
+
+    h=30;
+    validHistory=false;
+    for (item of TuuliSuuntaHistory) {
+        validHistory=true;
+        if (moment(item.measuredTime).format('H') != h)
+        {
+            h = moment(item.measuredTime).format('H');
+            TuuliSuuntaVal[h] = windDir(item.value) ;
+        } 
+        lastSuunta = windDir(item.value);
+    }
+    lastValues["TSuunt"] = validHistory ? lastSuunta : ""
+
 
     h=30;
     validHistory=false;
@@ -618,7 +634,7 @@ async function log24History(id)  {
             }
         }
     }
-    lastValues["sint"] = validHistory?lastRainI:""
+    lastValues["sint"] = validHistory ? lastRainI : ""
 
     h=30;
     naky = 99999;
@@ -637,20 +653,21 @@ async function log24History(id)  {
             }
         }
     }
-    lastValues["naky"] = validHistory?naky:""
+    lastValues["naky"] = validHistory ? naky : ""
 
     for (i=parseInt(startH)+1; i<(parseInt(startH)+25); i++) {
         id = i;
         if (id > 23){ id = id-24}
         console.log(
             timeIndex[id],
-            ((IlmaVal[id])?IlmaVal[id]:"").padStart(9," "),
-            ((Tie1Val[id])?Tie1Val[id]:"").padStart(8," "),
-            ((KosteVal[id])?KosteVal[id]:"").padStart(5," "),
-            ((MaxTuuliVal[id])?MaxTuuliVal[id]:"").padStart(9," "),
-            ((NakyVal[id])?NakyVal[id]:"").padStart(7," "),
-            ((SSumVal[id])?SSumVal[id]:"").padStart(8," "),
-            ((SIntVal[id])?SIntVal[id]:"").padStart(11," "),
+            ((IlmaVal[id]) ? IlmaVal[id]:"").padStart(9," "),
+            ((Tie1Val[id]) ? Tie1Val[id]:"").padStart(8," "),
+            ((KosteVal[id]) ? KosteVal[id]:"").padStart(5," "),
+            ((MaxTuuliVal[id]) ? MaxTuuliVal[id]:"").padStart(9," "),
+            ((TuuliSuuntaVal[id]) ? TuuliSuuntaVal[id]:"").padStart(3," "),
+            ((NakyVal[id]) ? NakyVal[id]:"").padStart(7," "),
+            ((SSumVal[id]) ? SSumVal[id]:"").padStart(8," "),
+            ((SIntVal[id]) ? SIntVal[id]:"").padStart(11," "),
         )
     }
 
@@ -718,7 +735,7 @@ function showTopValues(arvot,n) {
     showTopList("\n Sade 24h:",perusLista,"Sad24h",n);
 
     perusLista = sortSaaData(perusLista, 'i');
-    showTopList("\n Sade nyt:",perusLista,"S-Int",n);
+    showTopList("\n Sade nyt:",perusLista,"S-Int",n,2);
 
     perusLista = sortSaaData(perusLista, 'w');
     showTopList("\n Puuska tuuli:",perusLista,"MTuuli",n);
@@ -784,6 +801,7 @@ async function printData(id, lista, limit, detail) {
     ka_tuuli = 0; ka_tuulin=0;
     hLat = tiesaaConfig.home.latitude;
     hLat = tiesaaConfig.home.longitude;
+    distSum = 0;
 
     if (detail) {
         mittaukset =lista[0].mittaukset;
@@ -812,6 +830,7 @@ async function printData(id, lista, limit, detail) {
             ((lastValues.tieTemp!="")?(lastValues.tieTemp.toFixed(1)+"°C"):"").padStart(8," "),
             ((lastValues.kosteus!="")?(lastValues.kosteus+"%"):"").padStart(5," "),
             ((lastValues.maxTuuli!="")?(lastValues.maxTuuli.toFixed(1)+"m/s"):"").padStart(9," "),
+            ((lastValues.TSuunt!="")?(lastValues.TSuunt):"").padStart(3," "),
             ((lastValues.naky!="")?(lastValues.naky+"m"):"").padStart(7," "),
             ((lastValues.ssum!="")?(lastValues.ssum.toFixed(1)+"mm"):"").padStart(8," "),
             ((lastValues.sint!="")?(lastValues.sint.toFixed(2)+"mm/h"):"").padStart(11," "))
@@ -838,10 +857,17 @@ async function printData(id, lista, limit, detail) {
                             subCount++;
                             perusLine.mittaukset["Dist"].v =  distance(hLat,hLong,perusLine.lat,perusLine.lon);
                         }
-                        if(fromNext)  {
+                        if(fromPrev)  {
                             if(subCount == 0) {hLat = perusLine.lat; hLong = perusLine.lon};
                             subCount++;
                             perusLine.mittaukset["Dist"].v =  distance(hLat,hLong,perusLine.lat,perusLine.lon);
+                            hLat = perusLine.lat; hLong = perusLine.lon;
+                        }
+                        if(fromPrevPlus)  {
+                            if(subCount == 0) {hLat = perusLine.lat; hLong = perusLine.lon};
+                            subCount++;
+                            distSum += distance(hLat,hLong,perusLine.lat,perusLine.lon);
+                            perusLine.mittaukset["Dist"].v =  distSum;
                             hLat = perusLine.lat; hLong = perusLine.lon;
                         }
                         if (++counter<=limit) console.log(printSaatiedot(perusLine.fullname,perusLine.mittaukset,fullCount));
@@ -1031,7 +1057,8 @@ async function start(consoleline) {
     shortKeskari = false;
     splitPrint = false;
     fromZero = false;
-    fromNext = false;
+    fromPrev = false;
+    fromPrevPlus = false;
     topList=false;
     topAll=false;
     limit_top = 3;
@@ -1118,7 +1145,8 @@ async function start(consoleline) {
             if (param.substring(0,1) == "@") {newHomeString=param.substring(1)}
             if (param == 'k') {showKeli = true;}
             if (param == '@0') {fromZero = true;showDistance=true;newHomeString=''}
-            if (param == '@@') {fromNext = true;showDistance=true;newHomeString=''}
+            if (param == '@@') {fromPrev = true;showDistance=true;newHomeString=''}
+            if (param == '@+') {fromPrevPlus = true;showDistance=true;newHomeString=''}
             if (param == 'ka') {showKeskari = true;}
             if (param == 'KA') {showKeskari = true; shortKeskari = true;}
             if (param == 'top') {topList=true;}
