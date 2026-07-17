@@ -93,13 +93,11 @@ async function SaaAsematLista(searchString) {
                 if (asemaData) {
                     const s = asemaData.properties.id+" "+asemaData.properties.names.fi+","+asemaData.properties.province+"@"+asemaData.geometry.coordinates[0]+","+asemaData.geometry.coordinates[1]+","+asemaData.geometry.coordinates[2];
                         if (s.toLowerCase().includes(searchString.toLowerCase())) {
-                            // console.log(">"+ ++o);
                             returnData += s+"*"
                     }
                 }
             }))
         }
-        //console.log("Return"+returnData);
         return returnData
 }
 
@@ -386,6 +384,30 @@ function sortSaaData(data, order) {
         case 'd+':
             returnData = data.sort((a,b) => b.mittaukset["Dist"].v - a.mittaukset["Dist"].v);
         break;
+        case "x-":
+            returnData = data.sort((a,b) => a.mittaukset["MinMaxEro"].v - b.mittaukset["MinMaxEro"].v || a.mittaukset["IlmMIN"].v - b.mittaukset["IlmMIN"].v);
+        break;
+        case "x":
+        case "x+":
+            returnData = data.sort((a,b) => b.mittaukset["MinMaxEro"].v - a.mittaukset["MinMaxEro"].v || a.mittaukset["IlmMAX"].v - b.mittaukset["IlmMAX"].v);
+        break;
+        case "e-":
+        case "e-+":
+            returnData = data.sort((a,b) => b.mittaukset["EroMin"].v - a.mittaukset["EroMin"].v || a.mittaukset["IlmMIN"].v - b.mittaukset["IlmMIN"].v);
+        break;
+        case "e--":
+            returnData = data.sort((a,b) => a.mittaukset["EroMin"].v - b.mittaukset["EroMin"].v || a.mittaukset["IlmMAX"].v - b.mittaukset["IlmMAX"].v);
+        break;
+
+        case "e":
+        case "e+":
+        case "e++":
+            returnData = data.sort((a,b) => b.mittaukset["EroMax"].v - a.mittaukset["EroMax"].v || a.mittaukset["IlmMAX"].v - b.mittaukset["IlmMAX"].v);
+        break;
+        case "e+-":
+            returnData = data.sort((a,b) => a.mittaukset["EroMax"].v - b.mittaukset["EroMax"].v || b.mittaukset["IlmMAX"].v - a.mittaukset["IlmMAX"].v);
+        break;
+
         case 'o':
         case 'O':
             returnData = data;
@@ -1021,6 +1043,15 @@ async function getTiesaa(rawData,home,saatilat,detail,order,lineLimit,separator)
                     mittaukset["Dist"] = {v:parseFloat(dist),u:"km"};
                     mittaukset["Keli1"] ? mittaukset["Keli1"].text = mittaukset["Keli1"].d : mittaukset["Keli1"] = {text:" - "};
                     mittaukset["Keli2"] ? mittaukset["Keli2"].text = mittaukset["Keli2"].d : mittaukset["Keli2"] = {text:" - "};
+                    mittaukset["MinMaxEro"] = {x:0, v:mittaukset["IlmMAX"].v - mittaukset["IlmMIN"].v,u:""};
+                    if (order == 'x-' && mittaukset["MinMaxEro"].v < -100) mittaukset["MinMaxEro"].v =99;
+                    mittaukset["EroMin"] = {x:0, v:mittaukset["Ilma "].v - mittaukset["IlmMIN"].v,u:""};
+                    if ((order == 'e-' || order == 'e-+') && mittaukset["IlmMIN"].v == 99) mittaukset["EroMin"].v =-99;
+                    if (order == 'e--' && mittaukset["IlmMIN"].v == 99) mittaukset["EroMin"].v =99;
+                    mittaukset["EroMax"] = {x:0, v:mittaukset["IlmMAX"].v - mittaukset["Ilma "].v,u:""};
+                    if ((order == 'e' || order == 'e+' || order == 'e++') && mittaukset["IlmMAX"].v == 99) mittaukset["EroMax"].v =-99;
+                    if (order == 'e+-' && mittaukset["IlmMAX"].v == -99) mittaukset["EroMax"].v =99;
+                    
                     if (tuntematon) {mittaukset["Säätila"]={text:"Tuntematon asema"}};
                     if (puuttuu) {mittaukset["Säätila"]={text:"Data puuttuu"}};
                     perusLista.push({"fullname":fullName, "mittaukset": mittaukset, "asema":asm, "lon":parseFloat(longi), "lat":parseFloat(lati)});
@@ -1068,6 +1099,7 @@ async function start(consoleline) {
     tempString=""
     searchStrings = []
     oneStation = false;
+    kaikki = false;
     try {
         saatilat = await fileRead(filename)
     } catch (err) {console.log("error",err)}
@@ -1124,8 +1156,8 @@ async function start(consoleline) {
                 splitLine = param.length > 1 ? parseInt(param.substring(1)):splitLine
             }
             if (param == '-' || param == '-+') order = param;
-            if (param == 'x') showEmpty = true;
-            if (param == 'X') showInvalid = true;
+            if (param == 'q') showEmpty = true;
+            if (param == 'Q') showInvalid = true;
             if (param == 't') {showTie = true; }
             if (param == 't+' || param == 't-') {showTie = true; order = param}
             if (param == 'm') {showMuutos=true;}
@@ -1142,6 +1174,8 @@ async function start(consoleline) {
             if (param.toLowerCase() == 'lumi+' || param.toLowerCase() == 'lumi-') {showLumi = true; order = param.toLowerCase()}
             if (param == 'd') {showDistance = true;}
             if (param == 'd+' || param =='d-') {showDistance=true; order = param}
+            if (param == 'x' || param == 'x+' || param =='x-') {order = param}
+            if (param == 'e' || param == 'e+' || param =='e-' || param == 'e+-' || param =='e--' || param =='e-+' || param =='e++') {order = param}
             if (param.substring(0,1) == "@") {newHomeString=param.substring(1)}
             if (param == 'k') {showKeli = true;}
             if (param == '@0') {fromZero = true;showDistance=true;newHomeString=''}
@@ -1150,6 +1184,7 @@ async function start(consoleline) {
             if (param == 'ka') {showKeskari = true;}
             if (param == 'KA') {showKeskari = true; shortKeskari = true;}
             if (param == 'top') {topList=true;}
+            if (param == '#') {kaikki=true;}
         }
         if (limit_temp==-1) limit_temp=1000; else {limit=limit_temp;limit_top = limit;}
 
@@ -1159,12 +1194,16 @@ async function start(consoleline) {
                 rawData = await fileRead(filename)
             } catch (err) {console.log("error",err)}
         } else {
-            filename="tieasemat.txt";
+            if (kaikki) {
+                filename="kaikki.txt";
+            } else {
+                filename="tieasemat.txt";
+            }
             try {
                rawData = await fileRead(filename)
             } catch (err) {console.log("error",err)}
             for (a of consoleline.slice(2)) {
-                if ((a.length > 2) && (!a.match('([sS][0-9]|@[a-zA-ZåäöÅÄÖ]|^@[0-9]*|^top$)'))) searchStrings.push(a);
+                if ((a.length > 2) && (!a.match('([sS][0-9]|@[a-zA-ZåäöÅÄÖ]|^[0-9]{3}$|^@[0-9]*|^top$|^[a-zA-Z][+-]{1,2})'))) searchStrings.push(a);
             }
         }
         if (newHomeString!="") await setNewHome(newHomeString, tiesaaConfig.home)

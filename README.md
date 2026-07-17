@@ -26,6 +26,7 @@ Järjestys:\
 'E' etelä
 'a' aseman numero\
 'l' lämpimin ilma
+'m' lämpötilan muutos
 'd' etäisyys
 'p' ilmanpaine\
 '+'/'-' Max/Min lämpötilat
@@ -34,10 +35,11 @@ Järjestys:\
 'n' huonoin näkyvyys
 's' sade
 'i' sateen intensiteetti\
-Järjestys [ltm+-hwnsidf] ja + tai - järjestää nousevaan tai laskevaan järjestykseen\
+'x' Min/Max-ero 'e+' 'e-' Ero nyt Min/Max arvoihin\
+Järjestys [ltm+-hwnsidfex] ja + tai - järjestää nousevaan tai laskevaan järjestykseen\
 oletusjärjestys on etäisyys kotipisteestä
 
-'x' näyttää myös asemat joista ei päivitettyä mittausdataa (ilman lämpötilaa), 'X' vain ne\
+'q' näyttää myös asemat joista ei päivitettyä mittausdataa (ilman lämpötilaa), 'Q' vain ne\
 'd' näyttää etäisyyden kotipisteeseen
 't' näyttää tien lämpötilan
 'k' näyttää tien kelin\
@@ -49,7 +51,7 @@ oletusjärjestys on etäisyys kotipisteestä
 's24' sademittaus viimeiset 24h, 's0' aamulla nollattu sademäärä (oletus)\
 '!' näyttää järjestysnumeron\
 '@' Vaihtaa kotipisteen. @longitude,latitude (desimaalierotin .) tai @paikka\
-'@0' Etäisyydet näytetään listan ekasta, '@@' Etäisyys edellisestä\
+'@0' Etäisyydet näytetään listan ekasta, '@@' Etäisyys edellisestä '@+' Etäisyys lisättynä edelliseen\
 '#teksti' filtteröi tekstin sisältävät mukaan
 
 esim:\
