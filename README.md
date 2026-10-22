@@ -51,8 +51,8 @@ oletusjärjestys on etäisyys kotipisteestä
 's24' sademittaus viimeiset 24h, 's0' aamulla nollattu sademäärä (oletus)\
 '!' näyttää järjestysnumeron\
 '@' Vaihtaa kotipisteen. @longitude,latitude (desimaalierotin .) tai @paikka\
-'@0' Etäisyydet näytetään listan ekasta, '@@' Etäisyys edellisestä '@+' Etäisyys lisättynä edelliseen\
-'#teksti' filtteröi tekstin sisältävät mukaan
+'@0' Etäisyydet näytetään listan ekasta, '@@' Etäisyys edellisestä '@+' Etäisyys lisättynä edelliseen '@-' Ei näytetä etäisyyttä\
+'#teksti' filtteröi tekstin sisältävät mukaan, '-teksti' filtteröi tekstin sisältävät pois
 
 esim:\
 node tiesaa.js nelostie.txt E (=tiedostossa nelostie.txt olevat asemat etelästä lukien)\

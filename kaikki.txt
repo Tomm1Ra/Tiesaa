@@ -538,3 +538,7 @@
 45005 EFRO_21_Meteo Finavia lentokentät @25.849047,66.572881,189
 45006 EFRO_MID_Meteo Finavia lentokentät @25.831997,66.563936,195
 45007 EFRO_03_Meteo Finavia lentokentät @25.816583,66.55588,192
+6031 vt14_Kultakivi_IoT Etelä-Savo @29.419464,61.686315,0
+12094 st816_Oulunsalo_Keinosaari Pohjois-Pohjanmaa @25.144955,65.016793,0
+12095 st816_Oulunsalo_Huikun_silta Pohjois-Pohjanmaa @25.080574,65.033645,0
+12097 vt5_Kuusamo_Rukajärvi_IoT Pohjois-Pohjanmaa @29.154747,66.091661,0

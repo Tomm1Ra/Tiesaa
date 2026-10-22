@@ -63,7 +63,6 @@ function getMaxPeriod(beforeZero, last, data, step) {
         maxPeriod = fullData[fullData.length-1] -fullData[0];
         maxIndex = 0;
     }
-    //console.log({v:maxPeriod,i:maxIndex});
     return {v:maxPeriod,i:maxIndex};
 }
 
@@ -90,11 +89,9 @@ function getMaxValue(history) {
         }
     }
     return {v:maxValue,d:maxValueTime};
-
 }
 
-
-function printintensyHistory(history) {
+function print24History(history, rain5min) {
     colWidth=9;
     h='30';
     line = ""
@@ -111,11 +108,39 @@ function printintensyHistory(history) {
                 h = moment(item.measuredTime).format('H')
                 line =""
             }
-        line += (item.value+"").padStart(colWidth,' ')
-        //console.log(item.measuredTime, item.value);
+        if (rain5min == true) {
+            line += (item.rain5min+"").padStart(colWidth,' ')
+        } else {
+            line += (item.value+"").padStart(colWidth,' ')
+        }
     }
     console.log((h+":").padStart(3,' '),line);
 }
+
+function getValueFromHistory(history) {
+  
+    fullData =[];
+    prev = -1;
+    for (item of history.values) {
+        if (prev == -1) {
+            fullData.push(0);
+        } else {
+            if (item.value < prev) {
+                fullData.push(item.value);
+            } else {
+                fullData.push(item.value - prev);
+            }
+        }
+        prev = item.value;
+    }
+    a = 0;
+    for (item of history.values) {
+        item.rain5min = fullData[a].toFixed(1);
+        a++;
+    }
+    return history;
+}
+
 
 function printSadeDaily(historyIntensy, historySumma, history24h) {
     colWidth =7;
@@ -172,18 +197,22 @@ function printSadeDaily(historyIntensy, historySumma, history24h) {
         //(maxIntensyRange.minIntensy.toFixed(1)+"").padStart(colWidth,' '),(maxIntensyRange.maxIntensy.toFixed(1)+"").padStart(colWidth,' '),(maxIntensyRange.avgIntensy+"").padStart(colWidth,' '));
         //(directionRange.start+"").padStart(colWidth,' '),(directionRange.end+"").padStart(colWidth,' '),(directionRange.avg+"").padStart(colWidth,' '),windDir(directionRange.avg));
     }
+    maxVrk5Min = getMaxPeriod(-1*historySumma.values[0].value,0,historySumma.values,1);
     maxVrk10Min = getMaxPeriod(-1*historySumma.values[0].value,0,historySumma.values,2);
+    maxVrk15Min = getMaxPeriod(-1*historySumma.values[0].value,0,historySumma.values,3);
     maxVrk30Min = getMaxPeriod(-1*historySumma.values[0].value,0,historySumma.values,6);
-    maxVrk60Min = getMaxPeriod(-1*historySumma.values[0].value,0,historySumma.values,12);
-    maxVrk120Min = getMaxPeriod(-1*historySumma.values[0].value,0,historySumma.values,24);
+    maxVrk1h = getMaxPeriod(-1*historySumma.values[0].value,0,historySumma.values,12);
+    maxVrk2h = getMaxPeriod(-1*historySumma.values[0].value,0,historySumma.values,24);
+    maxVrk6h = getMaxPeriod(-1*historySumma.values[0].value,0,historySumma.values,72);
     maxIntency = getMaxValue(historyIntensy);
-        console.log("\nVoimakkain sade", (maxIntency.v+" mm/h").padStart(3*colWidth-1,' '), moment(maxIntency.d).format('HH:mm'));
-        console.log("Vuorokauden max 10min ",maxVrk10Min.v.toFixed(1).padStart(colWidth,' ') + " mm" + (maxVrk10Min.v>0?moment(historySumma.values[maxVrk10Min.i].measuredTime).format('HH:mm').padStart(colWidth,' '):"").padStart(colWidth,' '));
-        console.log("Vuorokauden max 30min ",maxVrk30Min.v.toFixed(1).padStart(colWidth,' ') + " mm" + (maxVrk30Min.v>0?moment(historySumma.values[maxVrk30Min.i].measuredTime).format('HH:mm').padStart(colWidth,' '):"").padStart(colWidth,' '));
-        console.log("Vuorokauden max  1h   ",maxVrk60Min.v.toFixed(1).padStart(colWidth,' ') + " mm" + (maxVrk60Min.v>0?moment(historySumma.values[maxVrk60Min.i].measuredTime).format('HH:mm').padStart(colWidth,' '):"").padStart(colWidth,' '));
-        console.log("Vuorokauden max  2h   ",maxVrk120Min.v.toFixed(1).padStart(colWidth,' ') + " mm" + (maxVrk120Min.v>0?moment(historySumma.values[maxVrk120Min.i].measuredTime).format('HH:mm').padStart(colWidth,' '):"").padStart(colWidth,' '));
-
-
+        console.log("\nVoimakkain sade", (maxIntency.v.toFixed(2)+" mm/h").padStart(3*colWidth-1,' '), (maxIntency.v>0?moment(maxIntency.d).format('HH:mm'):""));
+        console.log("Vuorokauden max  5min ",maxVrk5Min.v.toFixed(1).padStart(colWidth,' ') + " mm" + (maxVrk5Min.v>0?moment(historySumma.values[maxVrk5Min.i-1].measuredTime).format('HH:mm').padStart(colWidth,' ') + ' -'+ moment(historySumma.values[maxVrk5Min.i-1+1].measuredTime).format('HH:mm').padStart(colWidth,' ')  :"").padStart(colWidth,' '));
+        console.log("Vuorokauden max 10min ",maxVrk10Min.v.toFixed(1).padStart(colWidth,' ') + " mm" + (maxVrk10Min.v>0?moment(historySumma.values[maxVrk10Min.i-1].measuredTime).format('HH:mm').padStart(colWidth,' ') + ' -'+ moment(historySumma.values[maxVrk10Min.i-1+2].measuredTime).format('HH:mm').padStart(colWidth,' ')  :"").padStart(colWidth,' '));
+        console.log("Vuorokauden max 15min ",maxVrk15Min.v.toFixed(1).padStart(colWidth,' ') + " mm" + (maxVrk15Min.v>0?moment(historySumma.values[maxVrk15Min.i-1].measuredTime).format('HH:mm').padStart(colWidth,' ') + ' -'+ moment(historySumma.values[maxVrk15Min.i-1+3].measuredTime).format('HH:mm').padStart(colWidth,' ')  :"").padStart(colWidth,' '));
+        console.log("Vuorokauden max 30min ",maxVrk30Min.v.toFixed(1).padStart(colWidth,' ') + " mm" + (maxVrk30Min.v>0?moment(historySumma.values[maxVrk30Min.i-1].measuredTime).format('HH:mm').padStart(colWidth,' ') + ' -'+ moment(historySumma.values[maxVrk30Min.i-1+6].measuredTime).format('HH:mm').padStart(colWidth,' ')  :"").padStart(colWidth,' '));
+        console.log("Vuorokauden max  1h   ",maxVrk1h.v.toFixed(1).padStart(colWidth,' ') + " mm" + (maxVrk1h.v>0?moment(historySumma.values[maxVrk1h.i-1].measuredTime).format('HH:mm').padStart(colWidth,' ') + ' -'+ moment(historySumma.values[maxVrk1h.i-1+12].measuredTime).format('HH:mm').padStart(colWidth,' ')  :"").padStart(colWidth,' '));
+        console.log("Vuorokauden max  2h   ",maxVrk2h.v.toFixed(1).padStart(colWidth,' ') + " mm" + (maxVrk2h.v>0?moment(historySumma.values[maxVrk2h.i-1].measuredTime).format('HH:mm').padStart(colWidth,' ') + ' -'+ moment(historySumma.values[maxVrk2h.i-1+24].measuredTime).format('HH:mm').padStart(colWidth,' ')  :"").padStart(colWidth,' '));
+        console.log("Vuorokauden max  6h   ",maxVrk6h.v.toFixed(1).padStart(colWidth,' ') + " mm" + (maxVrk6h.v>0?moment(historySumma.values[maxVrk6h.i-1].measuredTime).format('HH:mm').padStart(colWidth,' ') + ' -'+ moment(historySumma.values[maxVrk6h.i-1+72].measuredTime).format('HH:mm').padStart(colWidth,' ')  :"").padStart(colWidth,' '));
 }
 
 async function start(consoleline) {
@@ -198,40 +227,35 @@ async function start(consoleline) {
 
      
         sensoriVoimakkuus = await getSensoriInfo(voimakkuusAnturi)
-        if (consoleline.length >3) console.log("\n"+sensoriVoimakkuus.name,"("+sensoriVoimakkuus.unit+")")
-
         historyIntensy = await getHistory(id,voimakkuusAnturi)
-        if (consoleline.length >3) printintensyHistory(historyIntensy)
 
         sensoriSumma = await getSensoriInfo(kertymaAnturi)
-        if (consoleline.length >3) console.log("\n"+sensoriSumma.name,"("+sensoriSumma.unit+")")
-
         historySumma = await getHistory(id,kertymaAnturi)
-        if (consoleline.length >3) printintensyHistory(historySumma)
 
         sensori24h = await getSensoriInfo(summa24Anturi)
-        if (consoleline.length >3) console.log("\n"+sensori24h.name,"("+sensori24h.unit+")")
-
         history24h = await getHistory(id,summa24Anturi)
-        if (consoleline.length >3) printintensyHistory(history24h)
-    
+
+
+        if (consoleline.length >3) {
+            console.log("\n"+sensoriVoimakkuus.name,"("+sensoriVoimakkuus.unit+")")
+            print24History(historyIntensy)
+            console.log("\n"+sensoriSumma.name,"("+sensoriSumma.unit+")")
+            print24History(historySumma)
+            console.log("\n"+sensori24h.name,"("+sensori24h.unit+")")
+            print24History(history24h)
+            historyPer5min = getValueFromHistory(historySumma);
+            console.log("\n Sade per 5min")
+            print24History(historyPer5min, true)
+        }
 
     console.log("\n\n Tuntikohtaiset rajat")
     printSadeDaily(historyIntensy, historySumma, history24h)
-    
-    //dailyDir = getDirectionRange(historyDirection.values);
-/*     dailyIntensy = getIntensyRange(historyIntensy.values);
-    dailyMaxIntensy = getIntensyRange(historyMaxIntensy.values);
-    console.log("\n:::",(dailyIntensy.minIntensy+"").padStart(colWidth,' '), (dailyIntensy.maxIntensy+"").padStart(colWidth,' '), (dailyIntensy.avgIntensy+"").padStart(colWidth,' '), 
-               (dailyMaxIntensy.minIntensy+"").padStart(colWidth,' '), (dailyMaxIntensy.maxIntensy+"").padStart(colWidth,' '), (dailyMaxIntensy.avgIntensy+"").padStart(colWidth,' ') ); */
-               //(dailyDir.start+"").padStart(colWidth,' '), (dailyDir.end+"").padStart(colWidth,' '), (dailyDir.avg+"").padStart(colWidth,' '), windDir(dailyDir.avg));
-    
 
 }
 
 if (process.argv.length > 2 ) {
     start(process.argv);
 } else {
-    console.log(" Edellisen 24h tuulimittaukset")
+    console.log(" Edellisen 24h sademittaukset")
     console.log(" Parametrit: AsemaId ")
 }

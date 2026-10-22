@@ -477,3 +477,7 @@
 14072 Tie 81 Rovaniemi, Juotasniemi Lappi @26.94151,66.323516,0
 15003 TEST_TSA_3 Pohjois-Pohjanmaa @19.71639,59.650285,0
 15011 TEST_TSA_1 Pohjois-Pohjanmaa @18.518625,61.726952,0
+6031 vt14_Kultakivi_IoT Etelä-Savo @29.419464,61.686315,0
+12094 st816_Oulunsalo_Keinosaari Pohjois-Pohjanmaa @25.144955,65.016793,0
+12095 st816_Oulunsalo_Huikun_silta Pohjois-Pohjanmaa @25.080574,65.033645,0
+12097 vt5_Kuusamo_Rukajärvi_IoT Pohjois-Pohjanmaa @29.154747,66.091661,0

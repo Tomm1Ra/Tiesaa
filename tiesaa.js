@@ -726,7 +726,8 @@ function showTopList(head,lista,param,n,d) {
     if (d ==null) d = 1;
     console.log(head);
     while( i<n && c<lista.length) {
-        if ((searchStrings.length == 0 || searchStrings.filter(word => lista[c].fullname.toLowerCase().includes(word.toLowerCase())).length > 0)) {
+        if ((notStrings.length == 0 || !notStrings.filter(word => lista[c].fullname.toLowerCase().includes(word.toLowerCase())).length > 0) &&
+            (searchStrings.length == 0 || searchStrings.filter(word => lista[c].fullname.toLowerCase().includes(word.toLowerCase())).length > 0)) {
             console.log(lista[c].mittaukset[p].v.toFixed(d).padStart(10," "), lista[c].mittaukset[p].u.padStart(2," "), lista[c].fullname);
             i++;
         }
@@ -873,7 +874,8 @@ async function printData(id, lista, limit, detail) {
             for (perusLine of lista) {
                 if ((perusLine.mittaukset["Ilma "].v != -99  && perusLine.mittaukset["Ilma "].mTime <timeReject) || showEmpty) {
                     fullCount++;
-                    if ((searchStrings.length == 0 || searchStrings.filter(word => perusLine.fullname.toLowerCase().includes(word.toLowerCase())).length > 0)) {
+                    if ((notStrings.length == 0 || !notStrings.filter(word => perusLine.fullname.toLowerCase().includes(word.toLowerCase())).length > 0) &&
+                        (searchStrings.length == 0 || searchStrings.filter(word => perusLine.fullname.toLowerCase().includes(word.toLowerCase())).length > 0)) {
                         if(fromZero)  {
                             if(subCount == 0) {hLat = perusLine.lat; hLong = perusLine.lon};
                             subCount++;
@@ -908,12 +910,13 @@ async function printData(id, lista, limit, detail) {
                 }
             }
             if (showKeskari) {
+                pois = showDistance?0:9;
                 console.log(" Keskiarvo",
                     ((ka_ilma/ka_ilman).toFixed(1)+"°C").padStart(46," "),
                     ((ka_tie/ka_tien).toFixed(1)+"°C").padStart(16," "),
                     ((ka_min/ka_minn).toFixed(1)+"°C").padStart(7," "),
                     ((ka_max/ka_maxn).toFixed(1)+"°C").padStart(7," "),
-                    ((ka_tuuli/ka_tuulin).toFixed(1)+"m/s").padStart(23," "),
+                    ((ka_tuuli/ka_tuulin).toFixed(1)+"m/s").padStart((23-pois)," "),
                     ((ka_sade/ka_saden).toFixed(1)+"mm").padStart(18," ")
                 );
             }
@@ -1096,8 +1099,9 @@ async function start(consoleline) {
     newHomeString=""
     separator='\n'
     isDST = moment().isDST();
-    tempString=""
-    searchStrings = []
+    tempString="";
+    searchStrings = [];
+    notStrings = [];
     oneStation = false;
     kaikki = false;
     try {
@@ -1181,6 +1185,7 @@ async function start(consoleline) {
             if (param == '@0') {fromZero = true;showDistance=true;newHomeString=''}
             if (param == '@@') {fromPrev = true;showDistance=true;newHomeString=''}
             if (param == '@+') {fromPrevPlus = true;showDistance=true;newHomeString=''}
+            if (param == '@-') {showDistance=false;newHomeString=''}
             if (param == 'ka') {showKeskari = true;}
             if (param == 'KA') {showKeskari = true; shortKeskari = true;}
             if (param == 'top') {topList=true;}
@@ -1203,11 +1208,17 @@ async function start(consoleline) {
                rawData = await fileRead(filename)
             } catch (err) {console.log("error",err)}
             for (a of consoleline.slice(2)) {
-                if ((a.length > 2) && (!a.match('([sS][0-9]|@[a-zA-ZåäöÅÄÖ]|^[0-9]{3}$|^@[0-9]*|^top$|^[a-zA-Z][+-]{1,2})'))) searchStrings.push(a);
+                if ((a.length > 2) && (!a.match('([sS][0-9]|@[a-zA-ZåäöÅÄÖ]|^[0-9]{3}$|^@[0-9]*|^top$|^[a-zA-Z][+-]{1,2})'))) {
+                    if (a[0] == '-') {
+                        notStrings.push(a.substring(1));
+                    } else {
+                        searchStrings.push(a);
+                    }
+                }
             }
         }
         if (newHomeString!="") await setNewHome(newHomeString, tiesaaConfig.home)
-        //  console.log(order, showEmpty, showTie, timeNotify, limit, tiesaaConfig.home.longitude,tiesaaConfig.home.latitude,searchStrings, splitPrint, splitLine, showPlace )
+          // console.log(order, showEmpty, showTie, timeNotify, limit, tiesaaConfig.home.longitude,tiesaaConfig.home.latitude,searchStrings, notStrings, splitPrint, splitLine, showPlace )
         if (typeof rawData !== 'undefined' && rawData) {
             getTiesaa(rawData,tiesaaConfig.home,saatilat,0,order,limit,separator);
         } 

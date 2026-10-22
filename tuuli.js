@@ -67,17 +67,31 @@ function getSpeedRange(values) {
 }
 
 function getDirectionRange(values) {
-    westBlock = [];
-    eastBlock = [];
+    westBlock = [], northWestBlock = [], southWestBlock = [];
+    eastBlock = [], northEastBlock = [], southEastBlock = [];
     avg360 = [];
     startDirection=0, endDirection=0;
     wbMin=0, wbMax=0, ebMin=0, ebMax=0, avg=0;
-    rangeww=0, rangewe=0, rangeew=0, rangeee=0;
+    nwbMin=0, nwbMax=0,nebMin=0, nebMax=0,swbMin=0, swbMax=0,sebMin=0, sebMax=0;
+    ero360=0;
+
     for (item of values) {
         if (item.value <= 180) {
             eastBlock.push(item.value)
+            if (item.value <= 90) {
+                northEastBlock.push(item.value)
+            }
+            else {
+                southEastBlock.push(item.value)
+            }
         } else {
             westBlock.push(item.value) 
+            if (item.value > 270) {
+                northWestBlock.push(item.value)
+            }
+            else {
+                southWestBlock.push(item.value)
+            }
         }
     }
     //console.log("W",westBlock)
@@ -98,31 +112,35 @@ function getDirectionRange(values) {
         wbMax = Math.max(...westBlock);
         ebMin = Math.min(...eastBlock);
         ebMax = Math.max(...eastBlock);
+        nwbMin = Math.min(...northWestBlock);
+        nwbMax = Math.max(...northWestBlock);
+        swbMin = Math.min(...southWestBlock);
+        swbMax = Math.max(...southWestBlock);
+        nebMin = Math.min(...northEastBlock);
+        nebMax = Math.max(...northEastBlock);
+        sebMin = Math.min(...southEastBlock);
+        sebMax = Math.max(...southEastBlock);
 
-        // console.log("ääri ",wbMin,wbMax,ebMin,ebMax)
-        rangewe = 360 - wbMin + ebMax;
-        rangeww = 360 - (wbMax - wbMin); 
-        for (item of values) {
-            if (item.value < wbMax && item.value > wbMin) {
-                rangeww=360;
+        //console.log("ääri ",wbMin,wbMax,ebMin,ebMax)
+        if (northEastBlock.length == 0) {
+            startDirection = sebMin ; endDirection = wbMax;
+        } 
+        else if (southEastBlock.length == 0) {
+                startDirection = wbMin ; endDirection = nebMax;
             }
+        else if (southWestBlock.length == 0) {
+                startDirection = nwbMin ; endDirection = ebMax;
+            }
+        else if (northWestBlock.length == 0) {
+                startDirection = ebMin ; endDirection = swbMax;
+            }
+        else {
+            startDirection = ebMin ; endDirection = wbMax; ero360=360+ebMin-wbMax;
+            if (sebMin-nebMax > ero360) {startDirection = sebMin ; endDirection = nebMax; ero360=sebMin-nebMax; }
+            if (swbMin-sebMax > ero360) {startDirection = swbMin ; endDirection = sebMax; ero360=swbMin-sebMax; }
+            if (nwbMin-swbMax > ero360) {startDirection = nwbMin ; endDirection = swbMax; ero360=nwbMin-swbMax; }
         }
         
-        rangeew = wbMax - ebMin;
-        rangeee = 360 - (ebMax - ebMin);
-        for (item of values) {
-            if (item.value < ebMax && item.value > ebMin) {
-                rangeee=360;
-            }
-        }
-        
-        //console.log(rangewe, rangeew, rangeww, rangeee);
-        
-        if (rangewe == Math.min(rangeww, rangewe, rangeew, rangeee)) { startDirection = wbMin ; endDirection = ebMax};
-        if (rangeew == Math.min(rangeww, rangewe, rangeew, rangeee)) { startDirection = ebMin ; endDirection = wbMax};
-        if (rangeww == Math.min(rangeww, rangewe, rangeew, rangeee)) { startDirection = wbMax ; endDirection = wbMin};
-        if (rangeee == Math.min(rangeww, rangewe, rangeew, rangeee)) { startDirection = ebMax ; endDirection = ebMin};
-
         for (item of values) {
          avg360.push(item.value > 0 && item.value<startDirection ? item.value+360 : item.value);
          };
